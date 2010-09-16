@@ -2,7 +2,7 @@ signature General =
 sig
   (* infix 5 ^* to
    * infix 4 \< \>
-   * infix 2 $
+   * infix 3 $
    *)
   include GENERAL where type unit = unit
                     and type order = order

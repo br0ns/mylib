@@ -20,7 +20,7 @@ val inc = General.inc
 val dec = General.dec
 infix 5 ^* to
 infix 4 \< \>
-infixr 2 $
+infixr 3 $
 
 val println = TextIO.println
 val ltoi = Int.fromLarge

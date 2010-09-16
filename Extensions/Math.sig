@@ -10,4 +10,9 @@ val realsum : real list -> real
 
 val mean : real list -> real
 val harmonicMean : real list -> real
+
+(* TODO
+ * val gcd : int list -> int
+ * val lcm : int list -> int
+ *)
 end

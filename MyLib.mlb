@@ -140,28 +140,31 @@ DataStructures/Tree/Tree.sml
 
 
 (***
+ * Top Level declarations
+ *)
+TopLevel.sml
+
+
+(***
  * Other (contd.)
  *)
-
-Other/Parsing.sig Other/Parsing.sml
+Other/ParserBase.sig
+Other/Parser.sig
+Other/ParserFn.sml
+Other/Parser.sml
+Other/Scanner.sml
+Other/PredictiveScanner.sml
 Other/JSON.sig Other/JSON.sml
 
 
 (***
  * Algorithms
  *)
-
 (* Sort should go away - moved to extensions *)
 Algorithms/ListSort/ListSort.sig
 Algorithms/ListSort/QuickSortList.sml
 Algorithms/ListSort/ListSort.sml (* Default implementation *)
 Algorithms/TopologicalSort/TopologicalSort.sig
 Algorithms/TopologicalSort/TopologicalSort.sml
-
-
-(***
- * Top Level declarations
- *)
-TopLevel.sml
 
 end
