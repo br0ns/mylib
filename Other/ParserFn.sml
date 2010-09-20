@@ -8,6 +8,9 @@ infix 0 |||
 infix 1 --- |-- --|
 infix 2 >>> --> ??? produce
 
+
+fun depends m = (any --> m) handle Match => fail
+
 fun (p >>> f) = (p --> return o f)
 fun (p1 --- p2) = p1 --> (fn a => p2 --> return o pair a)
 (* fun (p1 --| p2) = (p1 --- p2) >>> fst *)
@@ -15,12 +18,14 @@ fun (p1 --- p2) = p1 --> (fn a => p2 --> return o pair a)
 fun (p1 --| p2) = p1 --> (fn x => p2 --> (fn _ => return x))
 fun (p1 |-- p2) = p1 --> (fn _ => p2 --> (fn x => return x))
 fun p produce x = p |-- return x
+
+(* TODO: foo *)
 fun predicate pr p =
     p --> (fn x =>
               if pr x then
                 return x
               else
-                unexpected
+                fail
           )
 fun lookAhead p =
     getState --> (fn state =>
@@ -29,23 +34,28 @@ fun lookAhead p =
     ))
 
 fun notFollowedBy p =
-    try (try p --> (fn _ => unexpected) ||| return ())
+    (* getState --> (fn state => *)
+    (* try (p --> (fn _ => fail) ||| return ()) *)
+    (try p --> (fn _ => fail)) ||| return ()
+    (* ) *)
+
 fun eof c = (notFollowedBy any ??? "end of stream") c
+
 fun token t =
-    getState --> (fn state =>
     any --> (fn t' =>
       if t = t' then
         return t
       else
-        setState state |-- unexpected
-    ))
+        fail
+    )
+
 fun scan p r s =
     case parse p (const "") r s of
       (Left _, _) => NONE
     | (Right x, s') => SOME (x, s')
 fun choice [p] = p
   | choice (p :: ps) = p ||| choice ps
-  | choice _ = expected "at least one parser in choice"
+  | choice _ = (any |-- fail) ??? "at least one parser in choice"
 fun link ps = foldr (op:: \> op>>> o op---) (return nil) ps
 fun count 0 p = return nil
   | count n p = (p --- count (n - 1) p) >>> op::
@@ -75,7 +85,7 @@ fun chainr p oper x = chainr1 p oper ||| return x
 
 structure Text =
 struct
-fun char c = token c ??? ("'" ^ str c ^ "'")
+fun char c = try (token c) ??? ("'" ^ str c ^ "'")
 
 (* I actually wrote this - refactor please *)
 fun string s =

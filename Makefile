@@ -89,8 +89,14 @@ all :
       DataStructures/Tree/PlainTreeFn.sml \
       DataStructures/Tree/Tree.sml \
 \
-      Other/Parsing.sig \
-      Other/Parsing.sml \
+      TopLevel.sml \
+\
+      Other/ParserBase.sig \
+      Other/Parser.sig \
+      Other/ParserFn.sml \
+      Other/Parser.sml \
+      Other/Scanner.sml \
+      Other/PredictiveScanner.sml \
       Other/JSON.sig \
       Other/JSON.sml \
 \
@@ -100,7 +106,7 @@ all :
       Algorithms/TopologicalSort/TopologicalSort.sig \
       Algorithms/TopologicalSort/TopologicalSort.sml \
 \
-      TopLevel.sml > MyLib.sml
+      > MyLib.sml
 
 	mosmlc -c -P full \
       Random.ui \

@@ -272,6 +272,7 @@ fun writeMany nil = ""
 
 fun from (f, _) = f o read
 fun fromMany (f, _) = map f o readMany
+nonfix to
 fun to (_, t) = write o t
 fun toMany (_, t) = writeMany o map t
 

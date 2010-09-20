@@ -10,8 +10,7 @@ sig
                     'a) Either.t
 
   val ??? : ('a, 'b, 'x) parser * string -> ('a, 'b, 'x) parser
-  val expected : string -> ('a, 'b, 'x) parser
-  val unexpected : ('a, 'b, 'x) parser
+  val fail : ('a, 'b, 'x) parser
 
   val getState : ('a, 'x state, 'x) parser
   val setState : 'x state -> ('a, unit, 'x) parser

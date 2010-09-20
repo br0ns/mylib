@@ -9,9 +9,12 @@ datatype either = datatype Either.t
 
 type ('a, 'x) reader = ('a, 'x) StringCvt.reader
 type position = int
-type 'x state = 'x * position
-val position = snd
-val stream = fst
+type 'x state = 'x * 'x * position * int
+fun position (_, _, p, _) = p
+fun parsed (_, _, _, n) = n
+fun stream (_, s, _, _) = s
+fun streamBefore (s, _, _, _) = s
+fun renew (_, s, n, _) = (s, s, n, 0)
 
 datatype error = Expected of string
                | Unexpected
@@ -50,14 +53,14 @@ fun expect err errs =
 fun (p ??? expected) con state =
     case p con state of
       (res as (Left err, state')) =>
-      if position state = position state' then
+      if parsed state' = 0 then
         (expect (state, Expected expected) err, state')
       else
         res
     | x => x
 
 fun expected s con state = (Left [(state, Expected s)], state)
-fun unexpected con state = (Left [(state, Unexpected)], state)
+fun fail con state = (Left [(state, Unexpected)], state)
 
 fun getState con state = (Right state, state)
 fun setState state' con _ = (Right (), state')
@@ -75,7 +78,7 @@ fun (p1 ||| p2) con state =
 
 fun try p con state =
     case p con state of
-      (Left errs, _) => (Left errs, state)
+      (Left errs, _) => (Left errs, renew state)
     | x => x
 
 fun return x con state = (Right x, state)
@@ -87,11 +90,11 @@ fun (p --> f) con state =
 
 fun parse p show r s =
     let
-      fun con (s, n) =
+      fun con (_, s, n, _) =
           case r s of
-            SOME (x, s') => (Right x, (s', n + 1))
-          | NONE => (Left nil, (s, n))
-      val state = (s, 1)
+            SOME (x, s') => (Right x, (s, s', n + 1, 1))
+          | NONE => (Left nil, (s, s, n, 0))
+      val state = (s, s, 1, 0)
       (* fun tok n = *)
       (*     let *)
       (*       fun loop 1 (SOME (x, _)) = SOME x *)
@@ -103,15 +106,15 @@ fun parse p show r s =
       (*     end *)
 
       fun tok state =
-          case r (stream state) of
+          case r (streamBefore state) of
             NONE => "end of input"
-          | SOME (x, _) => show x
+          | SOME (x, _) => show x ^ "(" ^ Show.int (parsed state) ^ ")"
 
       fun errs nil = IntMap.empty
         | errs ((state, error) :: es) =
           let
             open IntMap
-            val p = position state
+            val p = position state - parsed state
             val m = errs es
           in
             modify (fn (t, exs) => (t, Set.insert exs error)) m p
@@ -149,9 +152,9 @@ fun parse p show r s =
       (*     } *)
     in
       case p con state of
-        (Left errs, (s', n)) =>
+        (Left errs, (s, _, n, _)) =>
         (Left $ err errs,
-         s')
-      | (Right x, (s', n)) => (Right x, s')
+         s)
+      | (Right x, (_, s', n, _)) => (Right x, s')
     end
 end)
