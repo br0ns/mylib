@@ -1,5 +1,8 @@
 all :
 	sed "s/.*and type exn = exn//" Extensions/General.sig > mosml/General.sig
+	sed "s/fun string.*/fun stringFull p s = vectorFull p (fn c => \"'\" ^ str c ^ \"'\") (Vector.fromList (explode s))/" Other/ParserFn.sml | sed "s/fun stringPrefix.*/fun stringPrefix p s = vectorPrefix p (fn c => \"'\" ^ str c ^ \"'\") (Vector.fromList (explode s))/" > mosml/ParserFn.sml
+
+
 	cat mosml/GENERAL.sig \
       mosml/VECTOR_SLICE.sig \
       mosml/LIST.sig \
@@ -41,11 +44,6 @@ all :
       Other/Show.sml \
       Other/Pair.sig \
       Other/Pair.sml \
-\
-      Other/Pretty.sig \
-      Other/Pretty.sml \
-      Other/Layout.sig \
-      Other/Layout.sml \
 \
       DataStructures/Ordered.sig \
 \
@@ -93,10 +91,15 @@ all :
 \
       Other/ParserBase.sig \
       Other/Parser.sig \
-      Other/ParserFn.sml \
+      mosml/ParserFn.sml \
       Other/Parser.sml \
       Other/Scanner.sml \
-      Other/PredictiveScanner.sml \
+\
+      Other/Pretty.sig \
+      Other/Pretty.sml \
+      Other/Layout.sig \
+      Other/Layout.sml \
+\
       Other/JSON.sig \
       Other/JSON.sml \
 \

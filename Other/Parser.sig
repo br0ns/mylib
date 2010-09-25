@@ -6,7 +6,6 @@
 signature Parser =
 sig
   include ParserBase
-val depends : ('a -> ('a, 'b, 'x) parser) -> ('a, 'b, 'x) parser
 val predicate : ('b -> bool) -> ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
 val notFollowedBy : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
 val lookAhead : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
@@ -28,33 +27,87 @@ val between : ('a, 'b, 'x) parser ->
 val followedBy : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
 val manyTill : ('a, 'b, 'x) parser ->
                ('a, 'c, 'x) parser -> ('a, 'b list, 'x) parser
+val sepBy : ('a, 'b, 'x) parser ->
+            ('a, 'c, 'x) parser ->
+            ('a, 'b list, 'x) parser
+val sepBy1 : ('a, 'b, 'x) parser ->
+             ('a, 'c, 'x) parser ->
+             ('a, 'b list, 'x) parser
+val endBy : ('a, 'b, 'x) parser ->
+            ('a, 'c, 'x) parser ->
+            ('a, 'b list, 'x) parser
+val endBy1 : ('a, 'b, 'x) parser ->
+             ('a, 'c, 'x) parser ->
+             ('a, 'b list, 'x) parser
+val sepEndBy : ('a, 'b, 'x) parser ->
+               ('a, 'c, 'x) parser ->
+               ('a, 'b list, 'x) parser
+val sepEndBy1 : ('a, 'b, 'x) parser ->
+                ('a, 'c, 'x) parser ->
+                ('a, 'b list, 'x) parser
 val eof : ('a, unit, 'x) parser
-val scan : (''a, ''b, 'x) parser -> (''a, 'x) reader -> (''b, 'x) reader
 
 structure Text : sig
   val char : char -> (char, char, 'x) parser
   val string : string -> (char, string, 'x) parser
+  (* val keywords : string list -> (char, string, 'x) parser *)
+(* oneOf char list *)
+(* noneOf char list *)
+(* spaces *)
+(* space *)
+(* newline *)
+(* tab *)
+(* upper *)
+(* lower *)
+(* alphaNum *)
+(* letter *)
+(* digit *)
+(* hexDigit *)
+(* octDigit *)
 end
+
+(* structure Token : sig *)
+
+(* end *)
+
 structure Parse : sig
-  val vectorPrefix : ('a, 'b, 'a VectorSlice.slice) parser ->
-                     ('a -> string) ->
-                     'a Vector.vector -> 'b result
-  val vectorFull : ('a, 'b, ''a VectorSlice.slice) parser ->
-                   ('a -> string) ->
-                   'a Vector.vector -> 'b result
-  val prefix : ('a, 'b, 'x) parser ->
+  val vector : ('a, 'b, 'a VectorSlice.slice) parser ->
                ('a -> string) ->
-               ('a, 'x) reader ->
-               'x -> 'b result
+               'a Vector.vector -> ('a, 'b) result
+  val vectorFull : ('a, 'b, 'a VectorSlice.slice) parser ->
+                   ('a -> string) ->
+                   'a Vector.vector -> ('a, 'b) result
+
+  val run : ('a, 'b, 'x) parser ->
+            ('a -> string) ->
+            ('a, 'x) reader ->
+            'x -> ('a, 'b) result
   val full : ('a, 'b, 'x) parser ->
              ('a -> string) ->
              ('a, 'x) reader ->
-             'x -> 'b result
-  val stringFull : (char, 'b, string) parser ->
+             'x -> ('a, 'b) result
+
+  val string : (char, 'b, char VectorSlice.slice) parser ->
+               string ->
+               (char, 'b) result
+  val stringFull : (char, 'b, char VectorSlice.slice) parser ->
                    string ->
-                   'b result
-  val stringPrefix : (char, 'b, string) parser ->
-                     string ->
-                     'b result
+                   (char, 'b) result
+
+  val list : ('a, 'b, 'a list) parser ->
+             ('a -> string) ->
+             'a list ->
+             ('a, 'b) result
+  val listFull : ('a, 'b, 'a list) parser ->
+                 ('a -> string) ->
+                 'a list ->
+                 ('a, 'b) result
+
+  val file : (char, 'b, char VectorSlice.slice) parser ->
+             string ->
+             (char, 'b) result
+  val fileFull : (char, 'b, char VectorSlice.slice) parser ->
+                 string ->
+                 (char, 'b) result
 end
 end

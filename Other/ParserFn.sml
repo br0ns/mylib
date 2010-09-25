@@ -1,15 +1,16 @@
-functor ParserFn (Base : ParserBase) =
+functor ParserFn (Base : ParserBase) :>
+        Parser where type ('a, 'b) result = ('a, 'b) Base.result =
 struct
 open Base
-type 'a result = ({position : position,
-                   error    : string} Set.t,
-                  'a) Either.t
+(* type 'a result = ({position : position, *)
+(*                    error    : string} Set.t, *)
+(*                   'a) Either.t *)
 infix 0 |||
 infix 1 --- |-- --|
 infix 2 >>> --> ??? produce
 
 
-fun depends m = (any --> m) handle Match => fail
+(* fun depends m = (any --> m) handle Match => fail *)
 
 fun (p >>> f) = (p --> return o f)
 fun (p1 --- p2) = p1 --> (fn a => p2 --> return o pair a)
@@ -34,10 +35,9 @@ fun lookAhead p =
     ))
 
 fun notFollowedBy p =
-    (* getState --> (fn state => *)
-    (* try (p --> (fn _ => fail) ||| return ()) *)
-    (try p --> (fn _ => fail)) ||| return ()
-    (* ) *)
+    getState --> (fn s =>
+    try p --> (fn _ => setState s |-- fail) ||| return ()
+    )
 
 fun eof c = (notFollowedBy any ??? "end of stream") c
 
@@ -49,10 +49,6 @@ fun token t =
         fail
     )
 
-fun scan p r s =
-    case parse p (const "") r s of
-      (Left _, _) => NONE
-    | (Right x, s') => SOME (x, s')
 fun choice [p] = p
   | choice (p :: ps) = p ||| choice ps
   | choice _ = (any |-- fail) ??? "at least one parser in choice"
@@ -71,7 +67,7 @@ fun sepBy p sep = sepBy1 p sep ||| return nil
 fun endBy p e = many (p --| e)
 fun endBy1 p e = many1 (p --| e)
 fun sepEndBy p sep = sepBy p sep --| maybe sep
-fun sepEndby1 p sep = sepBy1 p sep --| maybe sep
+fun sepEndBy1 p sep = sepBy1 p sep --| maybe sep
 fun chainr1 p oper =
     let
       fun scan c = (p --> rest) c
@@ -96,16 +92,31 @@ fun string s =
     in
       loop (explode s) >>> implode
     end
+
+(* fun keywords ks = *)
+(*     let *)
+      
+(*     in *)
+      
+(*     end *)
 end
 
 structure Parse =
 struct
-fun vectorPrefix p show v =
+fun vector p show v =
     fst $ parse p show VectorSlice.getItem (VectorSlice.full v)
-fun vectorFull p = vectorPrefix (p --| eof)
-val prefix = parse
-fun full p = parse (p --| eof)
+fun vectorFull p = vector (p --| eof)
+
+fun run p show r s = fst $ parse p show r s
+fun full p = run (p --| eof)
+
+fun string p s = vector p (fn c => "'" ^ str c ^ "'") s
 fun stringFull p s = vectorFull p (fn c => "'" ^ str c ^ "'") s
-fun stringPrefix p s = vectorPrefix p str s
+
+fun list p show l = fst $ parse p show List.getItem l
+fun listFull p = list (p --| eof)
+
+fun file p f = string p $ TextIO.readFile f
+fun fileFull p = file (p --| eof)
 end
 end

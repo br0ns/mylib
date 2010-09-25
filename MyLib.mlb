@@ -30,9 +30,6 @@ Other/Benchmark.sig Other/Benchmark.sml
 Other/Show.sig Other/Show.sml
 Other/Pair.sig Other/Pair.sml
 
-Other/Pretty.sig Other/Pretty.sml
-Other/Layout.sig Other/Layout.sml
-
 (***
  * DATA STRUCTURES
  *)
@@ -153,7 +150,10 @@ Other/Parser.sig
 Other/ParserFn.sml
 Other/Parser.sml
 Other/Scanner.sml
-Other/PredictiveScanner.sml
+
+Other/Pretty.sig Other/Pretty.sml
+Other/Layout.sig Other/Layout.sml
+
 Other/JSON.sig Other/JSON.sml
 
 

@@ -1,6 +1,7 @@
 structure Parser =
 ParserFn(
 struct
+val LOOK_AHEAD = 1
 infix 0 |||
 infix 1 --- |-- --|
 infix 2 >>> --> ???
@@ -9,41 +10,23 @@ datatype either = datatype Either.t
 
 type ('a, 'x) reader = ('a, 'x) StringCvt.reader
 type position = int
-type 'x state = 'x * 'x * position * int
-fun position (_, _, p, _) = p
-fun parsed (_, _, _, n) = n
+type 'x state = 'x * 'x * position
+fun position (_, _, p) = p
 fun stream (_, s, _, _) = s
-fun streamBefore (s, _, _, _) = s
-fun renew (_, s, n, _) = (s, s, n, 0)
+fun streamBefore (s, _, _) = s
 
 datatype error = Expected of string
                | Unexpected
 
 type ('a, 'x) consumer = 'x state ->
                          (('x state * error) list,
-                          'a) either * 'x state
+                          'a) either * 'x state * int
 
 type ('a, 'b, 'x) parser = ('a, 'x) consumer -> ('b, 'x) consumer
 
-type 'a result = ({position : position,
-                   error    : string} list,
-                  'a) Either.t
-
-(*
- * val ??? : ('a, 'b, 'x) parser * string -> ('a, 'b, 'x) parser
- * val unexpected : 'a -> ('a, 'b, 'x) parser
- * val fail : string -> ('a, 'b, 'x) parser
- * val getState : ('a, 'x state, 'x) parser
- * val setState : 'x state -> ('a, unit, 'x) parser
- * * val getPosition : ('a, position, 'x) parser
- * * val setPosition : position -> ('a, unit, 'x) parser
- * val any : ('a, 'a, 'x) parser
- * val ||| : ('a, 'b, 'x) parser * ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
- * val try : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
- * val --> : ('a, 'b, 'x) parser * ('b -> ('a, 'c, 'x) parser) -> ('a, 'c, 'x) parser
- * val return : 'b -> ('a, 'b, 'x) parser
- * val parse : ('a, 'b, 'x) parser -> ('a, 'x) reader -> 'x -> ('a, 'b) result
- *)
+type ('a, 'b) result = ({position : position,
+                         error    : string} list,
+                        'b) Either.t
 
 fun expect err errs =
     Left (err :: List.filter (fn (_, Expected _) => false
@@ -52,49 +35,56 @@ fun expect err errs =
 
 fun (p ??? expected) con state =
     case p con state of
-      (res as (Left err, state')) =>
-      if parsed state' = 0 then
-        (expect (state, Expected expected) err, state')
+      (err as (Left errs, state', n)) =>
+      if n <= LOOK_AHEAD then
+        (expect (state', Expected expected) errs, state', n)
       else
-        res
+        err
     | x => x
 
-fun expected s con state = (Left [(state, Expected s)], state)
-fun fail con state = (Left [(state, Unexpected)], state)
+fun fail con state = (Left [(state, Unexpected)], state, 0)
 
-fun getState con state = (Right state, state)
-fun setState state' con _ = (Right (), state')
+fun getState con state = (Right state, state, 0)
+fun setState state' con _ = (Right (), state', 0)
 
 fun any con state = con state
 
 fun (p1 ||| p2) con state =
     case p1 con state of
-      (Left errs, state') =>
-      if position state = position state' then
-        Arrow.first (Arrow.left (errs \< op@)) (p2 con state)
+      (err as (Left errs, state', n)) =>
+      if n <= LOOK_AHEAD then
+        case p2 con state of
+          (Left errs', state'', n') =>
+          (Left $ errs @ errs', state'', n')
+        | x => x
       else
-        (Left errs, state')
+        err
     | x => x
 
 fun try p con state =
     case p con state of
-      (Left errs, _) => (Left errs, renew state)
+      (Left errs, _, _) => (Left errs, state, 0)
     | x => x
 
-fun return x con state = (Right x, state)
+fun return x con state = (Right x, state, 0)
 
 fun (p --> f) con state =
     case p con state of
-      (Right x, state') => (f x) con state'
-    | (Left errs, state') => (Left errs, state')
+      (Right x, state', n) =>
+      let
+        val (x, state'', n') = (f x) con state'
+      in
+        (x, state'', n + n')
+      end
+    | (Left e, state', n) => (Left e, state', n)
 
 fun parse p show r s =
     let
-      fun con (_, s, n, _) =
+      fun con (_, s, p) =
           case r s of
-            SOME (x, s') => (Right x, (s, s', n + 1, 1))
-          | NONE => (Left nil, (s, s, n, 0))
-      val state = (s, s, 1, 0)
+            SOME (x, s') => (Right x, (s, s', p + 1), 1)
+          | NONE => (Left nil, (s, s, p), 0)
+      val state = (s, s, 1)
       (* fun tok n = *)
       (*     let *)
       (*       fun loop 1 (SOME (x, _)) = SOME x *)
@@ -108,13 +98,13 @@ fun parse p show r s =
       fun tok state =
           case r (streamBefore state) of
             NONE => "end of input"
-          | SOME (x, _) => show x ^ "(" ^ Show.int (parsed state) ^ ")"
+          | SOME (x, _) => show x
 
       fun errs nil = IntMap.empty
         | errs ((state, error) :: es) =
           let
             open IntMap
-            val p = position state - parsed state
+            val p = position state
             val m = errs es
           in
             modify (fn (t, exs) => (t, Set.insert exs error)) m p
@@ -152,9 +142,15 @@ fun parse p show r s =
       (*     } *)
     in
       case p con state of
-        (Left errs, (s, _, n, _)) =>
+        (Left errs, (s, _, _), n) =>
         (Left $ err errs,
          s)
-      | (Right x, (_, s', n, _)) => (Right x, s')
+      | (Right x, (_, s', _), n) => (Right x, s')
     end
+
+fun scan p r s =
+    case parse p (const "") r s of
+      (Left _, _) => NONE
+    | (Right x, s') => SOME (x, s')
+
 end)
