@@ -9,22 +9,18 @@ infix 0 |||
 infix 1 --- |-- --|
 infix 2 >>> --> ??? produce
 
-
-(* fun depends m = (any --> m) handle Match => fail *)
-
 fun map f p = (p --> return o f)
 fun (p1 --- p2) = p1 --> (fn a => p2 --> return o pair a)
 fun (p1 --| p2) = p1 --> (fn x => p2 --> (fn _ => return x))
 fun (p1 |-- p2) = p1 --> (fn _ => p2 --> (fn x => return x))
 fun p produce x = p |-- return x
 
-(* TODO: foo *)
-fun predicate pr p =
-    p --> (fn x =>
-              if pr x then
-                return x
-              else
-                fail
+fun predicate p =
+    any --> (fn x =>
+                if p x then
+                  return x
+                else
+                  fail
           )
 fun lookAhead p =
     getState --> (fn state =>
@@ -39,13 +35,7 @@ fun notFollowedBy p =
 
 fun eof c = (notFollowedBy any ??? "end of stream") c
 
-fun token t =
-    any --> (fn t' =>
-      if t = t' then
-        return t
-      else
-        fail
-    )
+fun token t = predicate $ curry op= t
 
 fun (lexer >>> parser) c = parser $ lexer c
 
@@ -68,16 +58,25 @@ fun endBy p e = many (p --| e)
 fun endBy1 p e = many1 (p --| e)
 fun sepEndBy p sep = sepBy p sep --| maybe sep
 fun sepEndBy1 p sep = sepBy1 p sep --| maybe sep
+
+fun chainl1 p oper =
+    let
+      fun rest lhs =
+          (oper --- p) --> (fn (f, rhs) => rest $ f (lhs, rhs)) ||| return lhs
+    in
+      p --> rest
+    end
+fun chainl p oper x = chainl1 p oper ||| return x
+
 fun chainr1 p oper =
     let
       fun scan c = (p --> rest) c
-      and rest x = map op$ (oper --- scan) ||| return x
+      and rest lhs =
+          map (fn (f, rhs) => f (lhs, rhs)) (oper --- scan) ||| return lhs
     in
       scan
     end
 fun chainr p oper x = chainr1 p oper ||| return x
-(* fun chainl  *)
-
 
 structure Text =
 struct
@@ -93,12 +92,30 @@ fun string s =
       map implode $ loop (explode s)
     end
 
-(* fun keywords ks = *)
-(*     let *)
-      
-(*     in *)
-      
-(*     end *)
+fun keywords ks =
+    foldr op||| fail $ List.map (fn (k, a) => try (string k) produce a) ks
+
+fun oneOf cs = foldr op||| fail $ List.map token cs
+fun noneOf cs = foldr op||| fail $ List.map (predicate o curry op<>) cs
+fun space c = (oneOf $ explode " \n\t\r" ??? "space") c
+fun spaces c = (map length $ many space) c
+fun newline c = (token #"\n" ??? "new line") c
+fun tab c = (token #"\t" ??? "tab") c
+fun upper c = (predicate Char.isUpper ??? "upper case letter") c
+fun lower c = (predicate Char.isLower ??? "lower case letter") c
+fun alphaNum c = (predicate Char.isAlphaNum ??? "alphanumeric character") c
+fun letter c = (predicate Char.isAlpha ??? "letter") c
+fun digit c = (predicate Char.isDigit ??? "digit") c
+
+fun integer c =
+    (map (foldl (fn (d, n) => ord d - 48 + 10 * n) 0)
+         (many1 digit)
+    ) c
+end
+
+structure Lex =
+struct
+
 end
 
 structure Parse =

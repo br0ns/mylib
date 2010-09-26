@@ -11,7 +11,7 @@ val --- : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'b * 'c, 'x) parser
 val --| : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'b, 'x) parser
 val |-- : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'c, 'x) parser
 val map : ('b -> 'c) -> ('a, 'b, 'x) parser -> ('a, 'c, 'x) parser
-val predicate : ('b -> bool) -> ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
+val predicate : ('a -> bool) -> ('a, 'a, 'x) parser
 val notFollowedBy : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
 val lookAhead : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
 val produce : ('a, 'b, 'x) parser * 'c -> ('a, 'c, 'x) parser
@@ -28,43 +28,63 @@ val between : ('a, 'b, 'x) parser ->
 val followedBy : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
 val manyTill : ('a, 'b, 'x) parser ->
                ('a, 'c, 'x) parser -> ('a, 'b list, 'x) parser
+
 val sepBy : ('a, 'b, 'x) parser ->
             ('a, 'c, 'x) parser ->
             ('a, 'b list, 'x) parser
 val sepBy1 : ('a, 'b, 'x) parser ->
              ('a, 'c, 'x) parser ->
              ('a, 'b list, 'x) parser
+
 val endBy : ('a, 'b, 'x) parser ->
             ('a, 'c, 'x) parser ->
             ('a, 'b list, 'x) parser
 val endBy1 : ('a, 'b, 'x) parser ->
              ('a, 'c, 'x) parser ->
              ('a, 'b list, 'x) parser
+
 val sepEndBy : ('a, 'b, 'x) parser ->
                ('a, 'c, 'x) parser ->
                ('a, 'b list, 'x) parser
 val sepEndBy1 : ('a, 'b, 'x) parser ->
                 ('a, 'c, 'x) parser ->
                 ('a, 'b list, 'x) parser
+
+val chainl1 : ('a, 'b, 'x) parser ->
+              ('a, 'b * 'b -> 'b, 'x) parser ->
+              ('a, 'b, 'x) parser
+val chainl : ('a, 'b, 'x) parser ->
+             ('a, 'b * 'b -> 'b, 'x) parser ->
+             'b ->
+             ('a, 'b, 'x) parser
+val chainr1 : ('a, 'b, 'x) parser ->
+              ('a, 'b * 'b -> 'b, 'x) parser ->
+              ('a, 'b, 'x) parser
+val chainr : ('a, 'b, 'x) parser ->
+             ('a, 'b * 'b -> 'b, 'x) parser ->
+             'b ->
+             ('a, 'b, 'x) parser
+
 val eof : ('a, unit, 'x) parser
 
 structure Text : sig
   val char : char -> (char, char, 'x) parser
   val string : string -> (char, string, 'x) parser
-  (* val keywords : string list -> (char, string, 'x) parser *)
-(* oneOf char list *)
-(* noneOf char list *)
-(* spaces *)
-(* space *)
-(* newline *)
-(* tab *)
-(* upper *)
-(* lower *)
-(* alphaNum *)
-(* letter *)
-(* digit *)
-(* hexDigit *)
-(* octDigit *)
+  val keywords : (string * 'a) list -> (char, 'a, 'x) parser
+  val oneOf : char list -> (char, char, 'x) parser
+  val noneOf : char list -> (char, char, 'x) parser
+  val spaces : (char, int, 'x) parser
+  val space : (char, char, 'x) parser
+  val newline : (char, char, 'x) parser
+  val tab : (char, char, 'x) parser
+  val upper : (char, char, 'x) parser
+  val lower : (char, char, 'x) parser
+  val alphaNum : (char, char, 'x) parser
+  val letter : (char, char, 'x) parser
+  val digit : (char, char, 'x) parser
+  (* val hexDigit : (char, char, 'x) parser *)
+  (* val octDigit : (char, char, 'x) parser *)
+  val integer : (char, int, 'x) parser
 end
 
 (* structure Lex : sig *)
