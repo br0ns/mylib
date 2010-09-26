@@ -6,13 +6,14 @@
 signature Parser =
 sig
   include ParserBase
-val predicate : ('b -> bool) -> ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
-val notFollowedBy : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
-val lookAhead : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
-val >>> : ('a, 'b, 'x) parser * ('b -> 'c) -> ('a, 'c, 'x) parser
+val >>> : ('a, 'b, 'x) parser * ('b, 'c, 'x) parser -> ('a, 'c, 'x) parser
 val --- : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'b * 'c, 'x) parser
 val --| : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'b, 'x) parser
 val |-- : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'c, 'x) parser
+val map : ('b -> 'c) -> ('a, 'b, 'x) parser -> ('a, 'c, 'x) parser
+val predicate : ('b -> bool) -> ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
+val notFollowedBy : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
+val lookAhead : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
 val produce : ('a, 'b, 'x) parser * 'c -> ('a, 'c, 'x) parser
 val token : ''a -> (''a, ''a, 'x) parser
 val choice : ('a, 'b, 'x) parser list -> ('a, 'b, 'x) parser
@@ -66,7 +67,7 @@ structure Text : sig
 (* octDigit *)
 end
 
-(* structure Token : sig *)
+(* structure Lex : sig *)
 
 (* end *)
 

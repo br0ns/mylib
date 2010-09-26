@@ -12,10 +12,8 @@ infix 2 >>> --> ??? produce
 
 (* fun depends m = (any --> m) handle Match => fail *)
 
-fun (p >>> f) = (p --> return o f)
+fun map f p = (p --> return o f)
 fun (p1 --- p2) = p1 --> (fn a => p2 --> return o pair a)
-(* fun (p1 --| p2) = (p1 --- p2) >>> fst *)
-(* fun (p1 |-- p2) = (p1 --- p2) >>> snd *)
 fun (p1 --| p2) = p1 --> (fn x => p2 --> (fn _ => return x))
 fun (p1 |-- p2) = p1 --> (fn _ => p2 --> (fn x => return x))
 fun p produce x = p |-- return x
@@ -49,20 +47,22 @@ fun token t =
         fail
     )
 
+fun (lexer >>> parser) c = parser $ lexer c
+
 fun choice [p] = p
   | choice (p :: ps) = p ||| choice ps
   | choice _ = (any |-- fail) ??? "at least one parser in choice"
-fun link ps = foldr (op:: \> op>>> o op---) (return nil) ps
+fun link ps = foldr (map op:: o op---) (return nil) ps
 fun count 0 p = return nil
-  | count n p = (p --- count (n - 1) p) >>> op::
-fun many p c = (try (p --- many p) >>> op:: ||| return nil) c
-fun many1 p = (p --- many p) >>> op::
-fun maybe p = p >>> SOME ||| return NONE
+  | count n p = map op:: (p --- count (n - 1) p)
+fun many p c = (map op:: $ try (p --- many p) ||| return nil) c
+fun many1 p = map op:: (p --- many p)
+fun maybe p = map SOME p ||| return NONE
 fun between l r p = l |-- p --| r
 fun followedBy p = lookAhead p produce ()
 fun manyTill p stop = stop produce nil |||
-                      (p --- manyTill p stop) >>> op::
-fun sepBy1 p sep = (p --- many (p --| sep)) >>> op::
+                      map op:: (p --- manyTill p stop)
+fun sepBy1 p sep = map op:: (p --- many (p --| sep))
 fun sepBy p sep = sepBy1 p sep ||| return nil
 fun endBy p e = many (p --| e)
 fun endBy1 p e = many1 (p --| e)
@@ -71,7 +71,7 @@ fun sepEndBy1 p sep = sepBy1 p sep --| maybe sep
 fun chainr1 p oper =
     let
       fun scan c = (p --> rest) c
-      and rest x = (oper --- scan) >>> op$ ||| return x
+      and rest x = map op$ (oper --- scan) ||| return x
     in
       scan
     end
@@ -87,10 +87,10 @@ fun char c = try (token c) ??? ("'" ^ str c ^ "'")
 fun string s =
     let
       fun loop nil = return nil
-        | loop (c :: cs) = (char c --- loop cs) >>> op:: ???
+        | loop (c :: cs) = map op:: (char c --- loop cs) ???
                            ("'" ^ str c ^ "' in \"" ^ s ^ "\"")
     in
-      loop (explode s) >>> implode
+      map implode $ loop (explode s)
     end
 
 (* fun keywords ks = *)
