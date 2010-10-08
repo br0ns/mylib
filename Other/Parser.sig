@@ -12,7 +12,6 @@ val --| : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'b, 'x) parser
 val |-- : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'c, 'x) parser
 val map : ('b -> 'c) -> ('a, 'b, 'x) parser -> ('a, 'c, 'x) parser
 val predicate : ('a -> bool) -> ('a, 'a, 'x) parser
-val notFollowedBy : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
 val lookAhead : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
 val produce : ('a, 'b, 'x) parser * 'c -> ('a, 'c, 'x) parser
 val token : ''a -> (''a, ''a, 'x) parser

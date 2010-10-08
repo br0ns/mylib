@@ -26,6 +26,10 @@ fun setState state' con state = SOME ((), state')
 
 fun (p ??? s) = p
 fun any con state = con state
+fun notFollowedBy p con state =
+    case p con state of
+      SOME _ => NONE
+    | NONE   => SOME ((), state)
 fun try p = p
 fun parse p show con state =
     case p con state of

@@ -16,6 +16,7 @@ sig
 
   val ??? : ('a, 'b, 'x) parser * string -> ('a, 'b, 'x) parser
   val any : ('a, 'a, 'x) parser
+  val notFollowedBy : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
   val try : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
 
   val parse : ('a, 'b, 'x) parser ->

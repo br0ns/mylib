@@ -47,6 +47,10 @@ fun getState con state = (Right state, state, 0)
 fun setState state' con _ = (Right (), state', 0)
 
 fun any con state = con state
+fun notFollowedBy p con state =
+    case p con state of
+      (Right _, _, _) => (Left [(state, Unexpected)], state, 0)
+    | (Left _, _, _)  => (Right (), state, 0)
 
 fun (p1 ||| p2) con state =
     case p1 con state of

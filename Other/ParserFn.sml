@@ -29,11 +29,6 @@ fun lookAhead p =
       setState state |-- return x
     ))
 
-fun notFollowedBy p =
-    getState --> (fn s =>
-    try p --> (fn _ => setState s |-- fail) ||| return ()
-    )
-
 fun eof c = (notFollowedBy any ??? "end of stream") c
 
 fun token t = predicate $ curry op= t
