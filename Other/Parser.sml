@@ -1,7 +1,6 @@
 structure Parser =
 ParserFn(
 struct
-val LOOK_AHEAD = 1
 infix 0 |||
 infix 1 --- |-- --|
 infix 2 >>> --> ???
@@ -36,7 +35,7 @@ fun expect err errs =
 fun (p ??? expected) con state =
     case p con state of
       (err as (Left errs, state', n)) =>
-      if n <= LOOK_AHEAD then
+      if n = 0 then
         (expect (state', Expected expected) errs, state', n)
       else
         err
@@ -52,7 +51,7 @@ fun any con state = con state
 fun (p1 ||| p2) con state =
     case p1 con state of
       (err as (Left errs, state', n)) =>
-      if n <= LOOK_AHEAD then
+      if n = 0 then
         case p2 con state of
           (Left errs', state'', n') =>
           (Left $ errs @ errs', state'', n')

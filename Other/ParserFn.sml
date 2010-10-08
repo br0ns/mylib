@@ -16,12 +16,13 @@ fun (p1 |-- p2) = p1 --> (fn _ => p2 --> (fn x => return x))
 fun p produce x = p |-- return x
 
 fun predicate p =
-    any --> (fn x =>
-                if p x then
-                  return x
-                else
-                  fail
-          )
+    try (any --> (fn x =>
+                     if p x then
+                       return x
+                     else
+                       fail
+                 )
+        )
 fun lookAhead p =
     getState --> (fn state =>
     p --> (fn x =>
@@ -52,7 +53,7 @@ fun between l r p = l |-- p --| r
 fun followedBy p = lookAhead p produce ()
 fun manyTill p stop = stop produce nil |||
                       map op:: (p --- manyTill p stop)
-fun sepBy1 p sep = map op:: (p --- many (p --| sep))
+fun sepBy1 p sep = map op:: (p --- many (sep |-- p))
 fun sepBy p sep = sepBy1 p sep ||| return nil
 fun endBy p e = many (p --| e)
 fun endBy1 p e = many1 (p --| e)
@@ -92,9 +93,6 @@ fun string s =
       map implode $ loop (explode s)
     end
 
-fun keywords ks =
-    foldr op||| fail $ List.map (fn (k, a) => try (string k) produce a) ks
-
 fun oneOf cs = foldr op||| fail $ List.map token cs
 fun noneOf cs = foldr op||| fail $ List.map (predicate o curry op<>) cs
 fun space c = (oneOf $ explode " \n\t\r" ??? "space") c
@@ -106,16 +104,38 @@ fun lower c = (predicate Char.isLower ??? "lower case letter") c
 fun alphaNum c = (predicate Char.isAlphaNum ??? "alphanumeric character") c
 fun letter c = (predicate Char.isAlpha ??? "letter") c
 fun digit c = (predicate Char.isDigit ??? "digit") c
-
-fun integer c =
-    (map (foldl (fn (d, n) => ord d - 48 + 10 * n) 0)
-         (many1 digit)
-    ) c
+fun natural c = (many1 digit produce ()) c
+fun whitespace c = ((many $ oneOf $ explode " \n\t\r") produce ()) c
 end
 
 structure Lex =
 struct
+fun lexeme p = p --| Text.whitespace
 
+fun symbol s = lexeme $ Text.string s
+
+fun keywords ks =
+    foldr op||| fail $ List.map (fn (k, a) => try (symbol k) produce a) ks
+
+fun parens p = between (symbol "(") (symbol ")") p
+fun braces p = between (symbol "{") (symbol "}") p
+fun angles p = between (symbol "<") (symbol ">") p
+fun brackets p = between (symbol "[") (symbol "]") p
+fun semi c = symbol ";" c
+fun colon c = symbol ":" c
+fun comma c = symbol "," c
+fun dot c = symbol "." c
+fun semiSep p = sepBy p (symbol ";")
+fun semiSep1 p = sepBy1 p (symbol ";")
+fun commaSep p = sepBy p (symbol ",")
+fun commaSep1 p = sepBy1 p (symbol ",")
+
+fun natural c =
+    lexeme
+      (map (foldl (fn (d, n) => ord d - 48 + 10 * n) 0)
+           (many1 Text.digit)
+      )
+      c
 end
 
 structure Parse =

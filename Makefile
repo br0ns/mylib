@@ -1,6 +1,8 @@
+MOSMLC=mosmlc
+
 all :
 	sed "s/.*and type exn = exn//" Extensions/General.sig > mosml/General.sig
-	sed "s/fun string.*/fun stringFull p s = vectorFull p (fn c => \"'\" ^ str c ^ \"'\") (Vector.fromList (explode s))/" Other/ParserFn.sml | sed "s/fun stringPrefix.*/fun stringPrefix p s = vectorPrefix p (fn c => \"'\" ^ str c ^ \"'\") (Vector.fromList (explode s))/" > mosml/ParserFn.sml
+	sed "s/fun string p s.*/fun string p s = vectorFull p (fn c => \"'\" ^ str c ^ \"'\") (Vector.fromList (explode s))/" Other/ParserFn.sml | sed "s/fun stringFull.*/fun stringFull p s = vector p (fn c => \"'\" ^ str c ^ \"'\") (Vector.fromList (explode s))/" > mosml/ParserFn.sml
 
 
 	cat mosml/GENERAL.sig \
@@ -111,7 +113,7 @@ all :
 \
       > MyLib.sml
 
-	mosmlc -c -P full \
+	$(MOSMLC) -c -P full \
       Random.ui \
       -toplevel MyLib.sml
 	rm MyLib.sml

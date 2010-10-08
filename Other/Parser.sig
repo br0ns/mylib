@@ -70,7 +70,6 @@ val eof : ('a, unit, 'x) parser
 structure Text : sig
   val char : char -> (char, char, 'x) parser
   val string : string -> (char, string, 'x) parser
-  val keywords : (string * 'a) list -> (char, 'a, 'x) parser
   val oneOf : char list -> (char, char, 'x) parser
   val noneOf : char list -> (char, char, 'x) parser
   val spaces : (char, int, 'x) parser
@@ -82,14 +81,30 @@ structure Text : sig
   val alphaNum : (char, char, 'x) parser
   val letter : (char, char, 'x) parser
   val digit : (char, char, 'x) parser
+  val natural : (char, unit, 'x) parser
   (* val hexDigit : (char, char, 'x) parser *)
   (* val octDigit : (char, char, 'x) parser *)
-  val integer : (char, int, 'x) parser
+  val whitespace : (char, unit, 'x) parser
 end
 
-(* structure Lex : sig *)
-
-(* end *)
+structure Lex : sig
+  val lexeme : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
+  val symbol : string -> (char, string, 'x) parser
+  val keywords : (string * 'a) list -> (char, 'a, 'x) parser
+  val parens : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
+  val braces : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
+  val angles : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
+  val brackets : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
+  val semi : (char, string, 'x) parser
+  val colon : (char, string, 'x) parser
+  val comma : (char, string, 'x) parser
+  val dot : (char, string, 'x) parser
+  val semiSep : (char, 'a, 'x) parser -> (char, 'a list, 'x) parser
+  val semiSep1 : (char, 'a, 'x) parser -> (char, 'a list, 'x) parser
+  val commaSep : (char, 'a, 'x) parser -> (char, 'a list, 'x) parser
+  val commaSep1 : (char, 'a, 'x) parser -> (char, 'a list, 'x) parser
+  val natural : (char, int, 'x) parser
+end
 
 structure Parse : sig
   val vector : ('a, 'b, 'a VectorSlice.slice) parser ->
