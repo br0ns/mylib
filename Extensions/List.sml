@@ -24,20 +24,20 @@ fun sort _ nil = nil
     end
 end
 
+
 fun shuffle lst = let
   val seed = (Int.fromLarge o Time.toSeconds o Time.now) ()
   val gen  = Random.rand (seed, 101010)
-in let
-    fun rnd_bool _ = Random.randRange (0,2) gen = 0
-    fun shuffle'  [] tail = tail
-      | shuffle' [x] tail = x::tail
-      | shuffle'  xs tail =
-        let
-          val (left, right) = List.partition rnd_bool xs
-          val right' = shuffle' right tail
-        in shuffle' left right'
-        end
-in shuffle' lst [] end end;
+  fun rnd_bool _ = Random.randRange (0,2) gen = 0
+  fun shuffle'  [] tail = tail
+    | shuffle' [x] tail = x::tail
+    | shuffle'  xs tail =
+      let
+        val (left, right) = List.partition rnd_bool xs
+        val right' = shuffle' right tail
+      in shuffle' left right'
+      end
+in shuffle' lst [] end;
 
 
 fun leftmost nil = NONE
