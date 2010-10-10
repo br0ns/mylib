@@ -2,3 +2,5 @@ MyLib
 *.uo
 *.ui
 Test
+mosml/ParserFn.sml
+mosml/General.sig
