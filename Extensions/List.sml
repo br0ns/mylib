@@ -24,37 +24,21 @@ fun sort _ nil = nil
     end
 end
 
-fun shuffle xs =
-    let
-      val i = (Int.fromLarge o Time.toSeconds o Time.now) ()
-      val rand = Random.rand (i, 42)
+fun shuffle lst = let
+  val seed = (Int.fromLarge o Time.toSeconds o Time.now) ()
+  val gen  = Random.rand (seed, 101010)
+in let
+    fun rnd_bool _ = Random.randRange (0,2) gen = 0
+    fun shuffle'  [] tail = tail
+      | shuffle' [x] tail = x::tail
+      | shuffle'  xs tail =
+        let
+          val (left, right) = List.partition rnd_bool xs
+          val right' = shuffle' right tail
+        in shuffle' left right'
+        end
+in shuffle' lst [] end end;
 
-      fun split (x :: y :: zs) =
-          let
-            val (xs, ys) = split zs
-          in
-            (x :: xs, y :: ys)
-          end
-        | split xs = (xs, nil)
-
-      fun merge (xs, nil) = xs
-        | merge (nil, ys) = ys
-        | merge (x :: xs, y :: ys) =
-          if Random.randInt rand mod 2 = 0 then
-            x :: merge (xs, y :: ys)
-          else
-            y :: merge (x :: xs, ys)
-
-      fun loop (zs as _ :: _ :: _) =
-          let
-            val (xs, ys) = split zs
-          in
-            merge (loop xs, loop ys)
-          end
-        | loop xs = xs
-    in
-      loop xs
-    end
 
 fun leftmost nil = NONE
   | leftmost (SOME x :: _) = SOME x
