@@ -16,13 +16,15 @@ fun (p1 |-- p2) = p1 --> (fn _ => p2 --> (fn x => return x))
 fun p produce x = p |-- return x
 
 fun predicate p =
-    try (any --> (fn x =>
-                     if p x then
-                       return x
-                     else
-                       fail
-                 )
+    try (any -->
+             (fn x =>
+                 if p x then
+                   return x
+                 else
+                   fail
+             )
         )
+
 fun lookAhead p =
     getState --> (fn state =>
     p --> (fn x =>
@@ -41,7 +43,7 @@ fun choice [p] = p
 fun link ps = foldr (map op:: o op---) (return nil) ps
 fun count 0 p = return nil
   | count n p = map op:: (p --- count (n - 1) p)
-fun many p c = (map op:: $ try (p --- many p) ||| return nil) c
+fun many p c = (map op:: $ (try p --- many p) ||| return nil) c
 fun many1 p = map op:: (p --- many p)
 fun maybe p = map SOME p ||| return NONE
 fun between l r p = l |-- p --| r

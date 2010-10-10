@@ -19,7 +19,7 @@ datatype error = Expected of string
 
 type ('a, 'x) consumer = 'x state ->
                          (('x state * error) list,
-                          'a) either * 'x state * int
+                          'a) either * 'x state * bool
 
 type ('a, 'b, 'x) parser = ('a, 'x) consumer -> ('b, 'x) consumer
 
@@ -34,31 +34,31 @@ fun expect err errs =
 
 fun (p ??? expected) con state =
     case p con state of
-      (err as (Left errs, state', n)) =>
-      if n = 0 then
-        (expect (state', Expected expected) errs, state', n)
+      (err as (Left errs, state', c)) =>
+      if c then
+        (expect (state', Expected expected) errs, state', c)
       else
         err
     | x => x
 
-fun fail con state = (Left [(state, Unexpected)], state, 0)
+fun fail con state = (Left [(state, Unexpected)], state, true)
 
-fun getState con state = (Right state, state, 0)
-fun setState state' con _ = (Right (), state', 0)
+fun getState con state = (Right state, state, true)
+fun setState state' con _ = (Right (), state', true)
 
 fun any con state = con state
 fun notFollowedBy p con state =
     case p con state of
-      (Right _, _, _) => (Left [(state, Unexpected)], state, 0)
-    | (Left _, _, _)  => (Right (), state, 0)
+      (Right _, _, _) => (Left [(state, Unexpected)], state, true)
+    | (Left _, _, _)  => (Right (), state, false)
 
 fun (p1 ||| p2) con state =
     case p1 con state of
-      (err as (Left errs, state', n)) =>
-      if n = 0 then
+      (err as (Left errs, state', c)) =>
+      if c then
         case p2 con state of
-          (Left errs', state'', n') =>
-          (Left $ errs @ errs', state'', n')
+          (Left errs', state'', c') =>
+          (Left $ errs @ errs', state'', c')
         | x => x
       else
         err
@@ -66,27 +66,27 @@ fun (p1 ||| p2) con state =
 
 fun try p con state =
     case p con state of
-      (Left errs, _, _) => (Left errs, state, 0)
+      (Left errs, _, _) => (Left errs, state, true)
     | x => x
 
-fun return x con state = (Right x, state, 0)
+fun return x con state = (Right x, state, true)
 
 fun (p --> f) con state =
     case p con state of
-      (Right x, state', n) =>
+      (Right x, state', c) =>
       let
-        val (x, state'', n') = (f x) con state'
+        val (x, state'', c') = (f x) con state'
       in
-        (x, state'', n + n')
+        (x, state'', c andalso c')
       end
-    | (Left e, state', n) => (Left e, state', n)
+    | (Left e, state', c) => (Left e, state', c)
 
 fun parse p show r s =
     let
       fun con (_, s, p) =
           case r s of
-            SOME (x, s') => (Right x, (s, s', p + 1), 1)
-          | NONE => (Left nil, (s, s, p), 0)
+            SOME (x, s') => (Right x, (s, s', p + 1), false)
+          | NONE => (Left nil, (s, s, p), true)
       val state = (s, s, 1)
       (* fun tok n = *)
       (*     let *)
@@ -145,10 +145,10 @@ fun parse p show r s =
       (*     } *)
     in
       case p con state of
-        (Left errs, (s, _, _), n) =>
+        (Left errs, (s, _, _), _) =>
         (Left $ err errs,
          s)
-      | (Right x, (_, s', _), n) => (Right x, s')
+      | (Right x, (_, s', _), _) => (Right x, s')
     end
 
 fun scan p r s =
