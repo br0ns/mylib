@@ -116,4 +116,4 @@ all :
 	$(MOSMLC) -c -P full \
       Random.ui \
       -toplevel MyLib.sml
-	rm MyLib.sml
+#	rm MyLib.sml

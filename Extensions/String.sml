@@ -35,4 +35,18 @@ fun wordwrap width text =
     end
 
 fun untabify tabw = translate (fn #"\t" => spaces tabw | s => str s)
+
+fun <- (s, x) =
+    let
+      open Substring
+      val ss = full s
+      fun loop i =
+          if sub (ss, i) = #"%" then
+            i
+          else
+            loop (i + 1)
+      val i = loop 0
+    in
+      concat [slice (ss, 0, SOME i), full x, slice (ss, i + 1, NONE)]
+    end handle Subscript => s
 end

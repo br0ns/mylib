@@ -8,11 +8,15 @@ sig
   val force : 'a t -> 'a List.list
   (* Alias for getItem *)
   val split : 'a t -> ('a * 'a t) option
-  val cons : 'a * 'a t -> 'a t
-  val singleton : 'a -> 'a t
+  val cons : 'a Lazy.t * 'a t -> 'a t
 
-  (* Tabulate over the natural numbers (starting from zero) *)
-  val tabulateN : (int -> 'a) -> 'a t
+  (* val nil : 'a t
+   * Because of value polymorphism nil can't be defined. Insted use
+   * Lazy.eager Nil or singleton nil
+   *)
+
+  val consEager : 'a * 'a t -> 'a t
+  val singleton : 'a -> 'a t
 
   (* These work just like for regular lists. So see
    * http://www.standardml.org/Basis/list.html
@@ -52,4 +56,27 @@ sig
   val tabulate : int * (int -> 'a) -> 'a t
   val collate : ('a * 'a -> order) -> 'a t * 'a t -> order
   val allPairs : 'a t -> 'b t -> ('a * 'b) t
+
+  (* Extra *)
+  (* In increasing magnitude, positive numbers before negative. The naturals start at 0 *)
+  val tabulateN : (int -> 'a) -> 'a t
+  (* val tabulateZ : (int -> 'a) -> 'a t *)
+  (* val tabulateQ : (int * int -> 'a) -> 'a t *)
+  (* val tabulatePrimes : (int -> 'a) -> 'a t *)
+  (* val tabulateFibonacci : (int -> 'a) -> 'a t *)
+  (* val tabulateBell : (int -> 'a) -> 'a t *)
+  (* val tabulateCatalan : (int -> 'a) -> 'a t *)
+  (* val tabulateFactorial : (int -> 'a) -> 'a t *)
+
+  (* val sort : ('a -> 'a -> order) -> 'a t -> 'a t *)
+  (* val shuffle : 'a t -> 'a t *)
+  (* val leftmost  : 'a option t -> 'a option *)
+  (* val rightmost : 'a option t -> 'a option *)
+  (* val allPairs : 'a t -> 'b t -> ('a * 'b) t *)
+  (* val splitAt : 'a t * int -> 'a t * 'a t *)
+  (* val allSplits : 'a t -> ('a t * 'a t) t *)
+  (* val consAll : 'a * 'a t t -> 'a t t *)
+  (* val concatMap : ('a -> 'b t) -> 'a t -> 'b t *)
+  (* val range : int -> int -> 'a t -> 'a t *)
+  (* val power : 'a t -> 'a t t *)
 end

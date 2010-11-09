@@ -4,6 +4,7 @@
 
 signature Layout =
 sig
+  (* infix ^^ ++ \ & \\ && <- *)
   include Pretty
 
   val println : int option -> t -> unit
@@ -75,7 +76,6 @@ sig
   (* Takes a desired width and appends spaces to a document if it is narrower or
    * does nothing if it isn't. *)
   val fill : int -> t -> t
-
 
   val ++ : t * t -> t (* l ++ r = l ^^ txt " " ^^ r *)
   val \  : t * t -> t (* l \\ r = l ^^ nl ^^ r      *)

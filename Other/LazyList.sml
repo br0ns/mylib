@@ -22,7 +22,9 @@ fun split l =
       Cons x => SOME x
     | Nil    => NONE
 
-fun cons x = E $ Cons x
+fun consEager x = E $ Cons x
+
+fun cons (x, xs) = L (fn _ => Cons (F x, xs))
 
 fun singleton x = eager [x]
 

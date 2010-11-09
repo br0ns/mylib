@@ -32,10 +32,4 @@ fun (a || b) z =
 
 fun (a >> b) = b o a
 fun (a << b) = a o b
-
-fun loop p a x =
-    if p x then
-      x
-    else
-      loop p a (a x)
 end

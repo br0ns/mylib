@@ -54,4 +54,8 @@ fun allSplits xs = tabulate (length xs, xs \< splitAt)
 fun consAll (x, xss) = map (x \< op::) xss
 
 fun concatMap f xs = foldr (fn (x, a) => f x @ a) nil xs
+
+fun range m n = n \> take o m \> drop
+
+fun power xs = foldl (fn (x, xs) => consAll (x, xs) @ xs) nil xs
 end

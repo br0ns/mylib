@@ -21,8 +21,6 @@ sig
   val ++ : ('a, 'b) t * ('c, 'd) t -> (('a, 'c) Either.t, ('b, 'd) Either.t) t
   val || : ('a, 'c) t * ('b, 'c) t -> (('a, 'b) Either.t, 'c) t
 
-  val loop : ('a, bool) t -> ('a, 'a) t -> ('a, 'a) t
-
   val >> : ('a, 'b) t * ('b, 'c) t -> ('a, 'c) t
   val << : ('b, 'c) t * ('a, 'b) t -> ('a, 'c) t
 

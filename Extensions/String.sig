@@ -17,4 +17,6 @@ val wordwrap : int -> string -> string
 val untabify : int -> string -> string
 
 val spaces : int -> string
+
+val <- : string * string -> string
 end

@@ -2,7 +2,7 @@
 
 signature Set =
 sig
-    eqtype ''a t
+    type ''a t
 
     val empty      : ''a t
     val singleton  : ''a -> ''a t
@@ -26,6 +26,7 @@ sig
     val card       : ''a t -> int
 
     val collate    : (''a -> ''a -> order) -> ''a t -> ''a t -> order
+    (* val power      : ''a t -> ''a t t *)
 
     val partition  : (''a -> bool) -> ''a t -> ''a t * ''a t
     val filter     : (''a -> bool) -> ''a t -> ''a t

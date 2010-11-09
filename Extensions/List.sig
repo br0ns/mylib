@@ -11,4 +11,6 @@ sig
   val allSplits : 'a list -> ('a list * 'a list) list
   val consAll : 'a * 'a list list -> 'a list list
   val concatMap : ('a -> 'b list) -> 'a list -> 'b list
+  val range : int -> int -> 'a list -> 'a list
+  val power : 'a list -> 'a list list
 end

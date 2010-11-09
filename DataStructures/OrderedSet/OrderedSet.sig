@@ -33,6 +33,8 @@ sig
 
     val card       : t -> int
 
+    (* val power      : t -> t Set.t *)
+
     val partition  : (element -> bool) -> t -> t * t
     val filter     : (element -> bool) -> t -> t
     val exists     : (element -> bool) -> t -> bool

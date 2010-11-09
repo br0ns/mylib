@@ -116,6 +116,7 @@ fun fold f s max doc = foldl f s (linearize max doc)
 
 local
   fun strs nil = nil
+    | strs ((_, "") :: ls) = "\n" :: strs ls
     | strs [(i, s)] = [String.spaces i, s]
     | strs ((i, s) :: ls) = String.spaces i :: s :: "\n" :: strs ls
 in

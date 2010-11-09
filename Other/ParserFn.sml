@@ -7,9 +7,9 @@ open Base
 (*                   'a) Either.t *)
 infix 0 |||
 infix 1 --- |-- --|
-infix 2 >>> --> ??? produce
+infix 2 >>> --> ??? produce underlies
 
-fun map f p = (p --> return o f)
+fun p >>> f = (p --> return o f)
 fun (p1 --- p2) = p1 --> (fn a => p2 --> return o pair a)
 fun (p1 --| p2) = p1 --> (fn x => p2 --> (fn _ => return x))
 fun (p1 |-- p2) = p1 --> (fn _ => p2 --> (fn x => return x))
@@ -35,22 +35,25 @@ fun eof c = (notFollowedBy any ??? "end of stream") c
 
 fun token t = predicate $ curry op= t
 
-fun (lexer >>> parser) c = parser $ lexer c
+fun (lexer underlies parser) c = parser $ lexer c
 
 fun choice [p] = p
   | choice (p :: ps) = p ||| choice ps
   | choice _ = (any |-- fail) ??? "at least one parser in choice"
-fun link ps = foldr (map op:: o op---) (return nil) ps
+
+fun cons p = p >>> op::
+
+fun link ps = foldr (cons o op---) (return nil) ps
 fun count 0 p = return nil
-  | count n p = map op:: (p --- count (n - 1) p)
-fun many p c = (map op:: $ (try p --- many p) ||| return nil) c
-fun many1 p = map op:: (p --- many p)
-fun maybe p = map SOME p ||| return NONE
+  | count n p = cons (p --- count (n - 1) p)
+fun many p c = (cons (try p --- many p) ||| return nil) c
+fun many1 p = cons (p --- many p)
+fun maybe p = p >>> SOME ||| return NONE
 fun between l r p = l |-- p --| r
 fun followedBy p = lookAhead p produce ()
 fun manyTill p stop = stop produce nil |||
-                      map op:: (p --- manyTill p stop)
-fun sepBy1 p sep = map op:: (p --- many (sep |-- p))
+                      cons (p --- manyTill p stop)
+fun sepBy1 p sep = cons (p --- many (sep |-- p))
 fun sepBy p sep = sepBy1 p sep ||| return nil
 fun endBy p e = many (p --| e)
 fun endBy1 p e = many1 (p --| e)
@@ -70,7 +73,7 @@ fun chainr1 p oper =
     let
       fun scan c = (p --> rest) c
       and rest lhs =
-          map (fn (f, rhs) => f (lhs, rhs)) (oper --- scan) ||| return lhs
+          (oper --- scan) >>> (fn (f, rhs) => f (lhs, rhs)) ||| return lhs
     in
       scan
     end
@@ -84,16 +87,16 @@ fun char c = try (token c) ??? ("'" ^ str c ^ "'")
 fun string s =
     let
       fun loop nil = return nil
-        | loop (c :: cs) = map op:: (char c --- loop cs) ???
+        | loop (c :: cs) = cons (char c --- loop cs) ???
                            ("'" ^ str c ^ "' in \"" ^ s ^ "\"")
     in
-      map implode $ loop (explode s)
+      loop (explode s) >>> implode
     end
 
 fun oneOf cs = foldr op||| fail $ List.map token cs
 fun noneOf cs = foldr op||| fail $ List.map (predicate o curry op<>) cs
 fun space c = (oneOf $ explode " \n\t\r" ??? "space") c
-fun spaces c = (map length $ many space) c
+fun spaces c = (many space >>> length) c
 fun newline c = (token #"\n" ??? "new line") c
 fun tab c = (token #"\t" ??? "tab") c
 fun upper c = (predicate Char.isUpper ??? "upper case letter") c
@@ -129,8 +132,8 @@ fun commaSep1 p = sepBy1 p (symbol ",")
 
 fun natural c =
     lexeme
-      (map (foldl (fn (d, n) => ord d - 48 + 10 * n) 0)
-           (many1 Text.digit)
+      (
+       (many1 Text.digit) >>> (foldl (fn (d, n) => ord d - 48 + 10 * n) 0)
       )
       c
 end

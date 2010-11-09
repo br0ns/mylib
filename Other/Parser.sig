@@ -1,16 +1,16 @@
 (* infix 0 |||
  * infix 1 --- |-- --|
- * infix 2 >>> --> ??? produce
+ * infix 2 >>> --> ??? produce underlies
  *)
 
 signature Parser =
 sig
   include ParserBase
-val >>> : ('a, 'b, 'x) parser * ('b, 'c, 'x) parser -> ('a, 'c, 'x) parser
+val underlies : ('a, 'b, 'x) parser * ('b, 'c, 'x) parser -> ('a, 'c, 'x) parser
+val >>> : ('a, 'b, 'x) parser * ('b -> 'c) -> ('a, 'c, 'x) parser
 val --- : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'b * 'c, 'x) parser
 val --| : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'b, 'x) parser
 val |-- : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'c, 'x) parser
-val map : ('b -> 'c) -> ('a, 'b, 'x) parser -> ('a, 'c, 'x) parser
 val predicate : ('a -> bool) -> ('a, 'a, 'x) parser
 val lookAhead : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
 val produce : ('a, 'b, 'x) parser * 'c -> ('a, 'c, 'x) parser
