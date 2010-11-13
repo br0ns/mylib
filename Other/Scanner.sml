@@ -31,7 +31,7 @@ fun notFollowedBy p con state =
       SOME _ => NONE
     | NONE   => SOME ((), state)
 fun try p = p
-fun parse p show con state =
+fun parse p con state =
     case p con state of
       SOME (x, state') => (SOME x, state')
     | NONE => (NONE, state)

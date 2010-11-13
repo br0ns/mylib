@@ -163,10 +163,13 @@ fun tabulate (n, f) =
       loop 0
     end
 
+exception Stop
 fun tabulateN f =
     let
       fun loop n =
-          L (fn _ => Cons (f n, loop (n + 1)))
+          L (fn _ => Cons (f n, loop (n + 1))
+                handle Stop => Nil
+            )
     in
       loop 0
     end
@@ -184,4 +187,16 @@ fun collate cmp (xs, ys) =
 
 fun allPairs xs ys =
     E Nil
+
+fun fromFile f =
+    let
+      val is = TextIO.openIn f
+      fun loop _ =
+          case TextIO.input1 is of
+            SOME c => Cons (c, L loop)
+          | NONE   => Nil before TextIO.closeIn is
+    in
+      L loop
+    end
+
 end

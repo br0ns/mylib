@@ -12,7 +12,7 @@ sig
 
   (* val nil : 'a t
    * Because of value polymorphism nil can't be defined. Insted use
-   * Lazy.eager Nil or singleton nil
+   * Lazy.eager Nil
    *)
 
   val consEager : 'a * 'a t -> 'a t
@@ -59,6 +59,7 @@ sig
 
   (* Extra *)
   (* In increasing magnitude, positive numbers before negative. The naturals start at 0 *)
+  exception Stop
   val tabulateN : (int -> 'a) -> 'a t
   (* val tabulateZ : (int -> 'a) -> 'a t *)
   (* val tabulateQ : (int * int -> 'a) -> 'a t *)
@@ -79,4 +80,6 @@ sig
   (* val concatMap : ('a -> 'b t) -> 'a t -> 'b t *)
   (* val range : int -> int -> 'a t -> 'a t *)
   (* val power : 'a t -> 'a t t *)
+
+  val fromFile : string -> char t
 end

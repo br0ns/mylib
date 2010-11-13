@@ -9,10 +9,9 @@ datatype either = datatype Either.t
 
 type ('a, 'x) reader = ('a, 'x) StringCvt.reader
 type position = int
-type 'x state = 'x * 'x * position
-fun position (_, _, p) = p
-fun stream (_, s, _, _) = s
-fun streamBefore (s, _, _) = s
+type 'x state = 'x * position
+fun position (_, p) = p
+fun stream (s, _) = s
 
 datatype error = Expected of string
                | Unexpected
@@ -81,13 +80,13 @@ fun (p --> f) con state =
       end
     | (Left e, state', c) => (Left e, state', c)
 
-fun parse p show r s =
+fun parse p r s =
     let
-      fun con (_, s, p) =
+      fun con (s, p) =
           case r s of
-            SOME (x, s') => (Right x, (s, s', p + 1), false)
-          | NONE => (Left nil, (s, s, p), true)
-      val state = (s, s, 1)
+            SOME (x, s') => (Right x, (s', p + 1), false)
+          | NONE => (Left nil, (s, p), true)
+      val state = (s, 0)
       (* fun tok n = *)
       (*     let *)
       (*       fun loop 1 (SOME (x, _)) = SOME x *)
@@ -98,40 +97,40 @@ fun parse p show r s =
       (*       loop n (r s) *)
       (*     end *)
 
-      fun tok state =
-          case r (streamBefore state) of
-            NONE => "end of input"
-          | SOME (x, _) => show x
+      (* fun tok state = *)
+      (*     case r (stream state) of *)
+      (*       NONE => "end of input" *)
+      (*     | SOME (x, _) => show x *)
 
-      fun errs nil = IntMap.empty
-        | errs ((state, error) :: es) =
-          let
-            open IntMap
-            val p = position state
-            val m = errs es
-          in
-            modify (fn (t, exs) => (t, Set.insert exs error)) m p
-            handle Domain => singleton (p, (tok state, Set.singleton error))
-          end
+      (* fun errs nil = IntMap.empty *)
+      (*   | errs ((state, error) :: es) = *)
+      (*     let *)
+      (*       open IntMap *)
+      (*       val p = position state *)
+      (*       val m = errs es *)
+      (*     in *)
+      (*       modify (fn (t, exs) => (t, Set.insert exs error)) m p *)
+      (*       handle Domain => singleton (p, (tok state, Set.singleton error)) *)
+      (*     end *)
 
-      fun err es =
-          let
-            val m = errs es
-            val ps = IntMap.toList m
-            fun showe Unexpected = ""
-              | showe (Expected e) = e
-          in
-            map (fn (p, (t, es)) =>
-                    {position = p,
-                     error = "Unexpected " ^ t ^ ", expected one of " ^
-                             Show.list showe
-                                       (List.filter
-                                          (fn Expected _ => true | _ => false)
-                                          (Set.toList es)
-                                       )
-                    }
-                ) ps
-          end
+      (* fun err es = *)
+      (*     let *)
+      (*       val m = errs es *)
+      (*       val ps = IntMap.toList m *)
+      (*       fun showe Unexpected = "" *)
+      (*         | showe (Expected e) = e *)
+      (*     in *)
+      (*       map (fn (p, (t, es)) => *)
+      (*               {position = p, *)
+      (*                error = "Unexpected " ^ t ^ ", expected one of " ^ *)
+      (*                        Show.list showe *)
+      (*                                  (List.filter *)
+      (*                                     (fn Expected _ => true | _ => false) *)
+      (*                                     (Set.toList es) *)
+      (*                                  ) *)
+      (*               } *)
+      (*           ) ps *)
+      (*     end *)
 
       (* fun err (s, e) = *)
       (*     {position = position s, *)
@@ -145,14 +144,15 @@ fun parse p show r s =
       (*     } *)
     in
       case p con state of
-        (Left errs, (s, _, _), _) =>
-        (Left $ err errs,
-         s)
-      | (Right x, (_, s', _), _) => (Right x, s')
+        (Left errs, (s', _), _) =>
+        (Left nil, s')
+        (* (Left $ err errs, *)
+        (*  s) *)
+      | (Right x, (s', _), _) => (Right x, s')
     end
 
 fun scan p r s =
-    case parse p (const "") r s of
+    case parse p r s of
       (Left _, _) => NONE
     | (Right x, s') => SOME (x, s')
 

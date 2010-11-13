@@ -2,7 +2,7 @@ MOSMLC=mosmlc
 
 all :
 	sed "s/.*and type exn = exn//" Extensions/General.sig > mosml/General.sig
-	sed "s/fun string p s.*/fun string p s = vectorFull p (fn c => \"'\" ^ str c ^ \"'\") (Vector.fromList (explode s))/" Other/ParserFn.sml | sed "s/fun stringFull.*/fun stringFull p s = vector p (fn c => \"'\" ^ str c ^ \"'\") (Vector.fromList (explode s))/" > mosml/ParserFn.sml
+	sed "s/fun string p s.*/fun string p s = vector p (Vector.fromList (explode s))/" Other/ParserFn.sml > mosml/ParserFn.sml
 
 
 	cat mosml/GENERAL.sig \

@@ -23,7 +23,7 @@ fun predicate p =
                  else
                    fail
              )
-        )
+        ) ??? "<predicate: write meaningfull description>"
 
 fun lookAhead p =
     getState --> (fn state =>
@@ -34,6 +34,7 @@ fun lookAhead p =
 fun eof c = (notFollowedBy any ??? "end of stream") c
 
 fun token t = predicate $ curry op= t
+fun except t = predicate $ curry op<> t
 
 fun (lexer underlies parser) c = parser $ lexer c
 
@@ -81,7 +82,8 @@ fun chainr p oper x = chainr1 p oper ||| return x
 
 structure Text =
 struct
-fun char c = try (token c) ??? ("'" ^ str c ^ "'")
+fun char c = token c ??? ("'" ^ str c ^ "'")
+(* try (token c ??? ("'" ^ str c ^ "'")) *)
 
 (* I actually wrote this - refactor please *)
 fun string s =
@@ -103,6 +105,8 @@ fun upper c = (predicate Char.isUpper ??? "upper case letter") c
 fun lower c = (predicate Char.isLower ??? "lower case letter") c
 fun alphaNum c = (predicate Char.isAlphaNum ??? "alphanumeric character") c
 fun letter c = (predicate Char.isAlpha ??? "letter") c
+fun word c = (many1 letter >>> implode ??? "word") c
+fun line c = (many $ except #"\n" >>> implode --| newline ??? "line") c
 fun digit c = (predicate Char.isDigit ??? "digit") c
 fun natural c = (many1 digit produce ()) c
 fun whitespace c = ((many $ oneOf $ explode " \n\t\r") produce ()) c
@@ -140,20 +144,18 @@ end
 
 structure Parse =
 struct
-fun vector p show v =
-    fst $ parse p show VectorSlice.getItem (VectorSlice.full v)
-fun vectorFull p = vector (p --| eof)
+fun vector p v =
+    fst $ parse p VectorSlice.getItem (VectorSlice.full v)
 
-fun run p show r s = fst $ parse p show r s
-fun full p = run (p --| eof)
+fun run p r s = fst $ parse p r s
 
-fun string p s = vector p (fn c => "'" ^ str c ^ "'") s
-fun stringFull p s = vectorFull p (fn c => "'" ^ str c ^ "'") s
+fun string p s = vector p s
 
-fun list p show l = fst $ parse p show List.getItem l
-fun listFull p = list (p --| eof)
+fun list p l = fst $ parse p List.getItem l
 
-fun file p f = string p $ TextIO.readFile f
-fun fileFull p = file (p --| eof)
+fun lazyList p l = fst $ parse p LazyList.getItem l
+
+fun file p f = lazyList p $ LazyList.fromFile f
+
 end
 end

@@ -20,9 +20,12 @@ sig
   val try : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
 
   val parse : ('a, 'b, 'x) parser ->
-              ('a -> string) ->
               ('a, 'x) reader ->
-              'x -> ('a, 'b) result * 'x
-  val scan : (''a, ''b, 'x) parser -> (''a, 'x) reader -> (''b, 'x) reader
+              'x ->
+              ('a, 'b) result * 'x
+
+  val scan : (''a, ''b, 'x) parser ->
+             (''a, 'x) reader ->
+             (''b, 'x) reader
 
 end
