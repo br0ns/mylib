@@ -13,4 +13,5 @@ sig
   val concatMap : ('a -> 'b list) -> 'a list -> 'b list
   val range : int -> int -> 'a list -> 'a list
   val power : 'a list -> 'a list list
+  val group : ('a -> 'a -> bool) -> 'a list -> 'a list list
 end

@@ -55,7 +55,6 @@ sig
   val all : ('a -> bool) -> 'a t -> bool
   val tabulate : int * (int -> 'a) -> 'a t
   val collate : ('a * 'a -> order) -> 'a t * 'a t -> order
-  val allPairs : 'a t -> 'b t -> ('a * 'b) t
 
   (* Extra *)
   (* In increasing magnitude, positive numbers before negative. The naturals start at 0 *)
@@ -73,13 +72,14 @@ sig
   (* val shuffle : 'a t -> 'a t *)
   (* val leftmost  : 'a option t -> 'a option *)
   (* val rightmost : 'a option t -> 'a option *)
-  (* val allPairs : 'a t -> 'b t -> ('a * 'b) t *)
+  val allPairs : 'a t -> 'b t -> ('a * 'b) t
   (* val splitAt : 'a t * int -> 'a t * 'a t *)
   (* val allSplits : 'a t -> ('a t * 'a t) t *)
   (* val consAll : 'a * 'a t t -> 'a t t *)
   (* val concatMap : ('a -> 'b t) -> 'a t -> 'b t *)
   (* val range : int -> int -> 'a t -> 'a t *)
   (* val power : 'a t -> 'a t t *)
+  (* val group : ('a -> 'a -> bool) -> 'a t -> 'a t t *)
 
   val fromFile : string -> char t
 end

@@ -4,10 +4,6 @@ sig
   where type string = string
     and type char = Char.char
 
-(* type stream *)
-(* val stream : string -> stream *)
-(* val reader : (char, stream) reader *)
-
 val tabulate : int * (int -> char) -> string
 
 (* Max width -> text -> wordwrapped text *)

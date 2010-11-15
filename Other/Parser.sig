@@ -92,6 +92,12 @@ end
 structure Lex : sig
   val lexeme : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
   val symbol : string -> (char, string, 'x) parser
+(* TODO *)
+  (* val identifier : {head : (char, char, 'x) parser, *)
+  (*                   tail : (char, char, 'x) parser} -> *)
+  (*                  (char, string, 'x) parser *)
+  (* val letter : (char, char, 'x) parser *)
+  (* val word : (char, word, 'x) parser *)
   val keywords : (string * 'a) list -> (char, 'a, 'x) parser
   val parens : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
   val braces : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
@@ -118,7 +124,7 @@ structure Parse : sig
                'a Vector.vector ->
                ('a, 'b) result
 
-  val string : (char, 'b, char VectorSlice.slice) parser ->
+  val string : (char, 'b, substring) parser ->
                string ->
                (char, 'b) result
 
@@ -133,5 +139,29 @@ structure Parse : sig
   val file : (char, 'b, char LazyList.t) parser ->
              string ->
              (char, 'b) result
+
+
+  val testVector : ('a -> string) ->
+                   ('a, 'b, 'a VectorSlice.slice) parser ->
+                   'a Vector.vector ->
+                   'b
+
+  val testString : (char, 'b, substring) parser ->
+                   string ->
+                   'b
+
+  val testList : ('a -> string) ->
+                 ('a, 'b, 'a list) parser ->
+                 'a list ->
+                 'b
+
+  val testLazyList : ('a -> string) ->
+                     ('a, 'b, 'a LazyList.t) parser ->
+                     'a LazyList.t ->
+                     'b
+
+  val testFile : (char, 'b, char LazyList.t) parser ->
+                 string ->
+                 'b
 end
 end

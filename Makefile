@@ -2,8 +2,6 @@ MOSMLC=mosmlc
 
 all :
 	sed "s/.*and type exn = exn//" Extensions/General.sig > mosml/General.sig
-	sed "s/fun string p s.*/fun string p s = vector p (Vector.fromList (explode s))/" Other/ParserFn.sml > mosml/ParserFn.sml
-
 
 	cat mosml/GENERAL.sig \
       mosml/VECTOR_SLICE.sig \
@@ -91,16 +89,16 @@ all :
 \
       TopLevel.sml \
 \
-      Other/ParserBase.sig \
-      Other/Parser.sig \
-      mosml/ParserFn.sml \
-      Other/Parser.sml \
-      Other/Scanner.sml \
-\
       Other/Pretty.sig \
       Other/Pretty.sml \
       Other/Layout.sig \
       Other/Layout.sml \
+\
+      Other/ParserBase.sig \
+      Other/Parser.sig \
+      Other/ParserFn.sml \
+      Other/Parser.sml \
+      Other/Scanner.sml \
 \
       Other/JSON.sig \
       Other/JSON.sml \

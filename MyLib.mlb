@@ -145,14 +145,14 @@ TopLevel.sml
 (***
  * Other (contd.)
  *)
+Other/Pretty.sig Other/Pretty.sml
+Other/Layout.sig Other/Layout.sml
+
 Other/ParserBase.sig
 Other/Parser.sig
 Other/ParserFn.sml
 Other/Parser.sml
 Other/Scanner.sml
-
-Other/Pretty.sig Other/Pretty.sml
-Other/Layout.sig Other/Layout.sml
 
 Other/JSON.sig Other/JSON.sml
 

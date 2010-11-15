@@ -36,4 +36,12 @@ fun parse p con state =
       SOME (x, state') => (SOME x, state')
     | NONE => (NONE, state)
 fun scan p = p
+exception Error of string
+fun test show p con state =
+    case parse p con state of
+      (SOME x, _) => x
+    | (NONE, state') =>
+      case con state' of
+        NONE        => raise Error "Parse error at end of stream."
+      | SOME (t, _) => raise Error ("Parse error at token " ^ show t ^ ".")
 end)

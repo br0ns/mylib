@@ -23,7 +23,7 @@ fun predicate p =
                  else
                    fail
              )
-        ) ??? "<predicate: write meaningfull description>"
+        )
 
 fun lookAhead p =
     getState --> (fn state =>
@@ -83,7 +83,6 @@ fun chainr p oper x = chainr1 p oper ||| return x
 structure Text =
 struct
 fun char c = token c ??? ("'" ^ str c ^ "'")
-(* try (token c ??? ("'" ^ str c ^ "'")) *)
 
 (* I actually wrote this - refactor please *)
 fun string s =
@@ -144,18 +143,34 @@ end
 
 structure Parse =
 struct
-fun vector p v =
-    fst $ parse p VectorSlice.getItem (VectorSlice.full v)
-
 fun run p r s = fst $ parse p r s
 
-fun string p s = vector p s
+fun vector p v =
+    fst $ parse p VectorSlice.getItem $ VectorSlice.full v
+
+fun string p s =
+    fst $ parse p Substring.getc $ Substring.full s
 
 fun list p l = fst $ parse p List.getItem l
 
 fun lazyList p l = fst $ parse p LazyList.getItem l
 
 fun file p f = lazyList p $ LazyList.fromFile f
+
+fun testVector show p v =
+    test show p VectorSlice.getItem $ VectorSlice.full v
+
+fun testString p s =
+    test (fn c => "'" ^ str c ^ "'") p Substring.getc $ Substring.full s
+
+fun testList show p l =
+    test show p List.getItem l
+
+fun testLazyList show p l =
+    test show p LazyList.getItem l
+
+fun testFile p f =
+    testLazyList (fn c => "'" ^ str c ^ "'") p $ LazyList.fromFile f
 
 end
 end

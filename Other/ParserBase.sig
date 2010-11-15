@@ -28,4 +28,10 @@ sig
              (''a, 'x) reader ->
              (''b, 'x) reader
 
+  exception Error of string
+  val test : ('a -> string) ->
+             ('a, 'b, 'x) parser ->
+             ('a, 'x) reader ->
+             'x ->
+             'b
 end

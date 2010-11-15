@@ -35,8 +35,7 @@ fun null l =
 
 infixr 5 @
 fun xs @ ys =
-    L
-      (fn _ =>
+    L (fn _ =>
           case F xs of
             Cons (x, xs) => Cons (x, xs @ ys)
           | Nil          => F ys
@@ -80,7 +79,7 @@ fun take (l, n) =
 
 fun drop (l, n) = tl ^* n $ l
 
-fun rev l = eager o List.rev o force $ l
+fun rev l = (eager o List.rev o force) l
 
 fun concat ls =
     L (fn _ =>

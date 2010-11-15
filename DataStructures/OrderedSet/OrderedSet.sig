@@ -2,7 +2,7 @@
 
 signature OrderedSet =
 sig
-    eqtype element
+    type element
     type t
 
     val empty      : t

@@ -1,6 +1,6 @@
 structure List :> List =
 struct
-open General infix 2 $ infix 4 \< \> infix 5 ^* to
+open General infixr 3 $ infix 4 \< \> infix 5 ^* to
 open List
 
 local
@@ -58,4 +58,22 @@ fun concatMap f xs = foldr (fn (x, a) => f x @ a) nil xs
 fun range m n = n \> take o m \> drop
 
 fun power xs = foldl (fn (x, xs) => consAll (x, xs) @ xs) nil xs
+
+fun group _ nil = nil
+  | group eq (x :: xs) =
+    let
+      fun collect (y, ys, yss) =
+          rev (y :: ys) :: yss
+    in
+      rev $ collect $
+          foldl
+          (fn (x, a as (y, ys, yss)) =>
+              if eq x y then
+                (x, y :: ys, yss)
+              else
+                (x, nil, collect a)
+          )
+          (x, nil, nil)
+          xs
+    end
 end
