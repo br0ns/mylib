@@ -1,8 +1,9 @@
 MOSMLC=mosmlc
+MYLIB_MOSML = MyLib.ui MyLib.uo
 
-.PHONY: sml
+.PHONY: mosml mosml-clean mosml-create-link
 
-sml:
+mosml: 
 	@echo Fixing MosML General.sig
 	@sed "s/.*and type exn = exn//" Extensions/General.sig > mosml/General.sig
 
@@ -120,3 +121,13 @@ sml:
 
 	@echo Removing tmp MosML specific temporary sources
 	rm MyLib.sml
+
+$(MYLIB_MOSML): mosml
+
+mosml-clean: 
+	rm MyLib.ui
+	rm MyLib.uo
+
+mosml-create-link: $(MYLIB_MOSML)
+	sudo ln -s `pwd`/MyLib.ui /usr/lib/mosml/
+	sudo ln -s `pwd`/MyLib.uo /usr/lib/mosml/

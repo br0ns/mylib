@@ -1,5 +1,12 @@
-.PHONY: mlton
+.PHONY: mlton mlton-create-link mlton-clean
 
 mlton:
 	@echo Building mlton sources
 	mlton -verbose 1 MyLib.mlb
+
+mlton-create-link: mlton
+	@echo This is at your own risk.
+	sudo ln -s `pwd` /usr/lib/mlton/sml/mylib
+
+mlton-clean:
+	-rm MyLib
