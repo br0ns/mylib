@@ -117,6 +117,13 @@ fun lexeme p = p --| Text.whitespace
 
 fun symbol s = lexeme $ Text.string s
 
+fun identifier {head, tail} =
+    lexeme ((head --- many tail) >>> op::)
+
+fun letter c = lexeme Text.letter c
+
+fun word c = lexeme Text.word c
+
 fun keywords ks =
     foldr op||| fail $ List.map (fn (k, a) => try (symbol k) produce a) ks
 

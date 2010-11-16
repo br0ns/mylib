@@ -103,7 +103,6 @@ fun parse p r s =
                 let
                   fun loop (F s) es = (s, NONE) :: es
                     | loop (E (s, e)) es = (s, SOME e) :: es
- (* before Arrow.second (Option.app println) e before println "foo" *)
                     | loop (C (es1, es2)) es =
                       loop es1 $ loop es2 es
                 in

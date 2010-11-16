@@ -92,12 +92,11 @@ end
 structure Lex : sig
   val lexeme : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
   val symbol : string -> (char, string, 'x) parser
-(* TODO *)
-  (* val identifier : {head : (char, char, 'x) parser, *)
-  (*                   tail : (char, char, 'x) parser} -> *)
-  (*                  (char, string, 'x) parser *)
-  (* val letter : (char, char, 'x) parser *)
-  (* val word : (char, word, 'x) parser *)
+  val identifier : {head : (char, char, 'x) parser,
+                    tail : (char, char, 'x) parser} ->
+                   (char, string, 'x) parser
+  val letter : (char, char, 'x) parser
+  val word : (char, word, 'x) parser
   val keywords : (string * 'a) list -> (char, 'a, 'x) parser
   val parens : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
   val braces : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
