@@ -1,0 +1,5 @@
+.PHONY: mlton
+
+mlton:
+	@echo Building mlton sources
+	mlton -verbose 1 MyLib.mlb
