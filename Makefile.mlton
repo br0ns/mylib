@@ -10,3 +10,4 @@ mlton-create-link: mlton
 
 mlton-clean:
 	-rm MyLib
+	-sudo rm /usr/lib/mlton/sml/mylib

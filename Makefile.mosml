@@ -125,8 +125,10 @@ mosml:
 $(MYLIB_MOSML): mosml
 
 mosml-clean: 
-	rm MyLib.ui
-	rm MyLib.uo
+	-rm MyLib.ui
+	-rm MyLib.uo
+	-sudo rm /usr/lib/mosml/MyLib.ui
+	-sudo rm /usr/lib/mosml/MyLib.uo
 
 mosml-create-link: $(MYLIB_MOSML)
 	sudo ln -s "`pwd`/MyLib.ui" /usr/lib/mosml/
