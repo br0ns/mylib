@@ -2,9 +2,6 @@ functor ParserFn (Base : ParserBase) :>
         Parser where type ('a, 'b) result = ('a, 'b) Base.result =
 struct
 open Base
-(* type 'a result = ({position : position, *)
-(*                    error    : string} Set.t, *)
-(*                   'a) Either.t *)
 infix 0 |||
 infix 1 --- |-- --|
 infix 2 >>> --> ??? produce underlies
@@ -94,9 +91,10 @@ fun string s =
       loop (explode s) >>> implode
     end
 
-fun oneOf cs = foldr op||| fail $ List.map token cs
-fun noneOf cs = foldr op||| fail $ List.map (predicate o curry op<>) cs
-fun space c = (oneOf $ explode " \n\t\r" ??? "space") c
+fun oneOf cs = foldr op||| fail $ List.map token $ explode cs
+fun noneOf cs = predicate (fn c => List.all (c \< op<>) $ explode cs)
+                          ??? "a character not among \"" ^ String.toString cs ^ "\""
+fun space c = (predicate Char.isSpace ??? "space") c
 fun spaces c = (many space >>> length) c
 fun newline c = (token #"\n" ??? "new line") c
 fun tab c = (token #"\t" ??? "tab") c
@@ -107,8 +105,81 @@ fun letter c = (predicate Char.isAlpha ??? "letter") c
 fun word c = (many1 letter >>> implode ??? "word") c
 fun line c = (many $ except #"\n" >>> implode --| newline ??? "line") c
 fun digit c = (predicate Char.isDigit ??? "digit") c
-fun natural c = (many1 digit produce ()) c
-fun whitespace c = ((many $ oneOf $ explode " \n\t\r") produce ()) c
+fun num c = (many1 digit >>> implode) c
+fun whitespace c = ((many $ oneOf " \n\t\r") produce ()) c
+end
+structure RegEx =
+struct
+type 'a match = 'a LazyList.t
+type ('a, 'x) regex = ('a, 'a match, 'x) parser
+
+infix @ ** ++
+open LazyList
+
+fun class p =
+    any -->
+        (fn t =>
+            if p t then
+              return $ singleton t
+            else
+              fail
+        )
+
+fun zero c = (return $ eager nil) c
+
+fun one c = (any >>> singleton) c
+fun lit t = class $ t \< op=
+fun oneOf ts = class (fn t => List.exists (t \< op=) ts)
+fun noneOf ts = class (fn t => List.all (t \< op<>) ts)
+
+fun run r = r >>> force
+
+fun r1 ** r2 = (r1 --- r2) >>> op@
+fun r1 ++ r2 = try r1 ||| r2
+
+fun maybe r = try r ||| zero
+
+fun star r c = (try (r ** star r) ||| zero) c
+
+fun plus p = p ** star p
+
+fun seq (t :: ts) = lit t ** seq ts
+  | seq nil = zero
+
+fun lower c = class Char.isLower c
+fun upper c = class Char.isUpper c
+fun digit c = class Char.isDigit c
+fun letter c = class Char.isAlpha c
+fun alphaNum c = class Char.isAlphaNum c
+fun space c = class Char.isSpace c
+end
+
+structure Symb =
+struct
+fun lparen c = Text.char #"(" c
+fun rparen c = Text.char #")" c
+fun langle c = Text.char #"<" c
+fun rangle c = Text.char #">" c
+fun lbrace c = Text.char #"{" c
+fun rbrace c = Text.char #"}" c
+fun lbracket c = Text.char #"[" c
+fun rbracket c = Text.char #"]" c
+fun pling c = Text.char #"'" c
+fun quote c = Text.char #"\"" c
+fun semi c = Text.char #";" c
+fun colon c = Text.char #":" c
+fun comma c = Text.char #"," c
+fun space c = Text.char #" " c
+fun dot c = Text.char #"." c
+fun dash c = Text.char #"-" c
+fun sharp c = Text.char #"#" c
+fun percent c = Text.char #"%" c
+fun dollar c = Text.char #"$" c
+fun ampersand c = Text.char #"&" c
+fun slash c = Text.char #"/" c
+fun backslash c = Text.char #"\\" c
+fun eq c = Text.char #"=" c
+fun tilde c = Text.char #"~" c
 end
 
 structure Lex =
@@ -118,7 +189,7 @@ fun lexeme p = p --| Text.whitespace
 fun symbol s = lexeme $ Text.string s
 
 fun identifier {head, tail} =
-    lexeme ((head --- many tail) >>> op::)
+    lexeme ((head --- many tail) >>> op:: >>> implode)
 
 fun letter c = lexeme Text.letter c
 
@@ -139,13 +210,6 @@ fun semiSep p = sepBy p (symbol ";")
 fun semiSep1 p = sepBy1 p (symbol ";")
 fun commaSep p = sepBy p (symbol ",")
 fun commaSep1 p = sepBy1 p (symbol ",")
-
-fun natural c =
-    lexeme
-      (
-       (many1 Text.digit) >>> (foldl (fn (d, n) => ord d - 48 + 10 * n) 0)
-      )
-      c
 end
 
 structure Parse =

@@ -70,8 +70,8 @@ val eof : ('a, unit, 'x) parser
 structure Text : sig
   val char : char -> (char, char, 'x) parser
   val string : string -> (char, string, 'x) parser
-  val oneOf : char list -> (char, char, 'x) parser
-  val noneOf : char list -> (char, char, 'x) parser
+  val oneOf : string -> (char, char, 'x) parser
+  val noneOf : string -> (char, char, 'x) parser
   val spaces : (char, int, 'x) parser
   val space : (char, char, 'x) parser
   val newline : (char, char, 'x) parser
@@ -83,10 +83,88 @@ structure Text : sig
   val word : (char, string, 'x) parser
   val line : (char, string, 'x) parser
   val digit : (char, char, 'x) parser
-  val natural : (char, unit, 'x) parser
+  val num : (char, string, 'x) parser
   (* val hexDigit : (char, char, 'x) parser *)
   (* val octDigit : (char, char, 'x) parser *)
   val whitespace : (char, unit, 'x) parser
+end
+
+structure Symb : sig
+  val lparen : (char, char, 'x) parser    (* = Text.char #"("  *)
+  val rparen : (char, char, 'x) parser    (* = Text.char #")"  *)
+  val langle : (char, char, 'x) parser    (* = Text.char #"<"  *)
+  val rangle : (char, char, 'x) parser    (* = Text.char #">"  *)
+  val lbrace : (char, char, 'x) parser    (* = Text.char #"{"  *)
+  val rbrace : (char, char, 'x) parser    (* = Text.char #"}"  *)
+  val lbracket : (char, char, 'x) parser  (* = Text.char #"["  *)
+  val rbracket : (char, char, 'x) parser  (* = Text.char #"]"  *)
+  val pling : (char, char, 'x) parser     (* = Text.char #"'"  *)
+  val quote : (char, char, 'x) parser     (* = Text.char #"\"" *)
+  val semi : (char, char, 'x) parser      (* = Text.char #";"  *)
+  val colon : (char, char, 'x) parser     (* = Text.char #":"  *)
+  val comma : (char, char, 'x) parser     (* = Text.char #","  *)
+  val space : (char, char, 'x) parser     (* = Text.char #" "  *)
+  val dot : (char, char, 'x) parser       (* = Text.char #"."  *)
+  val dash : (char, char, 'x) parser      (* = Text.char #"-"  *)
+  val sharp : (char, char, 'x) parser     (* = Text.char #"#"  *)
+  val percent : (char, char, 'x) parser   (* = Text.char #"%"  *)
+  val dollar : (char, char, 'x) parser    (* = Text.char #"$"  *)
+  val ampersand : (char, char, 'x) parser (* = Text.char #"&"  *)
+  val slash : (char, char, 'x) parser     (* = Text.char #"/"  *)
+  val backslash : (char, char, 'x) parser (* = Text.char #"\\" *)
+  val eq : (char, char, 'x) parser        (* = Text.char #"="  *)
+  val tilde : (char, char, 'x) parser     (* = Text.char #"~"  *)
+end
+
+structure RegEx : sig
+  (* Eager regular expression parser
+   *
+   * Don't forget that you have the full parser library at your disposal, so
+   * eager parsing shouldn't be a big hinderance.
+   *)
+  type 'a match
+  type ('a, 'x) regex = ('a, 'a LazyList.t, 'x) parser
+
+  val run : ('a, 'x) regex -> ('a, 'a list, 'x) parser
+
+  val one : ('a, 'x) regex
+
+  val ** : ('a, 'x) regex * ('a, 'x) regex ->
+           ('a, 'x) regex
+
+  val ++ : ('a, 'x) regex * ('a, 'x) regex ->
+           ('a, 'x) regex
+
+  val maybe : ('a, 'x) regex ->
+              ('a, 'x) regex
+
+  val star : ('a, 'x) regex ->
+             ('a, 'x) regex
+
+  val plus : ('a, 'x) regex ->
+              ('a, 'x) regex
+
+  val oneOf : ''a list ->
+              (''a, 'x) regex
+
+  val noneOf : ''a list ->
+               (''a, 'x) regex
+
+  val seq : ''a list ->
+            (''a, 'x) regex
+
+  val lit : ''a ->
+            (''a, 'x) regex
+
+  val class : ('a -> bool) ->
+              ('a, 'x) regex
+
+  val lower : (char, 'x) regex
+  val upper : (char, 'x) regex
+  val digit : (char, 'x) regex
+  val letter : (char, 'x) regex
+  val alphaNum : (char, 'x) regex
+  val space : (char, 'x) regex
 end
 
 structure Lex : sig
@@ -96,21 +174,23 @@ structure Lex : sig
                     tail : (char, char, 'x) parser} ->
                    (char, string, 'x) parser
   val letter : (char, char, 'x) parser
-  val word : (char, word, 'x) parser
+  val word : (char, string, 'x) parser
   val keywords : (string * 'a) list -> (char, 'a, 'x) parser
+
   val parens : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
-  val braces : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
   val angles : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
+  val braces : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
   val brackets : (char, 'a, 'x) parser -> (char, 'a, 'x) parser
+
   val semi : (char, string, 'x) parser
   val colon : (char, string, 'x) parser
   val comma : (char, string, 'x) parser
   val dot : (char, string, 'x) parser
+
   val semiSep : (char, 'a, 'x) parser -> (char, 'a list, 'x) parser
   val semiSep1 : (char, 'a, 'x) parser -> (char, 'a list, 'x) parser
   val commaSep : (char, 'a, 'x) parser -> (char, 'a list, 'x) parser
   val commaSep1 : (char, 'a, 'x) parser -> (char, 'a list, 'x) parser
-  val natural : (char, int, 'x) parser
 end
 
 structure Parse : sig

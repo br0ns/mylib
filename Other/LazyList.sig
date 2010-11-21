@@ -12,7 +12,7 @@ sig
 
   (* val nil : 'a t
    * Because of value polymorphism nil can't be defined. Insted use
-   * Lazy.eager Nil
+   * eager nil
    *)
 
   val consEager : 'a * 'a t -> 'a t

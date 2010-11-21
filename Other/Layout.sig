@@ -1,10 +1,15 @@
 (* The way it works, is that Layout is an extension of Pretty. So every
  * declaration in Pretty is also in Layout. Think of it as Pretty defining the
- * basic operations and Layout building sugar on top of that. *)
+ * basic operations and Layout building sugar on top of that.
+ *)
+
+(* TODO
+ * Make a suite of examples.
+ *)
 
 signature Layout =
 sig
-  (* infix ^^ ++ \ & \\ && <- *)
+  (* infix ^^ ++ \ & \\ && *)
   include Pretty
 
   val println : int option -> t -> unit
@@ -138,4 +143,5 @@ sig
   val slash : t     (* = txt "/"  *)
   val backslash : t (* = txt "\\" *)
   val eq : t        (* = txt "="  *)
+  val tilde : t     (* = txt "~"  *)
 end

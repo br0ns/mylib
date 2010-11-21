@@ -28,7 +28,7 @@ sig
              (''a, 'x) reader ->
              (''b, 'x) reader
 
-  exception Error of string
+  exception Error of string list
   val test : ('a -> string) ->
              ('a, 'b, 'x) parser ->
              ('a, 'x) reader ->

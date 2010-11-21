@@ -17,6 +17,9 @@ sig
     (* fold: inorder *)
     val fold : ('a * 'b -> 'b) -> 'b -> 'a t -> 'b
 
+    (*  *)
+    (* val translate : ('a -> 'a list) -> 'a t -> 'a t *)
+
     val mapChildren : ('a -> 'a) -> 'a t -> 'a t
     val mapChildrenPartial : ('a -> 'a option) -> 'a t -> 'a t
     val foldlChildren : ('a * 'b -> 'b) -> 'b -> 'a t -> 'b

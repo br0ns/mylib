@@ -130,7 +130,6 @@ fun parse p r s =
     in
       case p con state of
         (Left em, (s', _)) =>
-        (* (Left nil, s') *)
         (Left $ errs em, s')
       | (Right x, (s', _)) => (Right x, s')
     end
@@ -140,42 +139,37 @@ fun scan p r s =
       (Left _, _) => NONE
     | (Right x, s') => SOME (x, s')
 
-exception Error of string
+exception Error of string list
 fun test show p r s =
     case parse p r s of
       (Left es, _) =>
       let
-        open Layout
-        infix ^^ ++ \ & \\ &&
 
         fun one {position = p, token = top, expected = es} =
             let
-              fun loop [x, y] = txt x & txt "or" & txt y
-                | loop [x] = txt x
-                | loop (x :: xs) = txt x && comma & loop xs
-                | loop _ = empty
-              fun tok NONE = txt "end of stream"
-                | tok (SOME t) = txt $ show t
+              fun loop [x, y] = x ^ " or " ^ y
+                | loop [x] = x
+                | loop (x :: xs) = x ^ ", " ^ loop xs
+                | loop _ = ""
+              fun tok NONE = "end of stream"
+                | tok (SOME t) = show t
             in
-              hang
-                2
-                (txt "Failed at position"
-                     & int p && colon \
-                     txt "Got" & tok top &&
-                     (if null es then
-                        empty
-                      else
-                        txt ", but expected" & loop es
-                     ) && dot
-                )
+              if null es then
+                "Failed at position " ^
+                Int.toString (p - 1) ^
+                " just before " ^
+                tok top ^
+                "."
+              else
+                "Failed at position " ^
+                Int.toString p ^
+                ": Got " ^ tok top ^
+                ", but expected " ^
+                loop es ^
+                "."
             end
       in
-        raise Error $ Layout.pretty (SOME 80) (
-              case es of
-                [e] => one e
-              | _   => txt "Failed in" & int (length es) & txt "places:" \
-                           indent 1 (itemize "o" (map one es))
-              )
+        raise Error $ map one es
       end
     | (Right x, _) => x
 end

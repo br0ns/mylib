@@ -40,6 +40,7 @@ val ampersand = txt "&"
 val slash = txt "/"
 val backslash = txt "\\"
 val eq = txt "="
+val tilde = txt "~"
 
 fun punctuate sep ds =
     let
