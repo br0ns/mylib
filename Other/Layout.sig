@@ -144,4 +144,5 @@ sig
   val backslash : t (* = txt "\\" *)
   val eq : t        (* = txt "="  *)
   val tilde : t     (* = txt "~"  *)
+  val asterisk : t  (* = txt "*"  *)
 end

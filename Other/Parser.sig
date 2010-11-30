@@ -114,6 +114,7 @@ structure Symb : sig
   val backslash : (char, char, 'x) parser (* = Text.char #"\\" *)
   val eq : (char, char, 'x) parser        (* = Text.char #"="  *)
   val tilde : (char, char, 'x) parser     (* = Text.char #"~"  *)
+  val asterisk : (char, char, 'x) parser  (* = Text.char #"*"  *)
 end
 
 structure RegEx : sig

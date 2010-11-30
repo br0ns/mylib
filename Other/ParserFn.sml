@@ -103,7 +103,11 @@ fun lower c = (predicate Char.isLower ??? "lower case letter") c
 fun alphaNum c = (predicate Char.isAlphaNum ??? "alphanumeric character") c
 fun letter c = (predicate Char.isAlpha ??? "letter") c
 fun word c = (many1 letter >>> implode ??? "word") c
-fun line c = (many $ except #"\n" >>> implode --| newline ??? "line") c
+fun line c =
+    ((newline produce nil ||| many1 $ except #"\n" --| maybe newline)
+       >>> implode
+       ??? "line"
+    ) c
 fun digit c = (predicate Char.isDigit ??? "digit") c
 fun num c = (many1 digit >>> implode) c
 fun whitespace c = ((many $ oneOf " \n\t\r") produce ()) c
@@ -180,6 +184,7 @@ fun slash c = Text.char #"/" c
 fun backslash c = Text.char #"\\" c
 fun eq c = Text.char #"=" c
 fun tilde c = Text.char #"~" c
+fun asterisk c = Text.char #"*" c
 end
 
 structure Lex =
