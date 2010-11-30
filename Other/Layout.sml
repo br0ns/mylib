@@ -293,25 +293,22 @@ fun str s =
 fun besides spc (l, r) =
     left
       (fn w =>
-          case w of
-            NONE   => l ^^ r
-          | SOME w =>
-            let
-              val w = (w - spc) div 2
-              val ls = linearize (SOME w) l
-              val rs = linearize (SOME w) r
-              val lw = foldl Int.max 0 $ map (fn (i, s) => i + size s) ls
-              fun stitch (nil, (i, s) :: rs) =
-                  [spaces (lw + i + spc), txt s] :: stitch (nil, rs)
-                | stitch ((i, s) :: ls, nil) =
-                  [spaces i, txt s] :: stitch (ls, nil)
-                | stitch ((il, sl) :: ls, (ir, sr) :: rs) =
-                  [spaces il, txt sl, spaces (lw - il - size sl + spc),
-                   spaces ir, txt sr] :: stitch (ls, rs)
-                | stitch _ = nil
-            in
-              align o vcat o map hcat $ stitch (ls, rs)
-            end
+          let
+            val w = Option.map (fn w => (w - spc) div 2) w
+            val ls = linearize w l
+            val rs = linearize w r
+            val lw = foldl Int.max 0 $ map (fn (i, s) => i + size s) ls
+            fun stitch (nil, (i, s) :: rs) =
+                [spaces (lw + i + spc), txt s] :: stitch (nil, rs)
+              | stitch ((i, s) :: ls, nil) =
+                [spaces i, txt s] :: stitch (ls, nil)
+              | stitch ((il, sl) :: ls, (ir, sr) :: rs) =
+                [spaces il, txt sl, spaces (lw - il - size sl + spc),
+                 spaces ir, txt sr] :: stitch (ls, rs)
+              | stitch _ = nil
+          in
+            align o vcat o map hcat $ stitch (ls, rs)
+          end
       )
 
 fun flushRight d =
