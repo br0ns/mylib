@@ -153,8 +153,12 @@ struct
     val alli = die
     val find = die
     val findi = die
-    val app = die
-    val appi = die
+    fun app _ E = ()
+      | app f (T (l, (k, v), r)) =
+        (app f l ; f v ; app f r)
+    fun appi _ E = ()
+      | appi f (T (l, (k, v), r)) =
+        (appi f l ; f (k, v) ; appi f r)
     fun map _ E = E
       | map f (T (l, (k, v), r)) = T (map f l, (k, f v), map f r)
     val mapi = die
