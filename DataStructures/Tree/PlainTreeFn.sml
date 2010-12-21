@@ -176,6 +176,7 @@ struct
     type 'a tree = 'a t
     type 'a t = 'a tree * 'a tree list
     fun init t = (t, nil)
+    fun here (t, _) = t
     fun this (T (v, _, _), _) = v
     fun children (p as T (_, _, ts), w) =
         List.map (fn t => (t, p :: w)) (Map.range ts)
