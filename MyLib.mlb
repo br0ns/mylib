@@ -124,6 +124,7 @@ DataStructures/Queue/Deque.sig
 DataStructures/Tree/Tree.sig
 
 DataStructures/Tree/PlainTreeFn.sml
+DataStructures/Tree/ListTree.sml
 
 (* Default implementation *)
 DataStructures/Tree/Tree.sml

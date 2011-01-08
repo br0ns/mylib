@@ -27,7 +27,7 @@ val println = TextIO.println
 val ltoi = Int.fromLarge
 val itol = Int.toLarge
 
-datatype either = datatype Either.either
+datatype either = datatype Either.t
 exception Either = Either.Either
 val ofLeft = Either.ofLeft
 val ofRight = Either.ofRight

@@ -65,6 +65,7 @@ sig
         type 'a tree
         type 'a t
         val init : 'a tree -> 'a t
+        val here : 'a t -> 'a tree
         val this : 'a t -> 'a
         val children : 'a t -> 'a t list
         val parent : 'a t -> 'a t option

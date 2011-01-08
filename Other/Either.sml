@@ -1,7 +1,6 @@
 structure Either :> Either =
 struct
-datatype ('a, 'b) either = Left of 'a | Right of 'b
-type ('a, 'b) t = ('a, 'b) either
+datatype ('a, 'b) t = Left of 'a | Right of 'b
 exception Either
 
 fun ofLeft (Left x) = x

@@ -5,3 +5,5 @@ structure Tree = PlainTreeFn (
                  fun compare x y = Int.compare (x, y)
                  end
                  ))
+
+(* structure Tree = ListTree *)
