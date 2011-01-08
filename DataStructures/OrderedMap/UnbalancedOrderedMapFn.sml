@@ -149,8 +149,15 @@ fun filter _ = die "filter"
 fun filteri _ = die "filteri"
 fun exists _ = die "exists"
 fun existsi _ = die "existsi"
-fun all _ = die "all"
-fun alli _ = die "alli"
+
+fun all _ E = true
+  | all p (T (l, (_, v), r)) =
+    p v andalso all p l andalso all p r
+
+fun alli _ E = true
+  | alli p (T (l, (k, v), r)) =
+    p (k, v) andalso alli p l andalso alli p r
+
 fun find _ = die "find"
 fun findi _ = die "findi"
 fun app _ E = ()

@@ -14,4 +14,5 @@ sig
   val range : int -> int -> 'a list -> 'a list
   val power : 'a list -> 'a list list
   val group : ('a -> 'a -> bool) -> 'a list -> 'a list list
+  val transpose : 'a list list -> 'a list list
 end

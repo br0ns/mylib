@@ -59,21 +59,35 @@ fun range m n = n \> take o m \> drop
 
 fun power xs = foldl (fn (x, xs) => consAll (x, xs) @ xs) nil xs
 
+(* fun group _ nil = nil *)
+(*   | group eq (x :: xs) = *)
+(*     let *)
+(*       fun collect (y, ys, yss) = *)
+(*           rev (y :: ys) :: yss *)
+(*     in *)
+(*       rev $ collect $ *)
+(*           foldl *)
+(*           (fn (x, a as (y, ys, yss)) => *)
+(*               if eq x y then *)
+(*                 (x, y :: ys, yss) *)
+(*               else *)
+(*                 (x, nil, collect a) *)
+(*           ) *)
+(*           (x, nil, nil) *)
+(*           xs *)
+(*     end *)
+
 fun group _ nil = nil
-  | group eq (x :: xs) =
+  | group equiv (x :: xs) =
     let
-      fun collect (y, ys, yss) =
-          rev (y :: ys) :: yss
+      val (xs, ys) = List.partition (equiv x) xs
     in
-      rev $ collect $
-          foldl
-          (fn (x, a as (y, ys, yss)) =>
-              if eq x y then
-                (x, y :: ys, yss)
-              else
-                (x, nil, collect a)
-          )
-          (x, nil, nil)
-          xs
+      (x :: xs) :: group equiv ys
     end
+
+fun transpose nil = nil
+  | transpose [xs] =
+    List.map (fn x => [x]) xs
+  | transpose (xs :: xss) =
+    map op:: $ ListPair.zip (xs, transpose xss)
 end
