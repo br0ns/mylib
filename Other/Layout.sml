@@ -42,6 +42,7 @@ val backslash = txt "\\"
 val eq = txt "="
 val tilde = txt "~"
 val asterisk = txt "*"
+val bar = txt "|"
 
 fun punctuate sep ds =
     let
