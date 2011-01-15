@@ -15,4 +15,6 @@ sig
   val power : 'a list -> 'a list list
   val group : ('a -> 'a -> bool) -> 'a list -> 'a list list
   val transpose : 'a list list -> 'a list list
+  val loopl : ('a * 'b -> 'a * 'b) -> 'b -> 'a list
+  val loopr : ('a * 'b -> 'a * 'b) -> 'b -> 'a list
 end

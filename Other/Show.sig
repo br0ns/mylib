@@ -6,6 +6,7 @@ sig
     val char : char -> string
     val string : string -> string
     val option : ('a -> string) -> 'a option -> string
+    val order : order -> string
 
     val pair : ('a -> string) ->
                ('b -> string) ->

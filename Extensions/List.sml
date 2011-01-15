@@ -90,4 +90,22 @@ fun transpose nil = nil
     List.map (fn x => [x]) xs
   | transpose (xs :: xss) =
     map op:: $ ListPair.zip (xs, transpose xss)
+
+fun loopl _ state nil = (nil, state)
+  | loopl f state (x :: xs) =
+    let
+      val (x, state) = f (x, state)
+      val (xs, state) = loopl f state xs
+    in
+      (x :: xs, state)
+    end
+
+fun loopr _ state nil = (nil, state)
+  | loopr f state (x :: xs) =
+    let
+      val (xs, state) = loopr f state xs
+      val (x, state) = f (x, state)
+    in
+      (x :: xs, state)
+    end
 end

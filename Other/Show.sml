@@ -9,6 +9,10 @@ struct
     fun option _ NONE = "NONE"
       | option show (SOME x) = "SOME(" ^ show x ^ ")"
 
+    fun order LESS = "LESS"
+      | order EQUAL = "EQUAL"
+      | order GREATER = "GREATER"
+
     fun pair showa showb (a, b) = "(" ^ showa a ^ ", " ^ showb b ^ ")"
     fun triple showa showb showc (a, b, c)  = "(" ^ showa a ^ ", " ^ showb b ^ ", " ^ showc c ^ ")"
 
