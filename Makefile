@@ -1,4 +1,4 @@
-all: mlton mosml
+all: mlton-test mosml
 
 install: mlton-create-link mosml-create-link
 
