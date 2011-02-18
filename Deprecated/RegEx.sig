@@ -1,7 +1,3 @@
-signature RegEx =
-sig
-  type 'a result = 'a list
-
 signature Parsing =
 sig
   datatype 'a result =

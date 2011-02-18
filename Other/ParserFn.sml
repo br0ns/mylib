@@ -112,6 +112,7 @@ fun digit c = (predicate Char.isDigit ??? "digit") c
 fun num c = (many1 digit >>> implode) c
 fun whitespace c = ((many $ oneOf " \n\t\r") produce ()) c
 end
+
 structure RegEx =
 struct
 type 'a match = 'a LazyList.t

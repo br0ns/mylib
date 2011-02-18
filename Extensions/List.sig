@@ -1,7 +1,6 @@
 signature List =
 sig
   include LIST
-
   val sort : ('a -> 'a -> order) -> 'a list -> 'a list
   val shuffle : 'a list -> 'a list
   val leftmost  : 'a option list -> 'a option

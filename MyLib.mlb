@@ -37,6 +37,12 @@ Other/Pair.sig Other/Pair.sml
 (* Has a type t and a curried function compare *)
 DataStructures/Ordered.sig
 
+(*
+ * Concatenatable lists
+ *)
+DataStructures/CList/CList.sig
+DataStructures/CList/CList.sml
+
 
 (*
  * Map

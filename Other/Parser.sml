@@ -16,8 +16,6 @@ fun stream (s, _) = s
 fun justFailed (_, p1) (Left _, (_, p2)) = p2 = p1
   | justFailed _ _ = false
 
-structure Map = IntMap
-
 datatype 'x errors = F of 'x
                    | E of 'x * string
                    | C of 'x errors * 'x errors

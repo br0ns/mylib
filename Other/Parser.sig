@@ -123,8 +123,7 @@ structure RegEx : sig
    * Don't forget that you have the full parser library at your disposal, so
    * eager parsing shouldn't be a big hinderance.
    *)
-  type 'a match
-  type ('a, 'x) regex = ('a, 'a LazyList.t, 'x) parser
+  type ('a, 'x) regex
 
   val run : ('a, 'x) regex -> ('a, 'a list, 'x) parser
 

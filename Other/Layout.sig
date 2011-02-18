@@ -12,14 +12,8 @@ sig
   (* infix ^^ ++ \ & \\ && *)
   include Pretty
 
+  (* Prints to standard out (with an extra \n). Takes an optional max width. *)
   val println : int option -> t -> unit
-
-
-  val chr : char -> t
-  val int : int -> t
-  val real : real -> t
-  val bool : bool -> t
-  val option : ('a -> string) -> 'a option -> t
 
   (* A space if the output fits, new line and indent if it doesn't. *)
   val softln : t
@@ -27,14 +21,14 @@ sig
   (* Nothing if the output fits, new line and indent if it doesn't. *)
   val softbrk : t
 
-  (* Replaces all spaces with softln *)
+  (* Replaces all spaces with softln. *)
   val softtxt : string -> t
 
-  (* Like softtxt but preprends two spaces *)
+  (* Like softtxt but preprends two spaces. *)
   val paragraph : string -> t
 
-  (* Converts a preformatted text into a document. A newline character seperates
-   * paragraphs and the folowing number of spaces determine the next paragraphs
+  (* Converts a preformatted text into a document. A newline character separates
+   * paragraphs and the following number of spaces determine the next paragraphs
    * indentation. So it basically does what you would expect. *)
   val str : string -> t
 
@@ -147,5 +141,9 @@ sig
   val asterisk : t  (* = txt "*"  *)
   val bar : t       (* = txt "|"  *)
 
-
+  val chr : char -> t
+  val int : int -> t
+  val real : real -> t
+  val bool : bool -> t
+  val option : ('a -> string) -> 'a option -> t
 end

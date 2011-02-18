@@ -1,7 +1,7 @@
 structure List :> List =
 struct
-open General infixr 3 $ infix 4 \< \> infix 5 ^* to
 open List
+open General infixr 3 $ infix 4 \< \> infix 5 ^* to
 
 local
   fun merge cmp (xs as x::xs') (ys as y::ys') zs =
