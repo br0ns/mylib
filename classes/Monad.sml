@@ -4,9 +4,9 @@ functor Monad
         MonadO where type 'a t = 'a Monad.t
 =
 struct
-open Monad
+open Pointed Monad
 
-infix >>= >> =<< >=> <=< ap
+infix >>= >> =<< >=> <=<
 
 fun m >> n = m >>= (fn _ => n)
 fun seq ms =
@@ -54,23 +54,25 @@ fun tabulateM' n m =
 
 fun when p m = if p then m else return ()
 fun unless p m = if p then return () else m
-
-fun m ap n = m >>= (fn f => n >>= (fn x => return (f x)))
-infix ap
-fun liftM f a = return f ap a
-fun liftM2 f a b = liftM f a ap b
-fun liftM3 f a b c = liftM2 f a b ap c
-fun liftM4 f a b c d = liftM3 f a b c ap d
 end
 
-functor Monad' (M : MonadI) = Monad (structure Monad = M)
-
-functor ApplicativeFromMonad (M : MonadI) :>
-        ApplicativeI where type 'a t = 'a M.t
-=
+functor MonadEtAl (X : Monad) =
 struct
-structure M = Monad' (M)
-open M infix >>=
-val pure = return
-val ** = ap
+local
+  open X.Pointed X.Monad infix >>=
+
+  structure Y = struct
+  structure Pointed = X.Pointed
+  structure Applicative = struct
+  type 'a t = 'a t
+  fun ** (xs, ys) = xs >>= (fn x => ys >>= (fn y => return (x y)))
+  end
+  end
+
+  structure Z = ApplicativeEtAl (Y)
+  structure M = Monad (X)
+in
+open Z M Y
+end
+
 end

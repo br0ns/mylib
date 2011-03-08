@@ -4,8 +4,7 @@ functor MonadState
         MonadStateO where type 'a t = 'a MonadState.t
 =
 struct
-structure M = Monad' (Monad)
-open M MonadState
+open Pointed Monad MonadState infix >>=
 
 fun modify f = get >>= (fn state => put (f s))
 fun gets f = get >>= (fn state => return (f s))

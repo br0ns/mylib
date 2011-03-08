@@ -10,7 +10,7 @@ fun foldl f b xs =
     foldr (fn (x, c) => fn b => c (f (x, b))) (fn b => b) xs b
 
 local
-  fun maybe f x yop =
+  fun maybe f (x, yop) =
       SOME
         (case yop of
            SOME y => f (x, y)
@@ -29,7 +29,7 @@ local
         val (b, _) =
             fold
               (fn (_, a as (_, false)) => a
-                | x => f x
+                | (x, (a, _)) => f (x, a)
               )
               (b, true)
               xs
@@ -39,14 +39,30 @@ local
 in
 fun foldrUntil f b xs = foldUntil foldr f b xs
 fun foldlUntil f b xs = foldUntil foldl f b xs
-in
+end
+
+fun rightmost xs =
+    foldr
+      (fn (_, a as SOME _) => a
+        | (x as SOME _, _) => x
+      )
+      NONE
+      xs
+
+fun leftmost xs =
+    foldl
+      (fn (_, a as SOME _) => a
+        | (x as SOME _, _) => x
+      )
+      NONE
+      xs
 
 fun toList xs = foldr op:: nil xs
 
-fun concat xss = foldr op@ nil xs
+fun concat xss = foldr op@ nil xss
 
 fun concatMap f xs =
-    foldr (fn (x, a) => f x @ a) nil
+    foldr (fn (x, a) => f x @ a) nil xs
 
 fun conjoin xs =
     foldr (fn (x, a) => x andalso a) true xs
@@ -79,7 +95,7 @@ fun minimumBy cmp xs =
            xs
 
 fun find p xs =
-    foldr (fn (_, SOME a) => a
+    foldr (fn (_, a as SOME _) => a
             | (x, NONE) =>
               if p x then
                 SOME x

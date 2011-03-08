@@ -4,25 +4,55 @@ functor Applicative
         ApplicativeO where type 'a t = 'a Applicative.t
 =
 struct
-open Functor Applicative infix ** |* *| $$ $|
+open Pointed Applicative infix ** |* *| $$
 
-fun a $$ b = map a b
-fun liftA f a = f $$ a
-fun liftA2 f a b = f $$ a ** b
-fun liftA3 f a b c = f $$ a ** b ** c
-fun liftA4 f a b c d = f $$ a ** b ** c ** d
-fun a |* b = liftA2 (fn _ => fn x => x) a b
-fun a *| b = liftA2 (fn x => fn _ => x) a b
-fun x $| a = (fn _ => x) $$ a
-fun allPairs a b = liftA2 (fn x => x) a b
+fun map2 f a b = return f ** a ** b
+fun map3 f a b c = return f ** a ** b ** c
+fun map4 f a b c d = return f ** a ** b ** c ** d
+fun a |* b = map2 (fn _ => fn x => x) a b
+fun a *| b = map2 (fn x => fn _ => x) a b
+fun allPairs a b = map2 (fn x => fn y => (x, y)) a b
 end
 
-functor Applicative' (A : ApplicativeI) = Applicative (structure Applicative = A)
 
-functor FunctorFromApplicative (A : ApplicativeI) :>
-        FunctorI where type 'a t = 'a A.t
-=
+functor ApplicativeEtAl (X : Applicative) =
 struct
-open A infix **
-fun map f xs = pure f ** xs
+local
+  open X.Pointed X.Applicative infix **
+
+  structure Y = struct
+  structure Functor = struct
+  type 'a t = 'a t
+  fun map f xs = return f ** xs
+  end
+  end
+
+  structure F = Functor (Y)
+  structure P = Pointed (X)
+  structure A = Applicative (X)
+in
+open F P A Y
 end
+
+end
+
+(* local *)
+(*   structure A = Applicative (X) *)
+(*   structure P = Pointed (X) *)
+(* in *)
+(* open A P X infix ** *)
+(* end *)
+
+(* local *)
+(*   structure X = struct *)
+(*   structure Functor = struct *)
+(*   type 'a t = 'a t *)
+(*   fun map f xs = return f ** xs *)
+(*   end *)
+(*   end *)
+(*   structure F = Functor (X) *)
+(* in *)
+(* open F X *)
+(* end *)
+
+(* end *)

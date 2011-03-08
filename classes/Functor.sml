@@ -5,8 +5,10 @@ functor Functor
 =
 
 struct
-open Functor
-fun app f fnc = (map f fnc ; ())
-end
+open Functor infix $$ $|
 
-functor Functor' (F : FunctorI) = Functor (structure Functor = F)
+fun app f fnc = (map f fnc ; ())
+fun --> (fnc, f) = map f fnc
+fun a $$ b = map a b
+fun x $| a = (fn _ => x) $$ a
+end

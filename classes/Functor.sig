@@ -7,6 +7,9 @@ signature FunctorO = sig
   include FunctorI
 
   val app : ('a -> unit) -> 'a t -> unit
+  val --> : 'a t * ('a -> 'b) -> 'b t
+  val $$ : ('a -> 'b) * 'a t -> 'b t
+  val $| : 'a * 'b t -> 'a t
 end
 
 signature Functor = sig

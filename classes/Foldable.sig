@@ -14,8 +14,8 @@ signature FoldableO = sig
   val toList : 'a t -> 'a list
   val concat : 'a list t -> 'a list
   val concatMap : ('a -> 'b list) -> 'a t -> 'b list
-  val conjunction : bool t -> bool
-  val disjunction : bool t -> bool
+  val conjoin : bool t -> bool
+  val disjoin : bool t -> bool
   val any : ('a -> bool) -> 'a t -> bool
   val all : ('a -> bool) -> 'a t -> bool
   val find : ('a -> bool) -> 'a t -> 'a option
