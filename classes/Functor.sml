@@ -7,7 +7,8 @@ functor Functor
 struct
 open Functor infix $$ $|
 
-fun app f fnc = (map f fnc ; ())
+val lift = map
+fun app f fnc = (map (fn x => (f x ; ())) fnc ; ())
 fun --> (fnc, f) = map f fnc
 fun a $$ b = map a b
 fun x $| a = (fn _ => x) $$ a

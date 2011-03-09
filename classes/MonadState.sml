@@ -6,6 +6,6 @@ functor MonadState
 struct
 open Pointed Monad MonadState infix >>=
 
-fun modify f = get >>= (fn state => put (f s))
-fun gets f = get >>= (fn state => return (f s))
+fun modify f = get >>= (fn state => set (f state))
+fun gets f = get >>= (fn state => return (f state))
 end

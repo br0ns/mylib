@@ -6,9 +6,12 @@ functor Monad
 struct
 open Pointed Monad
 
-infix >>= >> =<< >=> <=<
+infix >>= >> =<< << -- >=> <=<
 
-fun m >> n = m >>= (fn _ => n)
+fun m >> n = m >>= (fn _ => n >>= (fn x => return x))
+fun m << n = m >>= (fn x => n >>= (fn _ => return x))
+fun m -- n = m >>= (fn x => n >>= (fn y => return (x, y)))
+fun join x = x >>= (fn x => x)
 fun seq ms =
     List.foldr
       (fn (m, m') =>
@@ -44,7 +47,19 @@ fun foreverWithDelay d m =
 
 fun ignore m = m >> return ()
 
-fun join x = x >>= (fn x => x)
+fun mapAndUnzipM f xs =
+    seq (map f xs) >>= (return o ListPair.unzip)
+
+fun zipWithM f ls =
+    seq (map f (ListPair.zip ls))
+
+fun zipWithM' f ls =
+    seq' (map f (ListPair.zip ls))
+
+fun foldM _ b nil = return b
+  | foldM f b (x :: xs) = f (x, b) >>= (fn b' => foldM f b' xs)
+
+fun foldM' f b xs = ignore (foldM f b xs)
 
 fun tabulateM n m =
     seq (List.tabulate (n, fn _ => m))

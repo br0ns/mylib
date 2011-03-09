@@ -6,7 +6,7 @@ signature MonadStateI = sig
 end
 
 signature MonadStateO = sig
-  include MonadI
+  include MonadStateI
 
   val modify : (state -> state) -> unit t
   val gets : (state -> 'a) -> 'a t

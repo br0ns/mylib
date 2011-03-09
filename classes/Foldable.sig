@@ -1,12 +1,13 @@
 signature FoldableI = sig
-    type 'a t
-    val foldr : ('a * 'b -> 'b) -> 'b -> 'a t -> 'b
+  type 'a e
+  type 'a t
+  val foldl : ('a e * 'b -> 'b) -> 'b -> 'a t -> 'b
 end
 
 signature FoldableO = sig
   include FoldableI
 
-  val foldl : ('a * 'b -> 'b) -> 'b -> 'a t -> 'b
+  val foldr : ('a * 'b -> 'b) -> 'b -> 'a t -> 'b
   val foldr1 : ('a * 'a -> 'a) -> 'a t -> 'a option
   val foldl1 : ('a * 'a -> 'a) -> 'a t -> 'a option
   val foldrUntil : ('a * 'b -> 'b * bool) -> 'b -> 'a t -> 'b

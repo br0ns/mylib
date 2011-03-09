@@ -1,15 +1,10 @@
 functor MonadPlus
-          (X : MonadPlus
+          (include MonadPlus
           ) :>
-        MonadPlusO where type 'a t = 'a X.Monad.t
+        MonadPlusO where type 'a t = 'a Monad.t
 =
 struct
-structure Y = MonadEtAl (X)
-open Y X.Alternative
-
-fun msum ms = List.foldr || zero ms
-fun guard true  = return ()
-  | guard false = zero
+type 'a t = 'a Monad.t
 end
 
 functor MonadPlusEtAl (X : MonadPlus) =

@@ -7,7 +7,15 @@ struct
 open Traversable
 
 fun travl f b xs =
-    travr (fn (x, c) => fn b => c (f (x, b))) (fn (b, a) => (b, a)) xs b
+    let
+      fun g (x, c) =
+          let
+            
+          c (f (x, b))
+      fun id x = x
+    in
+      travr g id xs b
+end
 
 local
   fun mapUntil trav f xs =
