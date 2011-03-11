@@ -1,17 +1,22 @@
-signature MonadErrorI = sig
+signature MonadErrorCore = sig
+  type 'a monad_error
   type error
-  type 'a t
-  val throw : error -> 'a t
-  val catch : 'a t * (error -> 'a t) -> 'a t
+  val throw : error -> 'a monad_error
+  val catch : 'a monad_error * (error -> 'a monad_error) -> 'a monad_error
 end
 
-signature MonadErrorO = sig
-  include MonadErrorI
+signature MonadErrorBase = sig
+  include MonadBase
+  include MonadErrorCore
+  sharing type monad = monad_error
+end
 
+signature MonadErrorExt = sig
+  include MonadErrorCore
 end
 
 signature MonadError = sig
   include Monad
-  structure MonadError : MonadErrorI
-  sharing type Monad.t = MonadError.t
+  include MonadErrorExt
+  sharing type monad = monad_error
 end

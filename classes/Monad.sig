@@ -1,39 +1,46 @@
-signature MonadI = sig
-  type 'a t
-  val >>= : 'a t * ('a -> 'b t) -> 'b t
+signature MonadCore = sig
+  type 'a monad
+  val >>= : 'a monad * ('a -> 'b monad) -> 'b monad
 end
 
-signature MonadO = sig
-  include MonadI
+signature MonadBase = sig
+  include PointedCore
+  include MonadCore
+  sharing type pointed = monad
+end
 
-  val join : 'a t t -> 'a t
-  val >> : 'a t * 'b t -> 'b t
-  val << : 'a t * 'b t -> 'a t
-  val -- : 'a t * 'b t -> ('a * 'b) t
-  val mapM : ('a -> 'b t) -> 'a list -> 'b list t
-  val mapM' : ('a -> '_ t) -> 'a list -> unit t
-  val seq : 'a t list -> 'a list t
-  val seq' : '_ t list -> unit t
-  val =<< : ('a -> 'b t) * 'a t -> 'b t
-  val >=> : ('a -> 'b t) * ('b -> 'c t) -> 'a -> 'c t
-  val <=< : ('b -> 'c t) * ('a -> 'b t) -> 'a -> 'c t
-  val forever : 'a t -> 'b t
-  val foreverWithDelay : int -> 'a t -> 'b t
-  val ignore : '_ t -> unit t
-  val filterM : ('a -> bool t) -> 'a list -> 'a list t
-  val mapAndUnzipM : ('a -> ('b * 'c) t) -> 'a list -> ('b list * 'c list) t
-  val zipWithM : ('a * 'b -> 'c t) -> 'a list * 'b list -> 'c list t
-  val zipWithM' : ('a * 'b -> '_ t) -> 'a list * 'b list -> unit t
-  val foldM : ('a * 'b -> 'b t) -> 'b -> 'a list -> 'b t
-  val foldM' : ('a * 'b -> 'b t) -> 'b -> 'a list -> unit t
-  val tabulateM : int -> 'a t -> 'a list t
-  val tabulateM' : int -> '_ t -> unit t
-  val when : bool -> unit t -> unit t
-  val unless : bool -> unit t -> unit t
+signature MonadExt = sig
+  include MonadCore
+
+  val join : 'a monad monad -> 'a monad
+  val >< : 'a monad * 'b monad -> ('a * 'b) monad
+  val mapM : ('a -> 'b monad) -> 'a list -> 'b list monad
+  val mapMPartial : ('a -> 'b option monad) -> 'a list -> 'b list monad
+  val mapM' : ('a -> '_ monad) -> 'a list -> unit monad
+  val seq : 'a monad list -> 'a list monad
+  val seq' : '_ monad list -> unit monad
+  val appUntil : ('a -> bool) -> 'a monad -> unit
+  val =<< : ('a -> 'b monad) * 'a monad -> 'b monad
+  val >=> : ('a -> 'b monad) * ('b -> 'c monad) -> 'a -> 'c monad
+  val <=< : ('b -> 'c monad) * ('a -> 'b monad) -> 'a -> 'c monad
+  val forever : 'a monad -> 'b monad
+  val foreverWithDelay : int -> 'a monad -> 'b monad
+  val ignore : '_ monad -> unit monad
+  val filterM : ('a -> bool monad) -> 'a list -> 'a list monad
+  val mapAndUnzipM : ('a -> ('b * 'c) monad) -> 'a list ->
+                     ('b list * 'c list) monad
+  val zipWithM : ('a * 'b -> 'c monad) -> 'a list * 'b list -> 'c list monad
+  val zipWithM' : ('a * 'b -> '_ monad) -> 'a list * 'b list -> unit monad
+  val foldM : ('a * 'b -> 'b monad) -> 'b -> 'a list -> 'b monad
+  val foldM' : ('a * 'b -> 'b monad) -> 'b -> 'a list -> unit monad
+  val tabulateM : int -> (int -> 'a monad) -> 'a list monad
+  val tabulateM' : int -> (int -> '_ monad) -> unit monad
+  val when : bool -> unit monad -> unit monad
+  val unless : bool -> unit monad -> unit monad
 end
 
 signature Monad = sig
-  include Pointed
-  structure Monad : MonadI
-  sharing type Pointed.t = Monad.t
+  include App
+  include MonadExt
+  sharing type app = monad
 end

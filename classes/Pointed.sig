@@ -1,12 +1,12 @@
-signature PointedI = sig
-  type 'a t
-  val return : 'a -> 'a t
+signature PointedCore = sig
+  type 'a pointed
+  val return : 'a -> 'a pointed
 end
 
-signature PointedO = sig
-  include PointedI
+signature PointedBase = PointedCore
+
+signature PointedExt = sig
+  include PointedCore
 end
 
-signature Pointed = sig
-  structure Pointed : PointedI
-end
+signature Pointed = PointedExt

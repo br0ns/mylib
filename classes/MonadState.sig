@@ -1,19 +1,25 @@
-signature MonadStateI = sig
+signature MonadStateCore = sig
+  type 'a monad_state
   type state
-  type 'a t
-  val get : state t
-  val set : state -> unit t
+  val get : state monad_state
+  val set : state -> unit monad_state
 end
 
-signature MonadStateO = sig
-  include MonadStateI
+signature MonadStateBase = sig
+  include MonadBase
+  include MonadStateCore
+  sharing type monad = monad_state
+end
 
-  val modify : (state -> state) -> unit t
-  val gets : (state -> 'a) -> 'a t
+signature MonadStateExt = sig
+  include MonadStateCore
+
+  val modify : (state -> state) -> unit monad_state
+  val gets : (state -> 'a) -> 'a monad_state
 end
 
 signature MonadState = sig
   include Monad
-  structure MonadState : MonadStateI
-  sharing type Monad.t = MonadState.t
+  include MonadStateExt
+  sharing type monad = monad_state
 end
