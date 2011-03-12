@@ -9,11 +9,8 @@ signature MonoMonadPBase = MonoMonadPCore
 signature MonoMonadPExt = sig
   include MonoMonadPCore
   val plus : monad -> monad -> monad
-  val merge : monad list -> monad
+  val merger : monad list -> monad
+  val mergel : monad list -> monad
 end
 
-signature MonadP = sig
-  include Monad
-  include AltExt
-  sharing type monad = alt
-end
+signature MonoMonadP = MonoMonadPExt

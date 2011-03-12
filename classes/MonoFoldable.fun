@@ -1,4 +1,4 @@
-functor Foldable (F : FoldableBase) : Foldable =
+functor MonoFoldable (F : MonoFoldableBase) : MonoFoldable =
 struct
 open F
 
@@ -50,36 +50,13 @@ fun apprUntil ef xs = appUntil foldr ef xs
 fun applUntil ef xs = appUntil foldl ef xs
 end
 
-fun rightmost xs =
-    foldr
-      (fn (_, a as SOME _) => a
-        | (x as SOME _, _) => x
-      )
-      NONE
-      xs
-
-fun leftmost xs =
-    foldl
-      (fn (_, a as SOME _) => a
-        | (x as SOME _, _) => x
-      )
-      NONE
-      xs
-
 fun toList xs = foldr op:: nil xs
 
-fun concat xss = foldr op@ nil xss
 fun concatList xss =
     List.foldr (fn (x, a) => toList x @ a) nil xss
 
 fun concatMap f xs =
     foldr (fn (x, a) => f x @ a) nil xs
-
-fun conjoin xs =
-    foldr (fn (x, a) => x andalso a) true xs
-
-fun disjoin xs =
-    foldr (fn (x, a) => x orelse a) false xs
 
 fun all p xs =
     foldr (fn (x, a) => p x andalso a) true xs
@@ -121,14 +98,5 @@ fun findr p xs = find foldr p xs
 fun findl p xs = find foldl p xs
 val find = findl
 end
-
-fun member x xs =
-    any (fn y => x = y) xs
-
-fun notMember x xs = not $ member x xs
-
-fun intSum xs = foldr op+ 0 xs
-fun realSum xs = foldr op+ 0.0 xs
-fun intProduct xs = foldr op* 1 xs
-fun realProduct xs = foldr op* 1.0 xs
 end
+

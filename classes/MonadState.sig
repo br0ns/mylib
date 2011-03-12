@@ -14,7 +14,7 @@ end
 signature MonadStateExt = sig
   include MonadStateCore
 
-  val modify : (state -> state) -> unit monad_state
+  val modify : state UnOp.t -> unit monad_state
   val gets : (state -> 'a) -> 'a monad_state
 end
 

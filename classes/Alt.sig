@@ -1,6 +1,6 @@
 signature AltCore = sig
   type 'a alt
-  val || : 'a alt * 'a alt -> 'a alt
+  val || : 'a alt BinOp.t
   val zero : 'a alt
 end
 
@@ -12,9 +12,10 @@ end
 
 signature AltExt = sig
   include AltCore
-  val plus : 'a alt -> 'a alt -> 'a alt
+  val plus : 'a alt BinOp.curried
   val optional : 'a alt -> 'a option alt
-  val merge : 'a alt list -> 'a alt
+  val merger : 'a alt list -> 'a alt
+  val mergel : 'a alt list -> 'a alt
   val guard : bool -> unit alt
 end
 

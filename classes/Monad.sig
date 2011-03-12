@@ -13,13 +13,12 @@ signature MonadExt = sig
   include MonadCore
 
   val join : 'a monad monad -> 'a monad
-  val >< : 'a monad * 'b monad -> ('a * 'b) monad
+  val -- : 'a monad * 'b monad -> ('a * 'b) monad
   val mapM : ('a -> 'b monad) -> 'a list -> 'b list monad
   val mapMPartial : ('a -> 'b option monad) -> 'a list -> 'b list monad
   val mapM' : ('a -> '_ monad) -> 'a list -> unit monad
   val seq : 'a monad list -> 'a list monad
   val seq' : '_ monad list -> unit monad
-  val appUntil : ('a -> bool) -> 'a monad -> unit
   val =<< : ('a -> 'b monad) * 'a monad -> 'b monad
   val >=> : ('a -> 'b monad) * ('b -> 'c monad) -> 'a -> 'c monad
   val <=< : ('b -> 'c monad) * ('a -> 'b monad) -> 'a -> 'c monad
