@@ -1,0 +1,66 @@
+MOSMLC=mosmlc
+MYLIB_MOSML = MyLib.ui MyLib.uo
+
+.PHONY: mosml mosml-clean mosml-create-link
+
+mosml:
+	@echo Fixing MosML General.sig
+	@sed "s/.*fun sleep.*/fun sleep () = OS.Process.system (\"sleep \" ^ Real.toString (real d \/ 1000.0))/" \
+       class/Monad.fun > mosml/Monad.fun
+	@sed "s/.*fun sleep.*/fun sleep () = OS.Process.system (\"sleep \" ^ Real.toString (real d \/ 1000.0))/" \
+       class/MonoMonad.fun > mosml/MonoMonad.fun
+
+	@echo Generating MosML specific temporary sources
+	@cat mosml/GENERAL.sig \
+       mosml/VECTOR_SLICE.sig \
+       mosml/LIST.sig \
+       mosml/General.sig \
+       mosml/TEXT_IO.sig \
+       mosml/MATH.sig \
+       mosml/STRING.sig \
+       mosml/Random.sig \
+\
+       mosml/Random.sml \
+       mosml/Timer.sml \
+       mosml/String.sml \
+       mosml/Substring.sml \
+       mosml/VectorSlice.sml \
+\
+       Bootstrap.sml \
+\
+       class/Func.sig class/Func.fun \
+       class/Pointed.sig class/Pointed.fun \
+       class/App.sig class/App.fun \
+       class/Monad.sig mosml/Monad.fun \
+       class/Alt.sig class/Alt.fun \
+       class/MonadP.sig class/MonadP.fun \
+       class/MonadState.sig class/MonadState.fun \
+       class/MonadError.sig class/MonadError.fun \
+       class/Foldable.sig class/Foldable.fun \
+       class/MonoMonad.sig mosml/MonoMonad.fun \
+       class/MonoMonadP.sig class/MonoMonadP.fun \
+       class/MonoFoldable.sig class/MonoFoldable.fun \
+\
+       control/Exit.sig control/Exit.sml \
+\
+       struct/Seq.sig struct/Seq.fun \
+       struct/CList.sml \
+      > MyLib.sml
+
+	@echo Compiling MosML specific temporary sources
+	$(MOSMLC) -c -P full Random.ui -toplevel MyLib.sml
+
+	@echo Removing tmp MosML specific temporary sources
+	rm MyLib.sml
+
+$(MYLIB_MOSML): mosml
+
+mosml-clean:
+	-rm MyLib.ui
+	-rm MyLib.uo
+	-rm /usr/lib/mosml/MyLib.ui
+	-rm /usr/lib/mosml/MyLib.uo
+
+mosml-create-link: $(MYLIB_MOSML)
+	ln -s "`pwd`/MyLib.ui" /usr/lib/mosml/
+	ln -s "`pwd`/MyLib.uo" /usr/lib/mosml/

@@ -6,29 +6,20 @@ local
 
   Bootstrap.sml
 in
-classes/Func.sig             (**) classes/Func.fun
-classes/Pointed.sig          (**) classes/Pointed.fun
-classes/App.sig              (**) classes/App.fun
-classes/Monad.sig            (**) classes/Monad.fun
-classes/Alt.sig              (**) classes/Alt.fun
-classes/MonadP.sig           (**) classes/MonadP.fun
-classes/MonadState.sig       (**) classes/MonadState.fun
-classes/MonadError.sig       (**) classes/MonadError.fun
-classes/Foldable.sig         (**) classes/Foldable.fun
-classes/MonoMonad.sig        (**) classes/MonoMonad.fun
-classes/MonoMonadP.sig       (**) classes/MonoMonadP.fun
-classes/MonoFoldable.sig     (**) classes/MonoFoldable.fun
+Infixes.sml
 
-classes/Seq.sig              (**) classes/Seq.fun
-(* classes/Map.sig              (\**\) classes/Map.fun *)
-(* classes/Set.sig              (\**\) classes/Set.fun *)
-
-(* classes/OrdMap.sig           (\**\) classes/OrdMap.fun *)
-(* classes/OrdSet.sig           (\**\) classes/OrdSet.fun *)
-(* classes/Heap.sig             (\**\) classes/Heap.fun *)
-(* classes/Queue.sig            (\**\) classes/Queue.fun *)
-(* classes/Deque.sig            (\**\) classes/Deque.fun *)
-(* classes/Tree.sig             (\**\) classes/Tree.fun *)
+class/Func.sig               (**) class/Func.fun
+class/Pointed.sig            (**) class/Pointed.fun
+class/App.sig                (**) class/App.fun
+class/Monad.sig              (**) class/Monad.fun
+class/Alt.sig                (**) class/Alt.fun
+class/MonadP.sig             (**) class/MonadP.fun
+class/MonadState.sig         (**) class/MonadState.fun
+class/MonadError.sig         (**) class/MonadError.fun
+class/Foldable.sig           (**) class/Foldable.fun
+class/MonoMonad.sig          (**) class/MonoMonad.fun
+class/MonoMonadP.sig         (**) class/MonoMonadP.fun
+class/MonoFoldable.sig       (**) class/MonoFoldable.fun
 
 (* classes/MonadTrans.sig       (\**\) classes/MonadTrans.sml *)
 
@@ -40,15 +31,7 @@ classes/Seq.sig              (**) classes/Seq.fun
 (* classes/Readable.sig         (\**\) classes/Readable.sml *)
 (* classes/Writable.sig         (\**\) classes/Writable.sml *)
 
-(* classes/Hash.sig             (\**\) classes/Hash.sml *)
-(* classes/Arbitrary.sig        (\**\) classes/Arbitrary.sml *)
-(* classes/Dynamic.sig          (\**\) classes/Dynamic.sml *)
-(* classes/Enum.sig             (\**\) classes/Enum.sml *)
-(* classes/Size.sig             (\**\) classes/Size.sml *)
-
-
-
-(* arrows/Fn.sig *)
+(* arrows/Fn.sig                (\**\) arrows/Fn.sml *)
 (* arrows/Effect.sig *)
 (* arrows/Thunk.sig *)
 (* (\* arrows/Cont.sig *\) *)
@@ -70,7 +53,7 @@ classes/Seq.sig              (**) classes/Seq.fun
 (* control/ErrorT.sig           (\**\) control/MkErrorT.fun *)
 (*                              (\**\) control/Identity.sml *)
 (* control/Iter.sig             (\**\) control/Iter.sml *)
-(* control/Exit.sig *)
+control/Exit.sig             (**) control/Exit.sml
 
 (* io/Reader.sig *)
 (* io/Scanner.sig *)
@@ -89,11 +72,12 @@ classes/Seq.sig              (**) classes/Seq.fun
 
 (* misc/Time.sig *)
 (* misc/Benchmark.sig *)
-(* misc/Basic.sig *)
-(* misc/Exn.sig *)
+(* misc/Basic.sig               (\**\) misc/Basic.sml *)
+
 (* (\* misc/Pretty.sig              (\\**\\) misc/Pretty.sml *\) *)
 (* (\* misc/Layout.sig              (\\**\\) misc/Layout.sml *\) *)
 
+(* data/Exn.sig *)
 (* data/Univ.sig *)
 (* data/Void.sig *)
 (* data/Unit.sig *)
@@ -104,7 +88,18 @@ classes/Seq.sig              (**) classes/Seq.fun
 (* (\* data/Pair.sig                (\\**\\) data/Pair.sml *\) *)
 (* (\* data/Product.sig             (\\**\\) data/Product.sml *\) *)
 
-(* (\* struct/List.sig              (\\**\\) data/List.sml *\) *)
+
+struct/Seq.sig               (**) struct/Seq.fun
+(* struct/Map.sig               (\**\) struct/Map.fun *)
+(* struct/Set.sig               (\**\) struct/Set.fun *)
+(* struct/OrdMap.sig            (\**\) struct/OrdMap.fun *)
+(* struct/OrdSet.sig            (\**\) struct/OrdSet.fun *)
+(* struct/Heap.sig              (\**\) struct/Heap.fun *)
+(* struct/Queue.sig             (\**\) struct/Queue.fun *)
+(* struct/Deque.sig             (\**\) struct/Deque.fun *)
+(* struct/Tree.sig              (\**\) struct/Tree.fun *)
+                             (**) struct/CList.sml
+(* struct/List.sig              (\**\) data/List.sml *)
 (* (\* (\\* 2-3 Finger tree            **\\) struct/Seq.sml *\) *)
 (* (\* struct/LazyList.sig          (\\**\\) struct/LazyList.sml *\) *)
 (* (\*                              (\\**\\) struct/Map.sml *\) *)
