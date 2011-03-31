@@ -4,9 +4,23 @@ local
   (* Used by Sequence.shuffle *)
   $(SML_LIB)/smlnj-lib/Util/smlnj-lib.mlb
 
-  Bootstrap.sml
+  bootstrap/Util.sml
+  bootstrap/Iso.sml
+  bootstrap/Emb.sml
+  bootstrap/Lazy.sml
+  bootstrap/Seq.sml
+  bootstrap/Stream.sml
+  bootstrap/Source.sml
+  bootstrap/ViewL.sml
+  bootstrap/ViewR.sml
+  bootstrap/Either.sml
+  bootstrap/Product.sml
+  bootstrap/Types.sml
 in
 Infixes.sml
+
+io/Scanner.sig               (**) io/Scanner.sml
+io/Nacser.sig                (**) io/Nacser.sml
 
 class/Func.sig               (**) class/Func.fun
 class/Pointed.sig            (**) class/Pointed.fun
@@ -20,16 +34,17 @@ class/Foldable.sig           (**) class/Foldable.fun
 class/MonoMonad.sig          (**) class/MonoMonad.fun
 class/MonoMonadP.sig         (**) class/MonoMonadP.fun
 class/MonoFoldable.sig       (**) class/MonoFoldable.fun
+class/MonadTrans.sig         (**) class/MonadTrans.fun
 
-(* classes/MonadTrans.sig       (\**\) classes/MonadTrans.sml *)
+class/Enumerable.sig         (**) class/Enumerable.fun
+class/Unfoldable.sig         (**) class/Unfoldable.fun
+class/Scannable.sig          (**) class/Scannable.fun
+class/Nacsable.sig           (**) class/Nacsable.fun
+
+class/Ordered.sig            (**) class/Ordered.fun
+
 
 (* classes/Bounded.sig          (\**\) classes/Bounded.fun *)
-(* classes/Showable.sig         (\**\) classes/Showable.sml *)
-(* classes/Ordered.sig          (\**\) classes/Ordered.sml *)
-
-(* classes/Serialisable.sig *)
-(* classes/Readable.sig         (\**\) classes/Readable.sml *)
-(* classes/Writable.sig         (\**\) classes/Writable.sml *)
 
 (* arrows/Fn.sig                (\**\) arrows/Fn.sml *)
 (* arrows/Effect.sig *)
@@ -38,7 +53,7 @@ class/MonoFoldable.sig       (**) class/MonoFoldable.fun
 (* arrows/Cmp.sig *)
 (* arrows/UnOp.sig *)
 (* arrows/BinOp.sig *)
-(* arrows/UnPred.sig *)
+arrows/UnPred.sig            (**) arrows/UnPred.sml
 (* arrows/BinPred.sig *)
 (* arrows/BinFn.sig *)
 
@@ -48,35 +63,8 @@ class/MonoFoldable.sig       (**) class/MonoFoldable.fun
 (* util/Emb.sig *)
 (* util/Iso.sig *)
 
-(* (\* control/State.sig            (\\**\\) control/MkState.fun *\) *)
-(* (\* control/StateT.sig           (\\**\\) control/MkStateT.fun *\) *)
-(* control/ErrorT.sig           (\**\) control/MkErrorT.fun *)
-(*                              (\**\) control/Identity.sml *)
-(* control/Iter.sig             (\**\) control/Iter.sml *)
-control/Exit.sig             (**) control/Exit.sml
-
-(* io/Reader.sig *)
-(* io/Scanner.sig *)
-(* io/Writer.sig *)
-(* io/Rennacs.sig *)
-(* io/TextIO.sig *)
-(* io/IO.sig *)
-
-(* os/OS.sig *)
-(* os/File.sig *)
-(* os/Path.sig *)
-
-(* text/Word.sig *)
-(* text/String.sig *)
-(* text/Char.sig *)
-
-(* misc/Time.sig *)
-(* misc/Benchmark.sig *)
-(* misc/Basic.sig               (\**\) misc/Basic.sml *)
-
-(* (\* misc/Pretty.sig              (\\**\\) misc/Pretty.sml *\) *)
-(* (\* misc/Layout.sig              (\\**\\) misc/Layout.sml *\) *)
-
+(* data/ViewL.sig *)
+(* data/ViewR.sig *)
 (* data/Exn.sig *)
 (* data/Univ.sig *)
 (* data/Void.sig *)
@@ -88,35 +76,61 @@ control/Exit.sig             (**) control/Exit.sml
 (* (\* data/Pair.sig                (\\**\\) data/Pair.sml *\) *)
 (* (\* data/Product.sig             (\\**\\) data/Product.sml *\) *)
 
+(* (\* control/State.sig            (\\**\\) control/MkState.fun *\) *)
+(* (\* control/StateT.sig           (\\**\\) control/MkStateT.fun *\) *)
+(* control/ErrorT.sig           (\**\) control/MkErrorT.fun *)
+(*                              (\**\) control/Identity.sml *)
+(* control/Iter.sig             (\**\) control/Iter.sml *)
+control/Exit.sig             (**) control/Exit.sml
 
-struct/Seq.sig               (**) struct/Seq.fun
+io/Reader.sig                (**) io/Reader.sml
+io/Writer.sig                (**) io/Writer.sml
+(* io/TextIO.sig *)
+(* io/IO.sig *)
+
+(* os/OS.sig *)
+(* os/File.sig *)
+(* os/Path.sig *)
+(* os/Dir.sig *)
+
+(* text/Word.sig *)
+(* text/String.sig *)
+(* text/Char.sig *)
+
+(* misc/Time.sig *)
+(* misc/Date.sig *)
+(* misc/Benchmark.sig *)
+(* misc/Basic.sig               (\**\) misc/Basic.sml *)
+
+(* (\* misc/Pretty.sig              (\\**\\) misc/Pretty.sml *\) *)
+(* (\* misc/Layout.sig              (\\**\\) misc/Layout.sml *\) *)
+
+(* struct/Sequence.sig          (\**\) struct/Seq.sml *)
+(*                              (\**\) struct/CList.sml *)
+(* struct/Stream.sig            (\**\) struct/Stream.sml *)
+(* struct/List.sig              (\**\) struct/List.sml *)
+
 (* struct/Map.sig               (\**\) struct/Map.fun *)
+(*                              (\**\) struct/RedBlackMap.fun *)
+(* (\* Default implementations    **\) struct/MkMap.fun *)
+(* (\*                            **\) struct/IntMap.sml *)
+(* (\*                            **\) struct/Dictionary.sml *)
+(* (\*                            **\) struct/CharMap.sml *)
+
 (* struct/Set.sig               (\**\) struct/Set.fun *)
-(* struct/OrdMap.sig            (\**\) struct/OrdMap.fun *)
-(* struct/OrdSet.sig            (\**\) struct/OrdSet.fun *)
+(*                              (\**\) struct/RedBlackSet.fun *)
+(*                              (\**\) struct/TrieSet.fun *)
+(* (\* Default implementations    **\) struct/MkSet.fun *)
+(*                              (\**\) struct/IntSet.sml *)
+(*                              (\**\) struct/StringSet.sml *)
+(*                              (\**\) struct/CharSet.sml *)
+
 (* struct/Heap.sig              (\**\) struct/Heap.fun *)
 (* struct/Queue.sig             (\**\) struct/Queue.fun *)
 (* struct/Deque.sig             (\**\) struct/Deque.fun *)
 (* struct/Tree.sig              (\**\) struct/Tree.fun *)
-                             (**) struct/CList.sml
-(* struct/List.sig              (\**\) data/List.sml *)
-(* (\* (\\* 2-3 Finger tree            **\\) struct/Seq.sml *\) *)
-(* (\* struct/LazyList.sig          (\\**\\) struct/LazyList.sml *\) *)
-(* (\*                              (\\**\\) struct/Map.sml *\) *)
-(* (\*                              (\\**\\) struct/Set.sml *\) *)
-(* (\*                              (\\**\\) struct/RedBlackOrdMap.sml *\) *)
 (* (\*                              (\\**\\) struct/TrieOrderedMap.sml *\) *)
-(* (\* (\\* Default implementations    **\\) struct/MkOrdMap.sml *\) *)
-(* (\* (\\* int keys                   **\\) struct/IntMap.sml *\) *)
-(* (\* (\\* string keys                **\\) struct/Dictionary.sml *\) *)
-(* (\* (\\* char keys                  **\\) struct/CharMap.sml *\) *)
 
-(* (\*                              (\\**\\) struct/RedBlackOrdSet.sml *\) *)
-(* (\*                              (\\**\\) struct/TrieOrderedSet.sml *\) *)
-(* (\* (\\* Default implementations    **\\) struct/MkOrdSet.sml *\) *)
-(* (\*                              (\\**\\) struct/IntSet.sml *\) *)
-(* (\*                              (\\**\\) struct/StringSet.sml *\) *)
-(* (\*                              (\\**\\) struct/CharSet.sml *\) *)
 (* (\*                              (\\**\\) struct/PairingHeap.sml *\) *)
 (* (\* (\\* Default implementations    **\\) struct/MkHeap.sml *\) *)
 (* (\* (\\*                            **\\) struct/IntMinHeap.sml *\) *)

@@ -1,6 +1,6 @@
 functor Ordered (O : OrderedBase) : Ordered =
 struct
-open O infix < <= > >= == <>
+open O
 fun a < b = compare (a, b) = LESS
 fun a == b = compare (a, b) = EQUAL
 fun a > b = compare (a, b) = GREATER

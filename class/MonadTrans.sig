@@ -1,13 +1,13 @@
-signature MonadTransI = sig
+signature MonadTransCore = sig
   type 'a t
   type 'a inner
   val liftM : 'a inner -> 'a t
 end
 
-signature MonadTransO = sig
-  include MonadTransI
+signature MonadTransBase = MonadTransCore
+
+signature MonadTransExt = sig
+  include MonadTransCore
 end
 
-signature MonadTrans = sig
-  structure MonadTrans : MonadTransI
-end
+signature MonadTrans = MonadTransExt

@@ -26,20 +26,21 @@ fun mapMPartial f xs =
     List.foldr
       (fn (x, m') =>
           f x >>= (fn NONE   => m'
-                    | SOME x => m' >>= (fn xs => return (x :: xs))
+                    | SOME x => m' >>= (fn xs => return $ x :: xs)
                   )
       )
       (return nil)
       xs
 fun mapM' f xs = seq' $ List.map f xs
 
-fun filterM p xs =
+fun keepM p xs =
     case xs of
       nil     => return nil
     | x :: xs => p x >>= (fn px =>
-                 filterM p xs >>= (fn ys =>
+                 keepM p xs >>= (fn ys =>
                  return (if px then x :: ys else ys)
                  ))
+fun rejectM p xs = keepM (fn x => p x >>= return o not) xs
 
 fun m =<< n = n >>= m
 fun (f >=> g) x = f x >>= g

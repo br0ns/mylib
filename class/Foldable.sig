@@ -1,7 +1,12 @@
 signature FoldableCore = sig
   type 'a foldable
-  val foldr : ('a * 'b -> 'b) -> 'b -> 'a foldable -> 'b
   val foldl : ('a * 'b -> 'b) -> 'b -> 'a foldable -> 'b
+
+  val foldr : ('a * 'b -> 'b) -> 'b -> 'a foldable -> 'b
+(* Can be implemented by:
+ * fun foldr f b xs = foldl (fn (x, k) => fn b => k (f (x, b))) (fn b => b) xs b
+ *)
+
 end
 
 signature FoldableBase = FoldableCore
@@ -11,15 +16,14 @@ signature Foldable = sig
 
   val foldr1 : 'a binop -> 'a foldable -> 'a option
   val foldl1 : 'a binop -> 'a foldable -> 'a option
-  val foldrUntil : ('a * 'b -> 'b * bool) -> 'b -> 'a foldable -> 'b
-  val foldlUntil : ('a * 'b -> 'b * bool) -> 'b -> 'a foldable -> 'b
+  val foldrWhile : ('a * 'b -> 'b * bool) -> 'b -> 'a foldable -> 'b
+  val foldlWhile : ('a * 'b -> 'b * bool) -> 'b -> 'a foldable -> 'b
   val appl : 'a effect -> 'a foldable effect
   val appr : 'a effect -> 'a foldable effect
-  val applUntil : ('a -> bool) -> 'a foldable effect
-  val apprUntil : ('a -> bool) -> 'a foldable effect
-  val concat : 'a list foldable -> 'a list
+  val applWhile : ('a -> bool) -> 'a foldable effect
+  val apprWhile : ('a -> bool) -> 'a foldable effect
+  val concatFoldable : 'a list foldable -> 'a list
   val concatList : 'a foldable list -> 'a list
-  val concatMap : ('a -> 'b list) -> 'a foldable -> 'b list
   val conjoin : bool foldable unpred
   val disjoin : bool foldable unpred
   val any : 'a unpred -> 'a foldable unpred
@@ -37,4 +41,6 @@ signature Foldable = sig
   val realProduct : real foldable -> real
   val leftmost  : 'a option foldable -> 'a option
   val rightmost : 'a option foldable -> 'a option
+  val first : 'a foldable -> 'a
+  val last : 'a foldable -> 'a
 end

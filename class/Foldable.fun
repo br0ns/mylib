@@ -17,63 +17,45 @@ fun foldl1 f xs =
 end
 
 local
-  fun foldUntil fold f b xs =
+  fun foldWhile fold f (b : 'b) xs =
       let
-        val (b, _) =
-            fold
-              (fn (_, a as (_, false)) => a
-                | (x, (a, _)) => f (x, a)
-              )
-              (b, true)
-              xs
+        exception Stop of 'b
       in
-        b
+        fold
+          (fn (x, b) =>
+              let
+                val (b, cont) = f (x, b)
+              in
+                if cont then
+                  b
+                else
+                  raise Stop b
+              end
+          )
+          b
+          xs
+          handle Stop b => b
       end
 in
-fun foldrUntil f b xs = foldUntil foldr f b xs
-fun foldlUntil f b xs = foldUntil foldl f b xs
+fun foldrWhile f b xs = foldWhile foldr f b xs
+fun foldlWhile f b xs = foldWhile foldl f b xs
 end
 
 fun appr ef xs = foldr (fn (x, _) => ef x) () xs
 fun appl ef xs = foldl (fn (x, _) => ef x) () xs
-
-local
-  fun appUntil fold p xs =
-      (fold (fn (_, false) => false
-              | (x, _) => p x
-            )
-            true
-            xs ;
-       ())
-in
-fun apprUntil ef xs = appUntil foldr ef xs
-fun applUntil ef xs = appUntil foldl ef xs
-end
+fun apprWhile ef xs = foldrWhile (fn (x, _) => ((), ef x)) () xs
+fun applWhile ef xs = foldlWhile (fn (x, _) => ((), ef x)) () xs
 
 fun rightmost xs =
-    foldr
-      (fn (_, a as SOME _) => a
-        | (x, _) => x
-      )
-      NONE
-      xs
-
+    foldrWhile (fn (x, _) => (x, not (Option.isSome x))) NONE xs
 fun leftmost xs =
-    foldl
-      (fn (_, a as SOME _) => a
-        | (x, _) => x
-      )
-      NONE
-      xs
+    foldlWhile (fn (x, _) => (x, not (Option.isSome x))) NONE xs
 
 fun toList xs = foldr op:: nil xs
 
-fun concat xss = foldr op@ nil xss
+fun concatFoldable xss = foldr op@ nil xss
 fun concatList xss =
     List.foldr (fn (x, a) => toList x @ a) nil xss
-
-fun concatMap f xs =
-    foldr (fn (x, a) => f x @ a) nil xs
 
 fun conjoin xs =
     foldr (fn (x, a) => x andalso a) true xs
@@ -82,13 +64,12 @@ fun disjoin xs =
     foldr (fn (x, a) => x orelse a) false xs
 
 fun all p xs =
-    foldr (fn (x, a) => p x andalso a) true xs
-
+    foldlWhile (fn (x, _) => if p x then (true, true) else (false, false)) true xs
 fun any p xs =
-    foldr (fn (x, a) => p x orelse a) false xs
+    foldlWhile (fn (x, _) => if p x then (true, false) else (false, true)) false xs
 
 fun maximumBy cmp xs =
-    foldr1 (fn (x, a) =>
+    foldl1 (fn (x, a) =>
                case cmp (x, a) of
                  LESS    => a
                | EQUAL   => a
@@ -97,7 +78,7 @@ fun maximumBy cmp xs =
            xs
 
 fun minimumBy cmp xs =
-    foldr1 (fn (x, a) =>
+    foldl1 (fn (x, a) =>
                case cmp (x, a) of
                  LESS    => x
                | EQUAL   => x
@@ -105,30 +86,32 @@ fun minimumBy cmp xs =
            )
            xs
 
-local
-  fun find fold p xs =
-      fold (fn (_, a as SOME _) => a
-             | (x, NONE) =>
-               if p x then
-                 SOME x
-               else
-                 NONE
-           )
-           NONE
-           xs
-in
-fun findr p xs = find foldr p xs
-fun findl p xs = find foldl p xs
+fun findr p xs =
+    foldrWhile (fn (x, _) => if p x then (SOME x, false) else (NONE, true)) NONE xs
+fun findl p xs =
+    foldlWhile (fn (x, _) => if p x then (SOME x, false) else (NONE, true)) NONE xs
 val find = findl
-end
 
 fun member x xs =
     any (fn y => x = y) xs
 
 fun notMember x xs = not $ member x xs
 
-fun intSum xs = foldr op+ 0 xs
-fun realSum xs = foldr op+ 0.0 xs
-fun intProduct xs = foldr op* 1 xs
-fun realProduct xs = foldr op* 1.0 xs
+fun intSum xs = foldl op+ 0 xs
+fun realSum xs = foldl op+ 0.0 xs
+fun intProduct xs = foldl op* 1 xs
+fun realProduct xs = foldl op* 1.0 xs
+
+local
+  fun getIt fold (xs : 'a foldable) =
+      let
+        exception GotIt of 'a
+      in
+        fold (fn (x, _) => raise GotIt x) (fn _ => raise Empty) xs ()
+        handle GotIt x => x
+      end
+in
+fun first xs = getIt foldl xs
+fun last xs = getIt foldr xs
+end
 end

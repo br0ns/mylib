@@ -1,6 +1,6 @@
 signature OrderedCore = sig
   type ordered
-  val compare : ordered Cmp.t
+  val compare : ordered cmp
 end
 
 signature OrderedBase = OrderedCore
@@ -8,22 +8,22 @@ signature OrderedBase = OrderedCore
 signature OrderedExt = sig
   include OrderedCore
 
-  val <   : ordered BinPred.t
-  val <=  : ordered BinPred.t
-  val >   : ordered BinPred.t
-  val >=  : ordered BinPred.t
-  val ==  : ordered BinPred.t
-  val !=  : ordered BinPred.t
-  val lt  : ordered BinPred.curried
-  val lte : ordered BinPred.curried
-  val gt  : ordered BinPred.curried
-  val gte : ordered BinPred.curried
-  val eq  : ordered BinPred.curried
-  val neq : ordered BinPred.curried
-  val min : ordered BinOp.t
-  val max : ordered BinOp.t
-  val comparing : ('a -> ordered) -> ordered Cmp.t
-  val inRange : ordered * ordered -> ordered UnPred.t
+  val <   : ordered binpred
+  val <=  : ordered binpred
+  val >   : ordered binpred
+  val >=  : ordered binpred
+  val ==  : ordered binpred
+  val !=  : ordered binpred
+  val lt  : ordered -> ordered -> bool
+  val lte : ordered -> ordered -> bool
+  val gt  : ordered -> ordered -> bool
+  val gte : ordered -> ordered -> bool
+  val eq  : ordered -> ordered -> bool
+  val neq : ordered -> ordered -> bool
+  val min : ordered binop
+  val max : ordered binop
+  val comparing : ('a -> ordered) -> 'a cmp
+  val inRange : ordered * ordered -> ordered unpred
 end
 
 signature Ordered = OrderedExt
