@@ -19,8 +19,8 @@ local
 in
 Infixes.sml
 
-io/Scanner.sig               (**) io/Scanner.sml
-io/Nacser.sig                (**) io/Nacser.sml
+io/Scan.sig                  (**) io/Scan.sml
+io/Nacs.sig                  (**) io/Nacs.sml
 
 class/Func.sig               (**) class/Func.fun
 class/Pointed.sig            (**) class/Pointed.fun
@@ -35,16 +35,12 @@ class/MonoMonad.sig          (**) class/MonoMonad.fun
 class/MonoMonadP.sig         (**) class/MonoMonadP.fun
 class/MonoFoldable.sig       (**) class/MonoFoldable.fun
 class/MonadTrans.sig         (**) class/MonadTrans.fun
-
 class/Enumerable.sig         (**) class/Enumerable.fun
 class/Unfoldable.sig         (**) class/Unfoldable.fun
 class/Scannable.sig          (**) class/Scannable.fun
 class/Nacsable.sig           (**) class/Nacsable.fun
-
 class/Ordered.sig            (**) class/Ordered.fun
-
-
-(* classes/Bounded.sig          (\**\) classes/Bounded.fun *)
+(* class/Sequence.sig           (\**\) class/Sequence.fun *)
 
 (* arrows/Fn.sig                (\**\) arrows/Fn.sml *)
 (* arrows/Effect.sig *)

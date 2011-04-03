@@ -11,8 +11,8 @@ signature ScannableExt = sig
 
   val fromString : string -> scannable option
   val fromFile : string -> scannable option
-  (* val fromStdIn : scannable option thunk *)
-  (* val fromInstream : TextIO.instream -> scannable option *)
+  val fromStdIn : scannable option thunk
+  val fromInstream : TextIO.instream -> scannable option
 
   (* val fromBitList : bit list -> scannable *)
   (* val fromBitSeq : bit seq -> scannable *)
@@ -20,11 +20,9 @@ signature ScannableExt = sig
   (* val fromBitSource : bit source -> scannable *)
   (* val fromBitStream : bit stream -> scannable *)
 
-  (* val fromCharList : char list -> scannable *)
-  (* val fromCharSeq : char seq -> scannable *)
-  (* val fromCharVector : char vector -> scannable *)
-  (* val fromCharSource : char source -> scannable *)
-  (* val fromCharStream : char stream -> scannable *)
+  val fromCharList : char list -> scannable option
+  val fromCharSeq : char seq -> scannable option
+  val fromCharStream : char stream -> scannable option
 
   (* val fromStringList : string list -> scannable *)
   (* val fromStringSeq : string seq -> scannable *)
