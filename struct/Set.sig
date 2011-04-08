@@ -33,9 +33,7 @@ signature SetExt = sig
   val getItem : t -> (element * t) option
   val getFirstItem : t -> (element * t) option
   val getLastItem : t -> (element * t) option
-  val isoList : (t, element list) iso
-  val toList : t -> element list
-  val fromList : element list -> t
+  include Serialisable where type 'a element = element and 'a serialisable = t
   val toAscList : t -> element list
   val toDecList : t -> element list
   val splitOn : element -> t -> t * element option * t
@@ -71,4 +69,7 @@ signature Set = sig
   include Ordered
   include SetExt
   sharing type monad = foldable = ordered = t
+
+  include Serialisable where type 'a element = element
+                       where type 'a serialisable = t
 end
