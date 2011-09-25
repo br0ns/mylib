@@ -66,7 +66,9 @@ infix <-- -- =<< >=> ^* <\ \> |> >< ^^ ++ % \ %- \- <-->
 (* right *)
 infixr --> >> << <=< $ </ /> <| &
 (* doesn't matter *)
-infix <:: ::> !! += -= ::= <|= |>= :=: to
+infix <:: ::> !! += -= ::= <|= |>= :=: to catch
+(* not used *)
+infix |< >|
 
 
 (* Func *)

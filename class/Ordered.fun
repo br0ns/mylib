@@ -21,4 +21,7 @@ fun max (a, b) = if a > b then a else b
 fun comparing f (a, b) = compare (f a, f b)
 
 fun inRange (a, b) x = x >= a andalso x <= b
+
+structure Map = OrderedMap(O)
+structure Set = OrderesSet(O)
 end

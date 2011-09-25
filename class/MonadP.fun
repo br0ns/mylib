@@ -7,6 +7,6 @@ open M A MP
 fun mapPartial f m =
     m >>= (fn x => case f x of
                      SOME y => return y
-                   | NONE   => zero
+                   | NONE   => genZero ()
           )
 end

@@ -13,7 +13,6 @@ fun toList xs = mk op:: nil xs
 fun toSeq xs = mk Seq.<| Seq.empty xs
 fun toVector xs = Vector.fromList $ toList xs
 fun toStream xs = mk Stream.<| Stream.empty xs
-fun toSource xs = Source.create read xs
 
 (* fun scanString s = Scanner.scanString $ Scanner.combine scan s *)
 (* fun scanFile s = Scanner.scanFile $ Scanner.combine scan s *)

@@ -1,6 +1,6 @@
 MyLib
 *.uo
 *.ui
-Test
+testing
 mosml/ParserFn.sml
 mosml/General.sig

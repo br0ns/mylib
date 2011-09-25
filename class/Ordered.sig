@@ -24,6 +24,9 @@ signature OrderedExt = sig
   val max : ordered binop
   val comparing : ('a -> ordered) -> 'a cmp
   val inRange : ordered * ordered -> ordered unpred
+
+  structure Map : OrderedMap where key = ordered
+  structure Set : OrderesSet where element = ordered
 end
 
 signature Ordered = OrderedExt

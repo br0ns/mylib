@@ -5,6 +5,7 @@ signature Reader = sig
 
   structure Monad : sig
     include MonadP
-    val run : ('a monad -> 'b monad) -> ('a, 'x) t -> ('b, 'x) t
+    val run : 'a monad -> ('a, 'x) t
+    val lift : ('a monad -> 'b monad) -> ('a, 'x) t -> ('b, 'x) t
   end
 end

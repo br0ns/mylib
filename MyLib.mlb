@@ -10,7 +10,6 @@ local
   bootstrap/Lazy.sml
   bootstrap/Seq.sml
   bootstrap/Stream.sml
-  bootstrap/Source.sml
   bootstrap/ViewL.sml
   bootstrap/ViewR.sml
   bootstrap/Either.sml
@@ -19,22 +18,17 @@ local
 in
 Infixes.sml
 
-io/Scan.sig                  (**) io/Scan.sml
-io/Nacs.sig                  (**) io/Nacs.sml
-
 class/Func.sig               (**) class/Func.fun
 class/Pointed.sig            (**) class/Pointed.fun
 class/App.sig                (**) class/App.fun
 class/Monad.sig              (**) class/Monad.fun
 class/Alt.sig                (**) class/Alt.fun
 class/MonadP.sig             (**) class/MonadP.fun
-class/MonadState.sig         (**) class/MonadState.fun
-class/MonadError.sig         (**) class/MonadError.fun
 class/Foldable.sig           (**) class/Foldable.fun
 class/MonoMonad.sig          (**) class/MonoMonad.fun
 class/MonoMonadP.sig         (**) class/MonoMonadP.fun
 class/MonoFoldable.sig       (**) class/MonoFoldable.fun
-class/MonadTrans.sig         (**) class/MonadTrans.fun
+
 class/Enumerable.sig         (**) class/Enumerable.fun
 class/Unfoldable.sig         (**) class/Unfoldable.fun
 class/Scannable.sig          (**) class/Scannable.fun
@@ -53,9 +47,7 @@ arrows/UnPred.sig            (**) arrows/UnPred.sml
 (* arrows/BinPred.sig *)
 (* arrows/BinFn.sig *)
 
-(* util/Fixpoint.sig *)
-(* util/Lazy.sig *)
-(* util/Tie.sig *)
+(* util/Fix.sig *)
 (* util/Emb.sig *)
 (* util/Iso.sig *)
 
@@ -67,22 +59,25 @@ arrows/UnPred.sig            (**) arrows/UnPred.sml
 (* data/Unit.sig *)
 (* data/Bool.sig *)
 (* data/Order.sig *)
-(* (\* data/Option.sig              (\\**\\) data/Option.sml *\) *)
-(* (\* data/Either.sig              (\\**\\) data/Either.sml *\) *)
-(* (\* data/Pair.sig                (\\**\\) data/Pair.sml *\) *)
-(* (\* data/Product.sig             (\\**\\) data/Product.sml *\) *)
+(* data/Lazy.sig *)
+(* data/Option.sig              (\**\) data/Option.sml *)
+(* data/Either.sig              (\**\) data/Either.sml *)
+(* data/Pair.sig                (\**\) data/Pair.sml *)
+(* data/Product.sig             (\**\) data/Product.sml *)
 
-(* (\* control/State.sig            (\\**\\) control/MkState.fun *\) *)
-(* (\* control/StateT.sig           (\\**\\) control/MkStateT.fun *\) *)
-(* control/ErrorT.sig           (\**\) control/MkErrorT.fun *)
-(*                              (\**\) control/Identity.sml *)
+(* control/MonadTrans.sig *)
+control/MonadState.sig       (**) control/StateT.fun
+control/MonadError.sig       (**) control/ErrorT.fun
+                             (**) control/ID.sml
+                             (**) control/State.fun
+                             (**) control/Error.fun
 (* control/Iter.sig             (\**\) control/Iter.sml *)
 control/Exit.sig             (**) control/Exit.sml
 
 io/Reader.sig                (**) io/Reader.sml
 io/Writer.sig                (**) io/Writer.sml
 (* io/TextIO.sig *)
-(* io/IO.sig *)
+(* io/IO.sig                    (\**\) io/IO.sml *)
 
 (* os/OS.sig *)
 (* os/File.sig *)
@@ -98,10 +93,11 @@ io/Writer.sig                (**) io/Writer.sml
 (* misc/Benchmark.sig *)
 (* misc/Basic.sig               (\**\) misc/Basic.sml *)
 
-(* (\* misc/Pretty.sig              (\\**\\) misc/Pretty.sml *\) *)
-(* (\* misc/Layout.sig              (\\**\\) misc/Layout.sml *\) *)
+(* misc/Pretty.sig              (\**\) misc/Pretty.sml *)
+(* misc/Layout.sig              (\**\) misc/Layout.sml *)
+(* misc/Bytes.sig               (\**\) misc/Bytes.sml *)
 
-(* struct/Sequence.sig          (\**\) struct/Seq.sml *)
+(* struct/Seq.sig               (\**\) struct/Seq.sml *)
 (*                              (\**\) struct/CList.sml *)
 (* struct/Stream.sig            (\**\) struct/Stream.sml *)
 (* struct/List.sig              (\**\) struct/List.sml *)
@@ -158,4 +154,5 @@ io/Writer.sig                (**) io/Writer.sml
 (* (\* libs/JSON.sig                (\\**\\) libs/JSON.sml *\) *)
 (* (\* generic/... *\) *)
 
+TopLevel.sml
 end

@@ -10,6 +10,7 @@ end
 structure A = App (M)
 open A M
 
+fun fail e = return () >>= (fn _ => raise e)
 fun m -- n = m >>= (fn x => n >>= (fn y => return (x, y)))
 fun join x = x >>= (fn x => x)
 fun seq ms =

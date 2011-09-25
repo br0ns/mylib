@@ -5,9 +5,9 @@ open Ap Al
 
 fun plus a b = a || b
 fun optional xs = (SOME $$ xs) || return NONE
-fun merger ms = List.foldr op|| zero ms
-fun mergel ms = List.foldl op|| zero ms
+fun merger ms = List.foldr op|| (genZero ()) ms
+fun mergel ms = List.foldl op|| (genZero ()) ms
 fun guard true  = return ()
-  | guard false = zero
+  | guard false = genZero ()
 
 end

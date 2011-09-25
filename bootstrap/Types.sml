@@ -22,4 +22,3 @@ type ('a, 'b, 'x) nacser = ('a, 'x) writer -> ('b, 'x) writer
 type 'a lazy = 'a Lazy.t
 type 'a seq = 'a Seq.t
 type 'a stream = 'a Stream.t
-type 'a source = 'a Source.t

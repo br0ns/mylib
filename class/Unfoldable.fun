@@ -19,15 +19,6 @@ fun fromList xs = mk List.foldr xs
 fun fromSeq xs = mk Seq.foldr xs
 fun fromVector xs = mk Vector.foldr xs
 fun fromStream xs = mk Stream.foldr xs
-fun fromSource s =
-    let
-      fun loop () =
-          case Source.get s of
-            NONE => empty
-          | SOME x => write (x, loop ())
-    in
-      loop ()
-    end
 
 (* fun scanString s = Scanner.scanString $ Scanner.combine scan s *)
 (* fun scanFile s = Scanner.scanFile $ Scanner.combine scan s *)

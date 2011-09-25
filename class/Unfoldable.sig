@@ -16,7 +16,6 @@ signature UnfoldableExt = sig
   val fromSeq : 'a unfoldable_element seq -> 'a unfoldable
   val fromVector : 'a unfoldable_element vector -> 'a unfoldable
   val fromStream : 'a unfoldable_element stream -> 'a unfoldable
-  val fromSource : 'a unfoldable_element source -> 'a unfoldable
   val scan : ('a unfoldable_element, 'a unfoldable, 'x) scanner
 end
 

@@ -10,5 +10,7 @@ fun die s =
             \Please email me at mortenbp@gmail.com.\n\
             \\n\
             \Error message:\n\
-            \" ^ s)
-   ; OS.Process.exit (1))
+            \" ^ s
+           )
+   ; OS.Process.exit OS.Process.failure
+    )

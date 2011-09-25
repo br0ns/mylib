@@ -13,7 +13,6 @@ signature EnumerableExt = sig
   val toSeq : 'a enumerable -> 'a enumerable_element seq
   val toVector : 'a enumerable -> 'a enumerable_element vector
   val toStream : 'a enumerable -> 'a enumerable_element stream
-  val toSource : 'a enumerable -> 'a enumerable_element source
   val nacs : ('a enumerable_element, 'a enumerable, 'x) nacser
 end
 

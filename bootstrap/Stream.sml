@@ -5,10 +5,6 @@ infix <| ><
 datatype 'a t = Promise of 'a t Lazy.t
               | Cons of 'a * 'a t
               | Nil
-(* datatype 'a t_ = Cons of 'a * 'a t *)
-(*                | Nil *)
-(* withtype 'a t = 'a t_ Lazy.t *)
-
 val empty = Nil
 
 fun x <| xs = Cons (x, xs)

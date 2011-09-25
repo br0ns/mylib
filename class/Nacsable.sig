@@ -9,7 +9,6 @@ signature NacsableBase = NacsableCore
 signature NacsableExt = sig
   include NacsableCore
 
-  (* Alias for {nacs} *)
   val toString : nacsable -> string
   val toFile : string -> nacsable effect
   val toStdOut : nacsable effect

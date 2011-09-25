@@ -1,7 +1,7 @@
 signature AltCore = sig
   type 'a alt
   val || : 'a alt binop
-  val zero : 'a alt
+  val genZero : 'a alt thunk
 end
 
 signature AltBase = sig
