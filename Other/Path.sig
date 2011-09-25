@@ -13,6 +13,8 @@ sig
   (* Relative to first argument.
      Ignores first argument if second argument is an absolute path. *)
   val new' : t -> string -> t
+  (* alias *)
+  val append : t -> string -> t
 
   val path : t -> string
   (* Alias *)

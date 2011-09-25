@@ -112,6 +112,8 @@ fun new' f f' =
         new (P.concat (f, f'))
     end
 
+fun append f f' = new $ toString f ^ f'
+
 fun path' f f' = P.mkCanonical (P.mkRelative {path = f', relativeTo = f})
 
 val file = P.file
