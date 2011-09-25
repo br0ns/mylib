@@ -2,7 +2,7 @@
 
 signature Heap =
 sig
-    eqtype key
+    type key
     type 'a t
 
     val empty      : 'a t

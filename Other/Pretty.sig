@@ -38,14 +38,23 @@ sig
   val delay : t Lazy.thunk -> t
 
 
-  (* Takes a function that given the current column generates a document. *)
-  val column : (int -> t) -> t
+  (* Takes a function that given the number of characters printed so far
+   * generates a document.
+   *)
+  val printed : (int -> t) -> t
 
-  (* Takes a function that given the current nesting level generates a document. *)
+  (* Takes a function that given the number of rows and columns (in the current
+   * line) printed so far generates a document.
+   *)
+  val position : ({row: int, column: int} -> t) -> t
+
+  (* Takes a function that given the current nesting level generates a document.
+   *)
   val nesting : (int -> t) -> t
 
   (* Takes a function that given the desired maximal printing width generates a
-   * document *)
+   * document
+   *)
   val max : (int option -> t) -> t
 
   val ^^ : t * t -> t (* Join horizontally. *)

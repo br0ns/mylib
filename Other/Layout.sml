@@ -53,6 +53,9 @@ fun punctuate sep ds =
       loop ds
     end
 
+fun column f = position (fn {column, ...} => f column)
+fun row f = position (fn {row, ...} => f row)
+
 fun align d = column (fn k => nesting (fn i => nest (k - i) d))
 fun hang i d = align (nest i d)
 fun indent i d = hang i (spaces i ^^ d)
@@ -401,5 +404,17 @@ fun enumerate (l, style, r) start ds =
     end
 end
 
-fun description items = vcat $ map (fn (s, d) => txt s ++ space ^^ nest 2 d) items
+fun description items =
+    vcat $ map (fn (s, d) => txt s ++ space ^^ nest 2 d) items
+
+fun placeAt {row = r, column = c} doc =
+    position (fn {row = r', column = c'} =>
+                 if r' < r then
+                   brk ^^ placeAt {row = r, column = c} doc
+                 else if c' < c then
+                   spaces (c - c') ^^ doc
+                 else
+                   doc
+             )
+
 end

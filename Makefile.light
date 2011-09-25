@@ -1,0 +1,64 @@
+MOSMLC=mosmlc
+
+.PHONY: light
+
+light :
+	sed "s/.*and type exn = exn//" Extensions/General.sig > mosml/autogen/General.sig
+
+	cat mosml/GENERAL.sig \
+      mosml/autogen/General.sig \
+      mosml/TEXT_IO.sig \
+      mosml/STRING.sig \
+\
+      mosml/Timer.sml \
+      mosml/String.sml \
+      mosml/Substring.sml \
+\
+      Extensions/General.sml \
+      Extensions/TextIO.sig \
+      Extensions/TextIO.sml \
+      Extensions/String.sig \
+      Extensions/String.sml \
+\
+      Other/Lazy.sig \
+      Other/Lazy.sml \
+      Other/Either.sig \
+      Other/Either.sml \
+      Other/Arrow.sig \
+      Other/Arrow.sml \
+      Other/LazyList.sig \
+      Other/LazyList.sml \
+      Other/Benchmark.sig \
+      Other/Benchmark.sml \
+      Other/Show.sig \
+      Other/Show.sml \
+      Other/Pair.sig \
+      Other/Pair.sml \
+\
+      DataStructures/Ordered.sig \
+\
+      DataStructures/Set/Set.sig \
+      DataStructures/Set/ListSet.sml \
+      DataStructures/Set/Set.sml \
+\
+      DataStructures/OrderedMap/OrderedMap.sig \
+      DataStructures/OrderedMap/ListOrderedMapFn.sml \
+      DataStructures/OrderedMap/UnbalancedOrderedMapFn.sml \
+      DataStructures/OrderedMap/OrderedMapFn.sml \
+      DataStructures/OrderedMap/Dictionary.sml \
+      DataStructures/OrderedMap/IntMap.sml \
+      DataStructures/OrderedMap/CharMap.sml \
+\
+      TopLevel.sml \
+\
+      Other/Pretty.sig \
+      Other/Pretty.sml \
+      Other/Layout.sig \
+      Other/Layout.sml \
+\
+      > MyLib.sml
+
+	$(MOSMLC) -c -P full \
+      Random.ui \
+      -toplevel MyLib.sml
+#	rm MyLib.sml

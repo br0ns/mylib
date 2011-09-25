@@ -2,11 +2,12 @@ structure Scanner =
 ParserFn(
 struct
 infix 0 |||
-infix 1 --- |-- --|
+infix 1 --- |-- --| ^^^
 infix 2 >>> --> ???
 
 type ('a, 'x) reader = ('a, 'x) StringCvt.reader
 type 'x state = 'x
+type position = unit
 type ('a, 'x) consumer = 'x state -> ('a * 'x state) option
 type ('a, 'b, 'x) parser = ('a, 'x) consumer -> ('b, 'x) consumer
 type ('a, 'b) result = 'b option
@@ -25,6 +26,7 @@ fun getState con state = SOME (state, state)
 fun setState state' con state = SOME ((), state')
 
 fun (p ??? s) = p
+fun getPosition ? = (fail ??? "getPosition not supported for Scanner")  ?
 fun any con state = con state
 fun notFollowedBy p con state =
     case p con state of

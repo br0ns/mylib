@@ -6,8 +6,17 @@
 signature Parser =
 sig
   include ParserBase
+val match : ('a, 'b, 'x) parser -> ('a, 'b, 'x) parser
 val underlies : ('a, 'b, 'x) parser * ('b, 'c, 'x) parser -> ('a, 'c, 'x) parser
+val void : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
 val >>> : ('a, 'b, 'x) parser * ('b -> 'c) -> ('a, 'c, 'x) parser
+val liftP : ('a -> 'b) -> ('a, 'b, 'x) parser
+val ^^^ : (char, string, 'x) parser * (char, string, 'x) parser ->
+          (char, string, 'x) parser
+val ::: : ('a, 'b, 'x) parser * ('a, 'b list, 'x) parser ->
+          ('a, 'b list, 'x) parser
+val @@@ : ('a, 'b list, 'x) parser * ('a, 'b list, 'x) parser ->
+          ('a, 'b list, 'x) parser
 val --- : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'b * 'c, 'x) parser
 val --| : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'b, 'x) parser
 val |-- : ('a, 'b, 'x) parser * ('a, 'c, 'x) parser -> ('a, 'c, 'x) parser
@@ -21,6 +30,8 @@ val link : ('a, 'b, 'x) parser list -> ('a, 'b list, 'x) parser
 val count : int -> ('a, 'b, 'x) parser -> ('a, 'b list, 'x) parser
 val many : ('a, 'b, 'x) parser -> ('a, 'b list, 'x) parser
 val many1 : ('a, 'b, 'x) parser -> ('a, 'b list, 'x) parser
+val many' : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
+val many1' : ('a, 'b, 'x) parser -> ('a, unit, 'x) parser
 val maybe : ('a, 'b, 'x) parser -> ('a, 'b option, 'x) parser
 val between : ('a, 'b, 'x) parser ->
               ('a, 'c, 'x) parser ->
@@ -70,6 +81,7 @@ val eof : ('a, unit, 'x) parser
 structure Text : sig
   val char : char -> (char, char, 'x) parser
   val string : string -> (char, string, 'x) parser
+  val strings : string list -> (char, string, 'x) parser
   val oneOf : string -> (char, char, 'x) parser
   val noneOf : string -> (char, char, 'x) parser
   val spaces : (char, int, 'x) parser
@@ -87,6 +99,7 @@ structure Text : sig
   (* val hexDigit : (char, char, 'x) parser *)
   (* val octDigit : (char, char, 'x) parser *)
   val whitespace : (char, unit, 'x) parser
+  val maybe : (char, string, 'x) parser -> (char, string, 'x) parser
 end
 
 structure Symb : sig
@@ -106,7 +119,7 @@ structure Symb : sig
   val space : (char, char, 'x) parser     (* = Text.char #" "  *)
   val dot : (char, char, 'x) parser       (* = Text.char #"."  *)
   val dash : (char, char, 'x) parser      (* = Text.char #"-"  *)
-  val sharp : (char, char, 'x) parser     (* = Text.char #"#"  *)
+  val hash : (char, char, 'x) parser      (* = Text.char #"#"  *)
   val percent : (char, char, 'x) parser   (* = Text.char #"%"  *)
   val dollar : (char, char, 'x) parser    (* = Text.char #"$"  *)
   val ampersand : (char, char, 'x) parser (* = Text.char #"&"  *)
@@ -118,7 +131,7 @@ structure Symb : sig
 end
 
 structure RegEx : sig
-  (* Eager regular expression parser
+   (* Eager regular expression parser
    *
    * Don't forget that you have the full parser library at your disposal, so
    * eager parsing shouldn't be a big hinderance.

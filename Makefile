@@ -6,5 +6,4 @@ clean: mlton-clean mosml-clean
 
 include Makefile.mlton
 include Makefile.mosml
-
-
+include Makefile.light

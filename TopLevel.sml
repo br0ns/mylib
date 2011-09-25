@@ -24,6 +24,8 @@ infix 4 \< \>
 infixr 3 $
 
 val println = TextIO.println
+val system = OS.Process.system
+val exit = OS.Process.exit
 val ltoi = Int.fromLarge
 val itol = Int.toLarge
 

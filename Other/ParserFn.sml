@@ -1,16 +1,25 @@
 functor ParserFn (Base : ParserBase) :>
-        Parser where type ('a, 'b) result = ('a, 'b) Base.result =
+        Parser where type ('a, 'b) result = ('a, 'b) Base.result
+                 and type position = Base.position =
 struct
 open Base
 infix 0 |||
-infix 1 --- |-- --|
+infix 1 --- |-- --| ^^^ ::: @@@
 infix 2 >>> --> ??? produce underlies
 
 fun p >>> f = (p --> return o f)
+fun liftP f = any >>> f
 fun (p1 --- p2) = p1 --> (fn a => p2 --> return o pair a)
+fun (p1 ^^^ p2) = p1 --> (fn a => p2 --> (fn b => return (a ^ b)))
 fun (p1 --| p2) = p1 --> (fn x => p2 --> (fn _ => return x))
 fun (p1 |-- p2) = p1 --> (fn _ => p2 --> (fn x => return x))
 fun p produce x = p |-- return x
+fun p1 ::: p2 = p1 --> (fn x => p2 --> (fn xs => return (x :: xs)))
+fun p1 @@@ p2 = p1 --> (fn xs => p2 --> (fn ys => return (xs @ ys)))
+
+fun void p = p |-- return ()
+
+fun match p c = (try p ||| any |-- match p) c
 
 fun predicate p =
     try (any -->
@@ -44,13 +53,17 @@ fun cons p = p >>> op::
 fun link ps = foldr (cons o op---) (return nil) ps
 fun count 0 p = return nil
   | count n p = cons (p --- count (n - 1) p)
+
+fun many' p ? = ((try p |-- many' p) ||| return ()) ?
+fun many1' p = p |-- many' p
+
 fun many p c = (cons (try p --- many p) ||| return nil) c
 fun many1 p = cons (p --- many p)
 fun maybe p = p >>> SOME ||| return NONE
 fun between l r p = l |-- p --| r
 fun followedBy p = lookAhead p produce ()
-fun manyTill p stop = stop produce nil |||
-                      cons (p --- manyTill p stop)
+fun manyTill p stop ? = (stop produce nil |||
+                         cons (p --- manyTill p stop)) ?
 fun sepBy1 p sep = cons (p --- many (sep |-- p))
 fun sepBy p sep = sepBy1 p sep ||| return nil
 fun endBy p e = many (p --| e)
@@ -111,6 +124,34 @@ fun line c =
 fun digit c = (predicate Char.isDigit ??? "digit") c
 fun num c = (many1 digit >>> implode) c
 fun whitespace c = ((many $ oneOf " \n\t\r") produce ()) c
+fun strings ss =
+    let
+      fun cmp (x :: _) (y :: _) = x = y
+        | cmp _ _ = false
+      fun loop css =
+          let
+            val gs = List.group cmp css
+            val (p, d) =
+                foldr (fn (g, (p, d)) =>
+                          let
+                            val pc =
+                                (token $ hd $ hd g) --- (loop $ map tl g)
+                          in
+                            (cons pc ||| p, d)
+                          end
+                      handle Empty => (p, true)
+                      )
+                      (fail, false)
+                      gs
+          in
+            if d then p ||| return nil else p
+          end
+    in
+      loop (map explode ss) >>> implode ??? "keyword"
+    end
+
+fun maybe p = p ||| return ""
+
 end
 
 structure RegEx =
@@ -177,7 +218,7 @@ fun comma c = Text.char #"," c
 fun space c = Text.char #" " c
 fun dot c = Text.char #"." c
 fun dash c = Text.char #"-" c
-fun sharp c = Text.char #"#" c
+fun hash c = Text.char #"#" c
 fun percent c = Text.char #"%" c
 fun dollar c = Text.char #"$" c
 fun ampersand c = Text.char #"&" c
@@ -202,7 +243,8 @@ fun letter c = lexeme Text.letter c
 fun word c = lexeme Text.word c
 
 fun keywords ks =
-    foldr op||| fail $ List.map (fn (k, a) => try (symbol k) produce a) ks
+    foldr op||| fail $ List.map (fn (k, a) => try (symbol k) produce a)
+    (rev $ List.sort (fn a => fn b => String.compare (fst a, fst b)) ks)
 
 fun parens p = between (symbol "(") (symbol ")") p
 fun braces p = between (symbol "{") (symbol "}") p

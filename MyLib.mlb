@@ -30,6 +30,7 @@ Other/Benchmark.sig Other/Benchmark.sml
 Other/Show.sig Other/Show.sml
 Other/Pair.sig Other/Pair.sml
 
+
 (***
  * DATA STRUCTURES
  *)
@@ -162,6 +163,10 @@ Other/Parser.sml
 Other/Scanner.sml
 
 Other/JSON.sig Other/JSON.sml
+Other/Path.sig Other/Path.sml
+Other/File.sig Other/File.sml
+Other/UniqId.sig Other/UniqId.sml
+Other/SourceText.sig Other/SourceText.sml
 
 
 (***

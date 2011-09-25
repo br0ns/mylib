@@ -4,7 +4,11 @@ sig
   where type string = string
     and type char = Char.char
 
+val TAB_WIDTH : int ref
+
 val tabulate : int * (int -> char) -> string
+
+val intercalate : string -> string list -> string
 
 (* Max width -> text -> wordwrapped text *)
 val wordwrap : int -> string -> string

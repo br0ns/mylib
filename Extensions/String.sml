@@ -3,7 +3,17 @@ struct
 open String
 val tabulate = CharVector.tabulate
 
+val TAB_WIDTH = ref 4
+
 fun spaces n = tabulate (n, fn _ => #" ")
+
+fun intercalate s ss =
+    let
+      fun loop (s' :: (ss as _ :: _)) = s' :: s :: loop ss
+        | loop x = x
+    in
+      concat (loop ss)
+    end
 
 fun wordwrap width text =
     let

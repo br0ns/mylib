@@ -2,7 +2,7 @@ structure Parser =
 ParserFn(
 struct
 infix 0 |||
-infix 1 --- |-- --|
+infix 1 --- |-- --| ^^^
 infix 2 >>> --> ???
 
 datatype either = datatype Either.t
@@ -12,9 +12,6 @@ type position = int
 type 'x state = 'x * position
 fun position (_, p) = p
 fun stream (s, _) = s
-
-fun justFailed (_, p1) (Left _, (_, p2)) = p2 = p1
-  | justFailed _ _ = false
 
 datatype 'x errors = F of 'x
                    | E of 'x * string
@@ -82,6 +79,9 @@ fun (p --> f) con state =
     case p con state of
       (Right x, state') => (f x) con state'
     | (Left e, state') => (Left e, state')
+
+fun getPosition ? =
+    (getState --> (fn st => return $ position st)) ?
 
 (* ========================================================== *)
 
@@ -166,8 +166,10 @@ fun test show p r s =
                 loop es ^
                 "."
             end
+        val es = map one es
       in
-        raise Error $ map one es
+        app println es
+      ; raise Error es
       end
     | (Right x, _) => x
 end

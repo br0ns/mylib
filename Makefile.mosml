@@ -3,9 +3,9 @@ MYLIB_MOSML = MyLib.ui MyLib.uo
 
 .PHONY: mosml mosml-clean mosml-create-link
 
-mosml: 
+mosml:
 	@echo Fixing MosML General.sig
-	@sed "s/.*and type exn = exn//" Extensions/General.sig > mosml/General.sig
+	@sed "s/.*and type exn = exn//" Extensions/General.sig > mosml/autogen/General.sig
 
 	@echo Generating MosML specific temporary sources
 	@cat mosml/GENERAL.sig \
@@ -124,7 +124,7 @@ mosml:
 
 $(MYLIB_MOSML): mosml
 
-mosml-clean: 
+mosml-clean:
 	-rm MyLib.ui
 	-rm MyLib.uo
 	-rm /usr/lib/mosml/MyLib.ui

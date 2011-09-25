@@ -68,6 +68,21 @@ sig
    * is reached produces a document *)
   val left : (int option -> t) -> t
 
+  (* Takes a function that given the number of lines printed so far produces a
+   * document.
+   *)
+  val row : (int -> t) -> t
+
+  (* Takes a function that given the current column produces a document.
+   *)
+  val column : (int -> t) -> t
+
+  (* Place a document at a specific position if that position is not already
+   * reached (in wich case the document is printed immediately.
+   * Rows and columns are zero indexed.
+   *)
+  val placeAt : {row: int, column: int} -> t -> t
+
   (* Takes a desired width and a document. Appends spaces if the document is
    * narrower, or inserts a line break and indents if it isn't. *)
   val fillBreak : int -> t -> t

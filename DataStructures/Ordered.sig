@@ -2,6 +2,6 @@
  * in and anonymous compare functions *)
 signature Ordered =
 sig
-    eqtype t
+    type t
     val compare  : t -> t -> order
 end
