@@ -1,6 +1,4 @@
 MyLib
 *.uo
 *.ui
-testing
-mosml/ParserFn.sml
-mosml/General.sig
+mosml/autogen
