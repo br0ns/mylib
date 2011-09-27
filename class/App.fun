@@ -15,6 +15,7 @@ fun lift3 f a b c = f $$ a ** b ** c
 fun lift4 f a b c d = f $$ a ** b ** c ** d
 fun a >> b = (fn _ => fn x => x) $$ a ** b
 fun a << b = (fn x => fn _ => x) $$ a ** b
+fun a -- b = (fn x => fn y => (x, y)) $$ a ** b
 fun cartesian a b = lift2 (fn x => fn y => (x, y)) a b
 
 fun mergerBy f xs =

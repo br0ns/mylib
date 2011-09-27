@@ -14,7 +14,6 @@ signature MonadExt = sig
 
   val fail : exn -> 'a monad
   val join : 'a monad monad -> 'a monad
-  val -- : 'a monad * 'b monad -> ('a * 'b) monad
   val mapM : ('a -> 'b monad) -> 'a list -> 'b list monad
   val mapMPartial : ('a -> 'b option monad) -> 'a list -> 'b list monad
   val mapM' : ('a -> '_ monad) -> 'a list -> unit monad

@@ -14,6 +14,7 @@ signature AppExt = sig
 
   val >> : 'a app * 'b app -> 'b app
   val << : 'a app * 'b app -> 'a app
+  val -- : 'a app * 'b app -> ('a * 'b) app
   val cartesian : 'a app -> 'b app -> ('a * 'b) app
   val lift2 : ('a -> 'b -> 'r) -> 'a app -> 'b app -> 'r app
   val lift3 : ('a -> 'b -> 'c -> 'r) -> 'a app -> 'b app -> 'c app -> 'r app
