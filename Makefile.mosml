@@ -5,13 +5,14 @@ MYLIB_MOSML = MyLib.ui MyLib.uo
 
 mosml:
 	@echo Fixing MosML General.sig
+	@mkdir -p mosml/autogen > /dev/null
 	@sed "s/.*and type exn = exn//" Extensions/General.sig > mosml/autogen/General.sig
 
 	@echo Generating MosML specific temporary sources
 	@cat mosml/GENERAL.sig \
       mosml/VECTOR_SLICE.sig \
       mosml/LIST.sig \
-      mosml/General.sig \
+      mosml/autogen/General.sig \
       mosml/TEXT_IO.sig \
       mosml/MATH.sig \
       mosml/STRING.sig \
