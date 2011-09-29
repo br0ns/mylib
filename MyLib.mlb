@@ -61,9 +61,12 @@ arrows/UnPred.sig            (**) arrows/UnPred.sml
 (* data/Order.sig *)
 (* data/Lazy.sig *)
 (* data/Option.sig              (\**\) data/Option.sml *)
+(* data/Sum.sig                 (\**\) data/Sum.sml *)
+(* data/Product.sig             (\**\) data/Product.sml *)
+
+(* Drop these *)
 (* data/Either.sig              (\**\) data/Either.sml *)
 (* data/Pair.sig                (\**\) data/Pair.sml *)
-(* data/Product.sig             (\**\) data/Product.sml *)
 
 (* control/MonadTrans.sig *)
 control/MonadState.sig       (**) control/StateT.fun
