@@ -16,6 +16,7 @@ mosml:
       mosml/TEXT_IO.sig \
       mosml/MATH.sig \
       mosml/STRING.sig \
+      mosml/ARRAY2.sig \
       mosml/Random.sig \
 \
       mosml/Random.sml \
@@ -23,6 +24,7 @@ mosml:
       mosml/String.sml \
       mosml/Substring.sml \
       mosml/VectorSlice.sml \
+      mosml/Array2.sml \
 \
       Extensions/General.sml \
       Extensions/List.sig \

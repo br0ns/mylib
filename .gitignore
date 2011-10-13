@@ -2,3 +2,5 @@ MyLib
 *.uo
 *.ui
 mosml/autogen
+notes.org
+install.local
