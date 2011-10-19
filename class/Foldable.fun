@@ -1,6 +1,12 @@
-functor Foldable (F : FoldableBase) : Foldable =
+functor Foldable (F : Foldable) :
+        sig
+          include Foldable Foldable_EX
+        end =
 struct
+open Util infixr $
 open F
+
+fun foldr f b xs = foldl (fn (x, k) => fn b => k $ f (x, b)) id xs b
 
 local
   fun maybe f (x, yop) =
@@ -64,9 +70,11 @@ fun disjoin xs =
     foldr (fn (x, a) => x orelse a) false xs
 
 fun all p xs =
-    foldlWhile (fn (x, _) => if p x then (true, true) else (false, false)) true xs
+    foldlWhile (fn (x, _) => if p x then (true, true) else (false, false))
+               true xs
 fun any p xs =
-    foldlWhile (fn (x, _) => if p x then (true, false) else (false, true)) false xs
+    foldlWhile (fn (x, _) => if p x then (true, false) else (false, true))
+               false xs
 
 fun maximumBy cmp xs =
     foldl1 (fn (x, a) =>
@@ -87,9 +95,13 @@ fun minimumBy cmp xs =
            xs
 
 fun findr p xs =
-    foldrWhile (fn (x, _) => if p x then (SOME x, false) else (NONE, true)) NONE xs
+    foldrWhile (fn (x, _) => if p x then (SOME x, false) else (NONE, true))
+               NONE xs
+
 fun findl p xs =
-    foldlWhile (fn (x, _) => if p x then (SOME x, false) else (NONE, true)) NONE xs
+    foldlWhile (fn (x, _) => if p x then (SOME x, false) else (NONE, true))
+               NONE xs
+
 val find = findl
 
 fun member x xs =
@@ -98,8 +110,11 @@ fun member x xs =
 fun notMember x xs = not $ member x xs
 
 fun intSum xs = foldl op+ 0 xs
+
 fun realSum xs = foldl op+ 0.0 xs
+
 fun intProduct xs = foldl op* 1 xs
+
 fun realProduct xs = foldl op* 1.0 xs
 
 local
