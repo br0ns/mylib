@@ -104,7 +104,7 @@ fun string s =
       loop (explode s) >>> implode
     end
 
-fun oneOf cs = foldr op||| fail $ List.map token $ explode cs
+fun oneOf cs = foldr op||| fail $ List.map char $ explode cs
 fun noneOf cs = predicate (fn c => List.all (c \< op<>) $ explode cs)
                           ??? "a character not among \"" ^ String.toString cs ^ "\""
 fun space c = (predicate Char.isSpace ??? "space") c

@@ -166,10 +166,8 @@ fun test show p r s =
                 loop es ^
                 "."
             end
-        val es = map one es
       in
-        app println es
-      ; raise Error es
+        raise Fail $ String.intercalate "\n" $ map one es
       end
     | (Right x, _) => x
 end
