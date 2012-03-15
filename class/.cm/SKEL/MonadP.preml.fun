@@ -1,2 +1,0 @@
-Skeleton 5
-aeўMonadP"i1aдўMP"gp1cяjh1bd2aдўPreML__TMP__cNEbDOFDpK"h1egp1яbd2aдўPreML__TMP__TAiMAFCyed"jh1езр±яgp1e"Monad"aдўPreML__TMP__WnDQKGnuCa"jh1c2езр±яЃяЃ gp1e"Alt"aяh1c3я‚egp1яЃ2яЃ яЃ gp1c"MonadPEX"

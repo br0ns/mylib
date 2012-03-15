@@ -1,2 +1,0 @@
-Skeleton 5
-d3f7d"Cmp"d"Int"Cd"Seq"d"Bool"d"List"d"Real"d"UnOp"Cd"Unit"d"Option"d"Packer"d"Reader"d"Stream"Cd"String"d"UnPred"d"Vector"d"Writer"d"Scanner"Cd"BinOp"d"Thunk"d"ViewL"d"ViewR"d"Effect"Nac"Sequence"è0ac"SequenceEX"ÿƒ

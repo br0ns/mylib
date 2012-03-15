@@ -1,2 +1,0 @@
-Skeleton 5
-d2ac"Set"h2åçð±ã¢Mono"f4ä¢Cmp"d"Int"ä¢Bool"ä¢Option"ac"SetEX"h2ÿf8ÿd"Seq"ÿ$Cd"List"d"UnOp"ÿ+d"Packer"d"Reader"Cd"Stream"d"UnPred"d"Vector"d"Writer"d"BinPred"Cd"Scanner"d"BinOp"d"Order"d"Thunk"d"Effect"N

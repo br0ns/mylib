@@ -1,2 +1,0 @@
-Skeleton 5
-aeўMonad"i1aдўM"gp1cяjh1bd2aдўPreML__TMP__CstZmGzQbu"h3egp1d"Fn"egp1яf5Cd"OS"d"List"d"Time"d"ListPair"d"LargeInt"Nbd2aдўPreML__TMP__QSwdLkeLOH"jh1езр±яgp1e"Idiom"aдўPreML__TMP__NVPxmiGPBS"jh1c2езр±яЃ8я‚gp1e"Func"aяh1c3яѓegp1я‚&я‚я‚gp1c"MonadEX"
