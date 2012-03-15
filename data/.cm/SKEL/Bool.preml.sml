@@ -1,0 +1,2 @@
+Skeleton 5
+aдўBool"jh1bd2aдўPreML__TMP__HjsNqvPpws"h2egp1яf1d"Fn"bd3aдўPreML__TMP__pyxbfhbFkr"jh1езр±яgp1e"Ordered"aдўPreML__TMP__kZttDPIGHL"jh1c2езр±я;яЃgp1e"Pickler"aдўPreML__TMP__LjbZwGVmWk"jh1c3я‚	езр±яЃ+яЃgp1e"Unpickler"aяh1c4я‚	яѓegp1я‚ яЃяЃgp1cя

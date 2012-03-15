@@ -9,7 +9,7 @@ fun newIso () : ('a, t) iso =
       fun ofE (E x) = x
         | ofE _ = raise Univ
     in
-      {to = E, from = ofE}
+      (E, ofE)
     end
 
 fun newEmb () : ('a, t) emb =
@@ -18,6 +18,6 @@ fun newEmb () : ('a, t) emb =
       fun ofE (E x) = SOME x
         | ofE _ = NONE
     in
-      {to = E, from = ofE}
+      (E, ofE)
     end
 end

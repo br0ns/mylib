@@ -1,21 +1,19 @@
-signature MonadPCore = sig
+signature MonadP =
+sig
+  type 'a t
+  include "AltIN.inc"
+  include "MonadIN.inc"
 end
 
-signature MonadPBase = sig
-  include MonadBase
-  include AltCore
-  sharing type monad = alt
-end
+signature MonadPEX =
+sig
+  include MonadP
+  include "MonadPEX.inc"
+  include "MonadEX.inc"
+  include "AltEX.inc"
 
-signature MonadPExt = sig
-  include MonadExt
-  val mapPartial : ('a -> 'a option) -> 'a monad unop
-  val keep : 'a unpred -> 'a monad unop
-  val reject : 'a unpred -> 'a monad unop
-end
-
-signature MonadP = sig
-  include Monad
-  include AltExt
-  sharing type monad = alt
+  include "FuncIN.inc"
+  include "FuncEX.inc"
+  include "IdiomIN.inc"
+  include "IdiomEX.inc"
 end

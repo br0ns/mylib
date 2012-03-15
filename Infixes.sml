@@ -64,9 +64,9 @@ infixr 0           !           !           !           !           !           !
 (* left *)
 infix <-- -- =<< >=> ^* <\ \> |> >< ^^ ++ % \ %- \- <-->
 (* right *)
-infixr --> >> << <=< $ </ /> <| &
+infixr --> >> << <=< $ </ /> <| & >-
 (* doesn't matter *)
-infix <:: ::> !! += -= ::= <|= |>= :=: to catch
+infix <:: ::> !! += -= ::= <|= |>= :=: catch
 (* not used *)
 infix |< >|
 

@@ -9,5 +9,5 @@ fun block b : 'a =
       b E handle E x => x
     end
 
-fun e <- x = raise e x
+fun op <- (e, x) = raise e x
 end

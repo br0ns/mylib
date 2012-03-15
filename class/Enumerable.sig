@@ -1,19 +1,11 @@
-signature EnumerableCore = sig
-  type 'a enumerable_element
-  type 'a enumerable
-  val read : ('a enumerable_element, 'a enumerable) reader
+signature Enumerable = sig
+  type 'a elm
+  type 'a t
+  include "EnumerableIN.inc"
 end
 
-signature EnumerableBase = EnumerableCore
-
-signature EnumerableExt = sig
-  include EnumerableCore
-
-  val toList : 'a enumerable -> 'a enumerable_element list
-  val toSeq : 'a enumerable -> 'a enumerable_element seq
-  val toVector : 'a enumerable -> 'a enumerable_element vector
-  val toStream : 'a enumerable -> 'a enumerable_element stream
-  val nacs : ('a enumerable_element, 'a enumerable, 'x) nacser
+signature EnumerableEX = sig
+  type 'a elm
+  type 'a t
+  include "EnumerableEX.inc"
 end
-
-signature Enumerable = EnumerableExt

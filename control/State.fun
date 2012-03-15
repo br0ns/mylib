@@ -1,2 +1,3 @@
-functor State (type state) =
-StateT (type state = state open ID)
+functor State (type state) :> MonadMonoState where type state = state
+                                               and type 'a inner = 'a
+= MonoStateT(type state = state open Identity)

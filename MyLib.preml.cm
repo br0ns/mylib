@@ -1,0 +1,75 @@
+library
+  source(-) - structure Util
+is
+(* TopLevel.sml *)
+
+arrows/Fn.sig                  (**) arrows/Fn.sml
+arrows/BinFn.sig               (**) arrows/BinFn.sml
+arrows/Effect.sig              (**) arrows/Effect.sml
+arrows/Thunk.sig               (**) arrows/Thunk.sml
+arrows/Cont.sig                (**) arrows/Cont.sml
+arrows/Cmp.sig                 (**) arrows/Cmp.sml
+arrows/UnOp.sig                (**) arrows/UnOp.sml
+arrows/BinOp.sig               (**) arrows/BinOp.sml
+arrows/UnPred.sig              (**) arrows/UnPred.sml
+arrows/BinPred.sig             (**) arrows/BinPred.sml
+arrows/Fix.sig                 (**) arrows/Fix.sml /home/mortenbp/code/sml/mylib/class/Func.preml.sig 
+
+                               (**) class/Func.fun /home/mortenbp/code/sml/mylib/class/Idiom.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/Idiom.preml.fun /home/mortenbp/code/sml/mylib/class/Monad.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/Monad.preml.fun /home/mortenbp/code/sml/mylib/class/Alt.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/Alt.preml.fun /home/mortenbp/code/sml/mylib/class/MonadP.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/MonadP.preml.fun /home/mortenbp/code/sml/mylib/class/Foldable.preml.sig 
+                               (**) class/Foldable.fun /home/mortenbp/code/sml/mylib/class/Enumerable.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/Enumerable.preml.fun /home/mortenbp/code/sml/mylib/class/Unfoldable.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/Unfoldable.preml.fun 
+
+class/Mono.sig /home/mortenbp/code/sml/mylib/class/MonoMonad.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/MonoMonad.preml.fun /home/mortenbp/code/sml/mylib/class/MonoMonadP.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/MonoMonadP.preml.fun /home/mortenbp/code/sml/mylib/class/MonoFoldable.preml.sig 
+                               (**) class/MonoFoldable.fun /home/mortenbp/code/sml/mylib/class/MonoEnumerable.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/MonoEnumerable.preml.fun /home/mortenbp/code/sml/mylib/class/MonoUnfoldable.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/MonoUnfoldable.preml.fun /home/mortenbp/code/sml/mylib/class/Ordered.preml.sig 
+
+                               (**) /home/mortenbp/code/sml/mylib/class/Ordered.preml.fun /home/mortenbp/code/sml/mylib/class/PolyOrdered.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/PolyOrdered.preml.fun /home/mortenbp/code/sml/mylib/class/Range.preml.sig 
+                               (**) /home/mortenbp/code/sml/mylib/class/Range.preml.fun /home/mortenbp/code/sml/mylib/class/Pickler.preml.sig 
+
+                               (**) class/Pickler.fun /home/mortenbp/code/sml/mylib/class/Unpickler.preml.sig 
+                               (**) class/Unpickler.fun /home/mortenbp/code/sml/mylib/class/Set.preml.sig 
+
+                               (**) /home/mortenbp/code/sml/mylib/class/Set.preml.fun /home/mortenbp/code/sml/mylib/class/Map.preml.sig /home/mortenbp/code/sml/mylib/class/Sequence.preml.sig 
+
+                               (**)
+
+                               (**) /home/mortenbp/code/sml/mylib/data/Option.preml.sml 
+data/Pair.sig                  (**) data/Pair.sml
+                               (**) data/ViewL.sml
+                               (**) data/ViewR.sml
+data/Exn.sig                   (**) data/Exn.sml
+data/Void.sig                  (**) data/Void.sml
+data/Unit.sig                  (**) /home/mortenbp/code/sml/mylib/data/Unit.preml.sml 
+data/Bool.sig                  (**) /home/mortenbp/code/sml/mylib/data/Bool.preml.sml 
+data/Order.sig                 (**) /home/mortenbp/code/sml/mylib/data/Order.preml.sml 
+data/Either.sig                (**) data/Either.sml
+data/Lazy.sig                  (**) data/Lazy.sml
+data/Univ.sig                  (**) data/Univ.sml
+
+control/Iso.sig                (**) control/Iso.sml
+control/Emb.sig                (**) control/Emb.sml
+                               (**) /home/mortenbp/code/sml/mylib/control/Identity.preml.sml 
+control/MonadState.sig         (**) /home/mortenbp/code/sml/mylib/control/StateT.preml.fun 
+                               (**) /home/mortenbp/code/sml/mylib/control/StateTP.preml.fun 
+                               (**) control/State.sml
+control/MonadError.sig         (**) /home/mortenbp/code/sml/mylib/control/ErrorT.preml.fun 
+                               (**) control/Error.sml
+control/Exit.sig               (**) control/Exit.sml
+
+io/Reader.sig                  (**) /home/mortenbp/code/sml/mylib/io/Reader.preml.sml 
+
+bootstrap/Util.sml
+bootstrap/Types.sml
+bootstrap/Lazy.sml
+bootstrap/Seq.sml
+bootstrap/Stream.sml
+bootstrap/String.sml

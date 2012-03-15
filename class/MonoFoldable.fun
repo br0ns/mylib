@@ -1,6 +1,9 @@
-functor MonoFoldable (F : MonoFoldableBase) : MonoFoldable =
+functor MonoFoldable (F : MonoFoldable) : MonoFoldableEX =
 struct
+open Fn infixr $
 open F
+
+fun foldr f b xs = foldl (fn (x, k) => fn b => k $ f (x, b)) id xs b
 
 local
   fun maybe f (x, yop) =
@@ -98,5 +101,19 @@ fun findr p xs = find foldr p xs
 fun findl p xs = find foldl p xs
 val find = findl
 end
+
+local
+  fun getIt fold xs =
+      let
+        exception GotIt of 'a
+      in
+        fold (fn (x, _) => raise GotIt x) (fn _ => raise Empty) xs ()
+        handle GotIt x => x
+      end
+in
+fun first xs = getIt foldl xs
+fun last xs = getIt foldr xs
+end
+
 end
 

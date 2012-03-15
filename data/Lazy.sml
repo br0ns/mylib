@@ -1,0 +1,1 @@
+structure Lazy :> Lazy = Lazy

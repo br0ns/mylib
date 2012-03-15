@@ -1,0 +1,3 @@
+Skeleton 5
+aeўSet"i1aдўS"gp1cяjh1bd2aдўPreML__TMP__vaISdTfORZ"h3baдўPreML__TMP__ONyqzeHzpb"jзр±я
+зр±еўMonoFoldable"egp1я8eяЃf1d"Fn"bd5CaдўPreML__TMP__YuXGDftxen"jh1езр±яgp1e"MonoMonadP"aдўPreML__TMP__WaqLAgCUAY"jh1c2езр±яЃ?я‚яЃaдўPreML__TMP__MejHInxfGW"jh1c3яѓезр±я‚2я‚gp1e"MonoEnumerable"aдўPreML__TMP__pZCrqWUFHQ"jh1c4яѓяѓ?езр±яѓя‚gp1e"MonoUnfoldable"aдўPreML__TMP__iyURdpCdKR"jh1c5Cяѓяѓ?я…езр±я„я‚Ngp1e"Ordered"Naяh1c6яѓCяѓ?я…я†	egp1я…!я‚Nя‚gp1c"SetEX"

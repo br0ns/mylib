@@ -1,22 +1,9 @@
-signature UnfoldableCore = sig
-  type 'a unfoldable_element
-  type 'a unfoldable
-  val write : ('a unfoldable_element, 'a unfoldable) writer
+signature Unfoldable = sig
+  type 'a t
+  include "UnfoldableIN.inc"
 end
 
-signature UnfoldableBase = sig
-  include UnfoldableCore
-  val empty : 'a unfoldable
+signature UnfoldableEX = sig
+  type 'a t
+  include "UnfoldableEX.inc"
 end
-
-signature UnfoldableExt = sig
-  include UnfoldableCore
-
-  val fromList : 'a unfoldable_element list -> 'a unfoldable
-  val fromSeq : 'a unfoldable_element seq -> 'a unfoldable
-  val fromVector : 'a unfoldable_element vector -> 'a unfoldable
-  val fromStream : 'a unfoldable_element stream -> 'a unfoldable
-  val scan : ('a unfoldable_element, 'a unfoldable, 'x) scanner
-end
-
-signature Unfoldable = UnfoldableExt

@@ -1,4 +1,0 @@
-structure Reader =
-struct
-
-end

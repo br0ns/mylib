@@ -1,17 +1,11 @@
-signature MonoMonadPCore = sig
-  include MonoMonadCore
-  val zero : monad
-  val || : monad binop
+signature MonoMonadP = sig
+  include Mono
+  include "MonoMonadIN.inc"
+  include "MonoAltIN.inc"
 end
 
-signature MonoMonadPBase = MonoMonadPCore
-
-signature MonoMonadPExt = sig
-  include MonoMonadPCore
-  val plus : monad -> monad -> monad
-  val merger : monad list -> monad
-  val mergel : monad list -> monad
-  val mapPartial : (monad_elm -> monad_elm option) -> monad -> monad
+signature MonoMonadPEX = sig
+  include MonoMonadP
+  include "MonoMonadPEX.inc"
+  include "MonoMonadEX.inc"
 end
-
-signature MonoMonadP = MonoMonadPExt

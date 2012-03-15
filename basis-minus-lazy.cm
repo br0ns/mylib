@@ -1,0 +1,4 @@
+library
+  library($/basis.cm) - structure Lazy
+is
+$/basis.cm

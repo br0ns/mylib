@@ -1,55 +1,77 @@
-functor Monad (M : MonadBase) : Monad =
-struct
-structure M = struct
-open M
-type 'a app = 'a monad
-fun a ** b = a >>= (fn x => b >>= (fn y => return $ x y))
-(* Alternatively {fun a ** b = do x <- a ; y <- b ; return (x y) end} *)
-end
+functor Monad (M : Monad) : MonadEX =
+struct (Idiom, Func)
+open M infix >>= =<< >=> <=< ** >>
 
-structure A = App (M)
-open A M
+(* Idiom interface *)
+val pure = return
+fun a ** b =
+    do f <- a
+     ; x <- b
+     ; return $ f x
+    end
 
-fun fail e = return () >>= (fn _ => raise e)
-fun join x = x >>= (fn x => x)
+fun a >> b = a >>= (fn _ => b)
+
+fun fail e = return () >>= (fn _ => raise Fail e)
+
+fun join x = x >>= Fn.id
+
 fun seq ms =
     List.foldr
       (fn (m, m') =>
-          m >>= (fn x => m' >>= (fn xs => return (x :: xs)))
+          do x <- m
+           ; xs <- m'
+           ; return $ x :: xs
+          end
       )
       (return nil)
       ms
+
 fun seq' ms = List.foldr op>> (return ()) ms
 
 fun mapM f xs = seq $ List.map f xs
+
 fun mapMPartial f xs =
     List.foldr
       (fn (x, m') =>
-          f x >>= (fn NONE   => m'
-                    | SOME x => m' >>= (fn xs => return $ x :: xs)
-                  )
+          do mx <- f x
+           ; case mx of
+               NONE   => m'
+             | SOME x =>
+               do xs <- m'
+                ; return $ x :: xs
+               end
+          end
       )
       (return nil)
       xs
+
 fun mapM' f xs = seq' $ List.map f xs
 
 fun keepM p xs =
     case xs of
       nil     => return nil
-    | x :: xs => p x >>= (fn px =>
-                 keepM p xs >>= (fn ys =>
-                 return (if px then x :: ys else ys)
-                 ))
+    | x :: xs =>
+      do px <- p x
+       ; ys <- keepM p xs
+       ; return (if px then x :: ys else ys)
+      end
+
 fun rejectM p xs = keepM (fn x => p x >>= return o not) xs
 
 fun m =<< n = n >>= m
+
 fun (f >=> g) x = f x >>= g
+
 fun (f <=< g) x = g x >>= f
 
 fun forever m = m >>= (fn _ => forever m)
+
 fun foreverWithDelay d m =
     let
-      fun sleep () = OS.Process.sleep $ Time.fromMilliseconds $ LargeInt.fromInt d
+      fun sleep () = OS.Process.sleep $
+                     Time.fromMilliseconds $
+                     LargeInt.fromInt d
       fun loop m = m >>= (fn _ => (sleep () ; loop m))
     in
       loop m
@@ -66,10 +88,14 @@ fun zipWithM f ls =
 fun zipWithM' f ls =
     seq' $ List.map f $ ListPair.zip ls
 
-fun foldM _ b nil = return b
-  | foldM f b (x :: xs) = f (x, b) >>= (fn b' => foldM f b' xs)
+fun foldlM _ b nil = return b
+  | foldlM f b (x :: xs) = do b' <- f (x, b) ; foldlM f b' xs end
 
-fun foldM' f b xs = ignore $ foldM f b xs
+fun foldlM' f b xs = ignore $ foldlM f b xs
+
+fun foldrM f b = foldlM f b o rev
+
+fun foldrM' f b = foldlM' f b o rev
 
 fun tabulateM n m =
     seq $ List.tabulate (n, m)
@@ -78,5 +104,6 @@ fun tabulateM' n m =
     seq' $ List.tabulate (n, m)
 
 fun when p m = if p then m else return ()
+
 fun unless p m = if p then return () else m
 end

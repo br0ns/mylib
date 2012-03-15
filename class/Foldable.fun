@@ -1,9 +1,6 @@
-functor Foldable (F : Foldable) :
-        sig
-          include Foldable Foldable_EX
-        end =
+functor Foldable (F : Foldable) :  FoldableEX =
 struct
-open Util infixr $
+open Fn infixr $
 open F
 
 fun foldr f b xs = foldl (fn (x, k) => fn b => k $ f (x, b)) id xs b
@@ -43,8 +40,8 @@ local
           handle Stop b => b
       end
 in
-fun foldrWhile f b xs = foldWhile foldr f b xs
-fun foldlWhile f b xs = foldWhile foldl f b xs
+fun foldrWhile f = foldWhile foldr f
+fun foldlWhile f = foldWhile foldl f
 end
 
 fun appr ef xs = foldr (fn (x, _) => ef x) () xs
@@ -118,7 +115,7 @@ fun intProduct xs = foldl op* 1 xs
 fun realProduct xs = foldl op* 1.0 xs
 
 local
-  fun getIt fold (xs : 'a foldable) =
+  fun getIt fold (xs : 'a t) =
       let
         exception GotIt of 'a
       in

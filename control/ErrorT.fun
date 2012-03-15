@@ -1,43 +1,42 @@
-functor ErrorT (X :
-                sig
-                  include Monad
-                  type error
-                  val noMsg : error
-                  val strMsg : string -> error
-                end) :
-        MonadError where type 'a inner = 'a X.monad
-                     and type error = X.error =
+functor ErrorT (I : Monad) :>
+        MonadError
+          where type 'a inner = 'a I.t =
 struct
-type error = X.error
-type 'a inner = 'a X.monad
-type 'a monad = (error, 'a) either inner
-type 'a alt = 'a monad
-
+type 'a inner = 'a I.t
+type ('a, 'e) t = ('e, 'a) Either.t inner
 datatype either = datatype Either.t
 
-fun liftM m = X.>>= (m, fn a => X.return $ Right a)
+fun op >>= (m, k) =
+    do with I
+     ; ex <- m
+     ; case ex of
+         LEFT e  => return (LEFT e)
+       | RIGHT x => k x
+    end
 
-fun throw e = X.return $ Left e
-fun (m catch h) = X.>>= (m, fn Left e  => (h e handle Bind => X.return $ Left e)
-                             | Right a => X.return $ Right a
-                        )
+fun return x = I.return $ RIGHT x
+
+fun op || (a, b) =
+    do with I
+     ; ex <- a
+     ; case ex of
+         LEFT e  => b
+       | RIGHT x => return $ RIGHT x
+    end
+
+fun lift m = I.>>= (m, return)
+
+fun throw e = I.return $ LEFT e
+
+fun op catch (m, h) =
+    do with I
+     ; x <- m
+     ; case x of
+         LEFT e  => (h e handle Bind => throw e)
+       | RIGHT x => return $ RIGHT x
+    end
 
 fun run m = m
+
 fun mapError f m = f m
-
-structure M = MonadP(
-type 'a pointed = 'a monad
-fun return a = X.return $ Right a
-type 'a alt = 'a monad
-fun m || n = X.>>= (m, fn Left _  => n
-                        | Right a => X.return $ Right a)
-
-fun genZero () = throw X.noMsg
-type 'a monad = 'a monad
-fun m >>= k = X.>>= (m, fn Left e  => X.return $ Left e
-                         | Right a => k a
-                    )
-              )
-
-open M
 end

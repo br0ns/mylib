@@ -1,12 +1,18 @@
-functor MonadP (MP : MonadPBase) : MonadP =
-struct
-structure M = Monad (MP)
-structure A = Alt (open M MP)
-open M A MP
+functor MonadP (MP : MonadP) : MonadPEX =
+struct (Monad, Alt)
+open MP
 
 fun mapPartial f m =
-    m >>= (fn x => case f x of
-                     SOME y => return y
-                   | NONE   => genZero ()
-          )
+    do x <- m
+     ; case f x of
+         SOME y => return y
+       | NONE   => genZero ()
+    end
+
+fun keep p m =
+    do x <- m
+     ; if p x then return x else genZero ()
+    end
+
+fun reject p = keep (not o p)
 end

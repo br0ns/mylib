@@ -1,0 +1,4 @@
+$(SML_LIB)/basis/basis.mlb
+%pre /home/mortenbp/code/sml/mylib/MyLib.mlb
+
+%pre test.sml

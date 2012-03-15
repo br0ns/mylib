@@ -4,158 +4,185 @@ local
   (* Used by Sequence.shuffle *)
   $(SML_LIB)/smlnj-lib/Util/smlnj-lib.mlb
 
-  bootstrap/Util.sml
-  bootstrap/Iso.sml
-  bootstrap/Emb.sml
-  bootstrap/Lazy.sml
-  bootstrap/Seq.sml
-  bootstrap/Stream.sml
-  bootstrap/ViewL.sml
-  bootstrap/ViewR.sml
-  bootstrap/Either.sml
-  bootstrap/Product.sml
-  bootstrap/Types.sml
+  bootstrap/Bootstrap.mlb
 in
-Infixes.sml
+     Infixes.sml
+     Types.sml
 
-class/Func.sig               (**) class/Func.fun
-class/Pointed.sig            (**) class/Pointed.fun
-class/App.sig                (**) class/App.fun
-class/Monad.sig              (**) class/Monad.fun
-class/Alt.sig                (**) class/Alt.fun
-class/MonadP.sig             (**) class/MonadP.fun
-class/Foldable.sig           (**) class/Foldable.fun
-class/MonoMonad.sig          (**) class/MonoMonad.fun
-class/MonoMonadP.sig         (**) class/MonoMonadP.fun
-class/MonoFoldable.sig       (**) class/MonoFoldable.fun
+     arrows/Fn.sig               (**)      arrows/Fn.sml
+     arrows/BinFn.sig            (**)      arrows/BinFn.sml
+     arrows/Effect.sig           (**)      arrows/Effect.sml
+     arrows/Thunk.sig            (**)      arrows/Thunk.sml
+     arrows/Cont.sig             (**)      arrows/Cont.sml
+     arrows/Cmp.sig              (**)      arrows/Cmp.sml
+     arrows/UnOp.sig             (**)      arrows/UnOp.sml
+     arrows/BinOp.sig            (**)      arrows/BinOp.sml
+     arrows/UnPred.sig           (**)      arrows/UnPred.sml
+     arrows/BinPred.sig          (**)      arrows/BinPred.sml
+     arrows/Fix.sig              (**)      arrows/Fix.sml
 
-class/Enumerable.sig         (**) class/Enumerable.fun
-class/Unfoldable.sig         (**) class/Unfoldable.fun
-class/Scannable.sig          (**) class/Scannable.fun
-class/Nacsable.sig           (**) class/Nacsable.fun
-class/Ordered.sig            (**) class/Ordered.fun
-(* class/Sequence.sig           (\**\) class/Sequence.fun *)
+     data/Exn.sig                (**)      data/Exn.sml
+     data/Pair.sig               (**)      data/Pair.sml
 
-(* arrows/Fn.sig                (\**\) arrows/Fn.sml *)
-(* arrows/Effect.sig *)
-(* arrows/Thunk.sig *)
-(* (\* arrows/Cont.sig *\) *)
-(* arrows/Cmp.sig *)
-(* arrows/UnOp.sig *)
-(* arrows/BinOp.sig *)
-arrows/UnPred.sig            (**) arrows/UnPred.sml
-(* arrows/BinPred.sig *)
-(* arrows/BinFn.sig *)
+%pre class/Func.sig              (**)      class/Func.fun
+%pre class/Idiom.sig             (**) %pre class/Idiom.fun
+%pre class/Monad.sig             (**) %pre class/Monad.fun
+%pre class/Alt.sig               (**) %pre class/Alt.fun
+%pre class/MonadP.sig            (**) %pre class/MonadP.fun
+%pre class/Foldable.sig          (**)      class/Foldable.fun
+%pre class/Enumerable.sig        (**) %pre class/Enumerable.fun
+%pre class/Unfoldable.sig        (**) %pre class/Unfoldable.fun
 
-(* util/Fix.sig *)
-(* util/Emb.sig *)
-(* util/Iso.sig *)
+     class/Mono.sig
+%pre class/MonoMonad.sig         (**) %pre class/MonoMonad.fun
+%pre class/MonoMonadP.sig        (**) %pre class/MonoMonadP.fun
+%pre class/MonoFoldable.sig      (**)      class/MonoFoldable.fun
+%pre class/MonoEnumerable.sig    (**) %pre class/MonoEnumerable.fun
+%pre class/MonoUnfoldable.sig    (**) %pre class/MonoUnfoldable.fun
 
-(* data/ViewL.sig *)
-(* data/ViewR.sig *)
-(* data/Exn.sig *)
-(* data/Univ.sig *)
-(* data/Void.sig *)
-(* data/Unit.sig *)
-(* data/Bool.sig *)
-(* data/Order.sig *)
-(* data/Lazy.sig *)
-(* data/Option.sig              (\**\) data/Option.sml *)
-(* data/Sum.sig                 (\**\) data/Sum.sml *)
-(* data/Product.sig             (\**\) data/Product.sml *)
+%pre class/Ordered.sig           (**) %pre class/Ordered.fun
+%pre class/PolyOrdered.sig       (**) %pre class/PolyOrdered.fun
+%pre class/Range.sig             (**)      class/Range.fun
 
-(* Drop these *)
-(* data/Either.sig              (\**\) data/Either.sml *)
-(* data/Pair.sig                (\**\) data/Pair.sml *)
+%pre class/Show.sig              (**)      class/Show.fun
+%pre class/Read.sig              (**)      class/Read.fun
+%pre class/Serialise.sig         (**) %pre class/Serialise.fun
 
-(* control/MonadTrans.sig *)
-control/MonadState.sig       (**) control/StateT.fun
-control/MonadError.sig       (**) control/ErrorT.fun
-                             (**) control/ID.sml
-                             (**) control/State.fun
-                             (**) control/Error.fun
-(* control/Iter.sig             (\**\) control/Iter.sml *)
-control/Exit.sig             (**) control/Exit.sml
+     data/Option.sig             (**) %pre data/Option.sml
+     data/Void.sig               (**)      data/Void.sml
+     data/Unit.sig               (**) %pre data/Unit.sml
+     data/Bool.sig               (**) %pre data/Bool.sml
+     data/Order.sig              (**) %pre data/Order.sml
+     data/Either.sig             (**)      data/Either.sml
+     data/Lazy.sig               (**)      data/Lazy.sml
+     data/Univ.sig               (**)      data/Univ.sml
+     data/Bit.sig                (**)      data/Bit.sml
+     data/Endian.sig             (**)      data/Endian.sml
+     data/Radix.sig              (**)      data/Radix.sml
 
-io/Reader.sig                (**) io/Reader.sml
-io/Writer.sig                (**) io/Writer.sml
+%pre class/Set.sig               (**) %pre class/Set.fun
+%pre class/Map.sig               (**) (* TODO *)
+%pre class/Sequence.sig          (**) %pre class/Sequence.fun
+
+     control/Iso.sig             (**)      control/Iso.sml
+     control/Emb.sig             (**)      control/Emb.sml
+                                 (**) %pre control/Identity.sml
+     control/MonadState.sig      (**) %pre control/StateT.fun
+                                 (**) %pre control/StateTP.fun
+                                 (**)      control/State.sml
+%pre control/MonadMonoState.sig  (**) %pre control/MonoStateT.fun
+                                 (**) %pre control/MonoStateTP.fun
+                                 (**)      control/State.fun
+     control/MonadError.sig      (**) %pre control/ErrorT.fun
+                                 (**)      control/Error.sml
+     control/MonadMonoError.sig  (**) %pre control/MonoErrorT.fun
+                                           control/Error.fun
+     control/Exit.sig            (**)      control/Exit.sml
+
+     control/Reader.sig          (**) %pre control/Reader.sml
+     control/Writer.sig          (**)      control/Writer.sml
+     (* control/Scanner.sig         (\**\)      control/Scanner.sml *)
+     (* control/Packer.sig          (\**\)      control/Packer.sml *)
+
+     (* binary/Binary.sig *)
+
+
+                                 (**) %pre data/Int.sml
+
+(* remember packFile/scanFile -- see Binary.sig *)
 (* io/TextIO.sig *)
-(* io/IO.sig                    (\**\) io/IO.sml *)
+(* io/In.sig *)
+(* io/Out.sig *)
+(* io/BinIO.sig *)
+(* io/BinIn.sig *)
+(* io/BinOut.sig *)
 
-(* os/OS.sig *)
+
+(* os/FileSys.sig *)
 (* os/File.sig *)
 (* os/Path.sig *)
 (* os/Dir.sig *)
+(* os/Process.sig *)
 
 (* text/Word.sig *)
 (* text/String.sig *)
 (* text/Char.sig *)
 
+(* generic/Binary.sig *)
+(* generic/Show.sig *)
+(* ... *)
+
 (* misc/Time.sig *)
 (* misc/Date.sig *)
 (* misc/Benchmark.sig *)
-(* misc/Basic.sig               (\**\) misc/Basic.sml *)
+(* misc/PrintF.sig *)
+(* misc/Logging.sig *)
+(* misc/Pretty.sig              (**) misc/Pretty.sml *)
+(* misc/Layout.sig              (**) misc/Layout.sml *)
+(* misc/Bytes.sig               (**) misc/Bytes.sml *)
 
-(* misc/Pretty.sig              (\**\) misc/Pretty.sml *)
-(* misc/Layout.sig              (\**\) misc/Layout.sml *)
-(* misc/Bytes.sig               (\**\) misc/Bytes.sml *)
+(* struct/Seq.sig               (**) struct/Seq.sml *)
+(*                              (**) struct/CList.sml *)
+(* struct/Stream.sig            (**) struct/Stream.sml *)
+                                (**) %pre struct/List.sml
 
-(* struct/Seq.sig               (\**\) struct/Seq.sml *)
-(*                              (\**\) struct/CList.sml *)
-(* struct/Stream.sig            (\**\) struct/Stream.sml *)
-(* struct/List.sig              (\**\) struct/List.sml *)
+(* struct/Map.sig               (**) struct/Map.fun *)
+(*                              (**) struct/RedBlackMap.fun *)
+(* (* Default implementations    **) struct/MkMap.fun *)
+(* (*                            **) struct/IntMap.sml *)
+(* (*                            **) struct/Dictionary.sml *)
+(* (*                            **) struct/CharMap.sml *)
 
-(* struct/Map.sig               (\**\) struct/Map.fun *)
-(*                              (\**\) struct/RedBlackMap.fun *)
-(* (\* Default implementations    **\) struct/MkMap.fun *)
-(* (\*                            **\) struct/IntMap.sml *)
-(* (\*                            **\) struct/Dictionary.sml *)
-(* (\*                            **\) struct/CharMap.sml *)
+(* struct/Set.sig           (\**\) struct/Set.fun *)
+(*                               struct/WithSet.fun *)
+(*                               struct/ListSetFn.fun *)
 
-(* struct/Set.sig               (\**\) struct/Set.fun *)
-(*                              (\**\) struct/RedBlackSet.fun *)
-(*                              (\**\) struct/TrieSet.fun *)
-(* (\* Default implementations    **\) struct/MkSet.fun *)
-(*                              (\**\) struct/IntSet.sml *)
-(*                              (\**\) struct/StringSet.sml *)
-(*                              (\**\) struct/CharSet.sml *)
+(* struct/Set.sig               (**) struct/Set.fun *)
+(*                              (**) struct/RedBlackSet.fun *)
+(*                              (**) struct/TrieSet.fun *)
+(* (* Default implementations    **) struct/MkSet.fun *)
+(*                              (**) struct/IntSet.sml *)
+(*                              (**) struct/StringSet.sml *)
+(*                              (**) struct/CharSet.sml *)
 
-(* struct/Heap.sig              (\**\) struct/Heap.fun *)
-(* struct/Queue.sig             (\**\) struct/Queue.fun *)
-(* struct/Deque.sig             (\**\) struct/Deque.fun *)
-(* struct/Tree.sig              (\**\) struct/Tree.fun *)
-(* (\*                              (\\**\\) struct/TrieOrderedMap.sml *\) *)
+(* struct/Heap.sig              (**) struct/Heap.fun *)
+(* struct/Queue.sig             (**) struct/Queue.fun *)
+(* struct/Deque.sig             (**) struct/Deque.fun *)
+(* struct/Tree.sig              (**) struct/Tree.fun *)
+(*                              (**) struct/TrieOrderedMap.sml *)
 
-(* (\*                              (\\**\\) struct/PairingHeap.sml *\) *)
-(* (\* (\\* Default implementations    **\\) struct/MkHeap.sml *\) *)
-(* (\* (\\*                            **\\) struct/IntMinHeap.sml *\) *)
-(* (\* (\\*                            **\\) struct/IntMaxHeap.sml *\) *)
-(* (\* (\\*                            **\\) struct/StringMinHeap.sml *\) *)
-(* (\* (\\*                            **\\) struct/StringMaxHeap.sml *\) *)
-(* (\* (\\*                            **\\) struct/CharMinHeap.sml *\) *)
-(* (\* (\\*                            **\\) struct/CharMaxHeap.sml *\) *)
-(* (\*                              (\\**\\) struct/MkQueue.fun *\) *)
-(* (\*                              (\\**\\) struct/MkDeque.fun *\) *)
-(* (\*                              (\\**\\) struct/MkTree.fun *\) *)
+(*                              (**) struct/PairingHeap.sml *)
+(* (* Default implementations    **) struct/MkHeap.sml *)
+(* (*                            **) struct/IntMinHeap.sml *)
+(* (*                            **) struct/IntMaxHeap.sml *)
+(* (*                            **) struct/StringMinHeap.sml *)
+(* (*                            **) struct/StringMaxHeap.sml *)
+(* (*                            **) struct/CharMinHeap.sml *)
+(* (*                            **) struct/CharMaxHeap.sml *)
+(*                              (**) struct/MkQueue.fun *)
+(*                              (**) struct/MkDeque.fun *)
+(*                              (**) struct/MkTree.fun *)
 
-(* (\* libs/generic/Generic.sig     (\\**\\) libs/generic/Generic.sml *\) *)
-(* (\*                              (\\**\\) libs/generic/Show.sml *\) *)
-(* (\*                              (\\**\\) libs/generic/Compare.sml *\) *)
-(* (\*                              (\\**\\) libs/generic/Read.sml *\) *)
-(* (\*                              (\\**\\) libs/generic/Write.sml *\) *)
-(* (\*                              (\\**\\) libs/generic/Hash.sml *\) *)
-(* (\*                              (\\**\\) libs/generic/Arbitrary.sml *\) *)
-(* (\*                              (\\**\\) libs/generic/Dynamic.sml *\) *)
-(* (\*                              (\\**\\) libs/generic/Enum.sml *\) *)
-(* (\*                              (\\**\\) libs/generic/Size.sml *\) *)
+(* libs/generic/Generic.sig     (**) libs/generic/Generic.sml *)
+(*                              (**) libs/generic/Show.sml *)
+(*                              (**) libs/generic/Compare.sml *)
+(*                              (**) libs/generic/Read.sml *)
+(*                              (**) libs/generic/Write.sml *)
+(*                              (**) libs/generic/Hash.sml *)
+(*                              (**) libs/generic/Arbitrary.sml *)
+(*                              (**) libs/generic/Dynamic.sml *)
+(*                              (**) libs/generic/Enum.sml *)
+(*                              (**) libs/generic/Size.sml *)
 
-(* (\* algorithms/graph/TopSort.sig (\\**\\) algorithms/graph/TopSort.sml *\) *)
+(* algorithms/graph/TopSort.sig (**) algorithms/graph/TopSort.sml *)
 
-(* (\* libs/Parser.sig              (\\**\\) libs/Parser.sml *\) *)
-(* (\*                              (\\**\\) libs/Parse.sml *\) *)
-(* (\*                              (\\**\\) libs/Scan.sml *\) *)
-(* (\* libs/JSON.sig                (\\**\\) libs/JSON.sml *\) *)
-(* (\* generic/... *\) *)
+(* libs/Parser.sig              (**) libs/Parser.sml *)
+(*                              (**) libs/Parse.sml *)
+(*                              (**) libs/Scan.sml *)
+(* libs/JSON.sig                (**) libs/JSON.sml *)
+(* generic/... *)
 
 TopLevel.sml
+Infixes.sml
+OpenTopLevel.sml
 end

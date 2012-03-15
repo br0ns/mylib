@@ -1,9 +1,12 @@
-functor App (A : AppBase) : App =
+functor App (A : App) : AppInstance =
 struct
+open A infix **
+
+
 structure A = struct
 open A
 type 'a func = 'a app
-fun map f xs = return f ** xs
+fun map f xs = pure f ** xs
 end
 
 structure F = Func (A)

@@ -1,31 +1,38 @@
-functor MonoMonad (M : MonoMonadBase) : MonoMonad =
+functor MonoMonad (M : MonoMonad) : MonoMonadEX =
 struct
-open M
+open Fn infixr $
+open M infix $$ $| << >> =<< >>= <=< >=>
 
 fun map f m = m >>= return o f
+
 fun app f m = (map (fn x => (f x; x)) m ; ())
-fun m --> f = map f m
+
 fun f $$ m = map f m
-val lift = map
+
 fun x $| m = const x $$ m
+
 fun m >> n = m >>= (fn x => n >>= (fn _ => return x))
+
 fun m << n = m >>= (fn _ => n >>= (fn x => return x))
 
-fun lift2 f a b =
-    a >>= (fn a =>
-    b >>= (fn b =>
-    return $ f a b))
-fun lift3 f a b c =
-    a >>= (fn a =>
-    b >>= (fn b =>
-    c >>= (fn c =>
-    return $ f a b c)))
-fun lift4 f a b c d =
-    a >>= (fn a =>
-    b >>= (fn b =>
-    c >>= (fn c =>
-    d >>= (fn d =>
-    return $ f a b c d))))
+fun map2 f am bm =
+    do a <- am
+     ; b <- bm
+     ; return $ f a b
+    end
+fun map3 f am bm cm =
+    do a <- am
+     ; b <- bm
+     ; c <- cm
+     ; return $ f a b c
+    end
+fun map4 f am bm cm dm =
+    do a <- am
+     ; b <- bm
+     ; c <- cm
+     ; d <- dm
+     ; return $ f a b c d
+    end
 
 fun mergerBy _ nil = NONE
   | mergerBy f (m :: ms) =
@@ -33,18 +40,22 @@ fun mergerBy _ nil = NONE
     case mergerBy f ms of
       NONE   => m
     | SOME n =>
-      n >>= (fn y =>
-      m >>= (fn x =>
-      return $ f (x, y)))
+      do y <- n
+       ; x <- m
+       ; return $ f (x, y)
+      end
     )
 
-fun mergelBy f ms = mergerBy f $ rev ms
+fun mergelBy f = mergerBy f o rev
 
 fun m =<< n = n >>= m
+
 fun (f >=> g) x = f x >>= g
+
 fun (f <=< g) x = g x >>= f
 
 fun forever m = m >>= (fn _ => forever m)
+
 fun foreverWithDelay d m =
     let
       fun sleep () = OS.Process.sleep $ Time.fromMilliseconds $ LargeInt.fromInt d
@@ -53,6 +64,8 @@ fun foreverWithDelay d m =
       loop m
     end
 
-fun foldM _ b nil = return b
-  | foldM f b (x :: xs) = f (x, b) >>= (fn b' => foldM f b' xs)
+fun foldlM _ b nil = return b
+  | foldlM f b (x :: xs) = f (x, b) >>= (fn b' => foldlM f b' xs)
+
+fun foldrM f b = foldlM f b o rev
 end

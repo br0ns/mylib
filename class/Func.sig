@@ -1,19 +1,9 @@
-signature FuncCore = sig
-  type 'a func
-  val map : ('a -> 'b) -> 'a func -> 'b func
+signature Func = sig
+  type 'a t
+  include "FuncIN.inc"
 end
 
-signature FuncBase = FuncCore
-
-signature FuncExt = sig
-  include FuncCore
-
-  val app : 'a effect -> 'a func effect
-  val --> : 'a func * ('a -> 'b) -> 'b func
-  val <-- : ('a -> 'b) * 'a func -> 'b func
-  val $$ : ('a -> 'b) * 'a func -> 'b func
-  val lift : ('a -> 'b) -> 'a func -> 'b func
-  val $| : 'a * 'b func -> 'a func
+signature FuncEX = sig
+  include Func
+  include "FuncEX.inc"
 end
-
-signature Func = FuncExt

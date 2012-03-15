@@ -34,9 +34,9 @@ datatype 'a t =
          N of 'a
        | B of int * 'a tree list
 withtype 'a digit = 'a list
-type 'a sequence = 'a t
 
 val empty = E
+fun genEmpty () = E
 
 fun null E = true
   | null _ = false

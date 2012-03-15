@@ -1,11 +1,7 @@
-functor Func (F : FuncBase) : Func =
+functor Func (F : Func) : FuncEX =
 struct
-open F
-
-val lift = map
+open F infix $$ $|
 fun app f a = (map (fn x => (f x ; ())) a ; ())
-fun a --> f = map f a
-fun f <-- a = a --> f
 fun a $$ b = map a b
 fun x $| a = (fn _ => x) $$ a
 end

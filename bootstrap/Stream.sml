@@ -1,26 +1,25 @@
 structure Stream =
 struct
-infix <| ><
+infix <|
 
-datatype 'a t = Promise of 'a t Lazy.t
-              | Cons of 'a * 'a t
-              | Nil
-val empty = Nil
+val F = Lazy.force
+val E = Lazy.eager
 
-fun x <| xs = Cons (x, xs)
+datatype 'a t' = Cons of 'a * 'a t
+               | Nil
+withtype 'a t = 'a t' Lazy.t
+
+fun genEmpty () = E Nil
+
+fun x <| xs = E (Cons (x, xs))
+
+fun viewl xs =
+    case F xs of
+      Cons x => ViewL.<:: x
+    | Nil    => ViewL.nill
 
 fun getl xs =
-    case xs of
-      Nil => NONE
-    | Cons (x, xs) => SOME (x, xs)
-    | Promise p => getl $ Lazy.force p
-
-fun foldl f b xs =
-    case xs of
-      Nil => b
-    | Cons (x, xs) => foldl f (f (x, b)) xs
-    | Promise p => foldl f b $ Lazy.force p
-
-fun foldr f b xs = foldl (fn (x, k) => fn b => k (f (x, b))) (fn b => b) xs b
-
+    case F xs of
+      Cons (x, xs) => SOME (x, xs)
+    | Nil          => NONE
 end

@@ -1,0 +1,1412 @@
+val $ : ('a -> 'b) * 'a -> 'b
+structure BinFn:
+   sig
+      type ('a, 'b) t = 'a * 'a -> 'b
+      val lift: ('a -> 'b) * ('c -> 'd) -> ('b * 'b -> 'c) -> 'a * 'a -> 'd
+   end
+structure BinOp:
+   sig
+      type 'a t = 'a * 'a -> 'a
+      val lift: ('a -> 'b) * ('c -> 'd) -> ('b * 'b -> 'c) -> 'a * 'a -> 'd
+   end
+structure BinPred: BinPred
+structure Cmp:
+   sig
+      type 'a t = 'a * 'a -> Primitive.Order.t
+      val map: ('a -> 'b) -> ('b * 'b -> 'c) -> 'a * 'a -> 'c
+   end
+structure Cont: Cont
+structure Effect: Effect
+structure Fn: Fn
+structure Identity:
+   sig
+      eqtype 'a t = 'a
+      val $$ : ('a -> 'b) * 'a -> 'b
+      val $| : 'a * 'b -> 'a
+      val ** : ('a -> 'b) * 'a -> 'b
+      val -- : 'a * 'b -> 'a * 'b
+      val << : 'a * 'b -> 'a
+      val <=< : ('a -> 'b) * ('c -> 'a) -> 'c -> 'b
+      val =<< : ('a -> 'b) * 'a -> 'b
+      val >=> : ('a -> 'b) * ('b -> 'c) -> 'a -> 'c
+      val >> : 'a * 'b -> 'b
+      val >>= : 'a * ('a -> 'b) -> 'b
+      val app: ('a -> unit) -> 'a -> unit
+      val fail: string -> 'a
+      val foldlM: ('a * 'b -> 'b) -> 'b -> 'a list -> 'b
+      val foldlM': ('a * 'b -> 'b) -> 'b -> 'a list -> unit
+      val foldrM: ('a * 'b -> 'b) -> 'b -> 'a list -> 'b
+      val foldrM': ('a * 'b -> 'b) -> 'b -> 'a list -> unit
+      val forever: 'a -> 'b
+      val foreverWithDelay: Int.int -> 'a -> 'b
+      val ignore: 'a -> unit
+      val join: 'a -> 'a
+      val keepM: ('a -> bool) -> 'a list -> 'a list
+      val map: ('a -> 'b) -> 'a -> 'b
+      val map2: ('a -> 'b -> 'c) -> 'a -> 'b -> 'c
+      val map3: ('a -> 'b -> 'c -> 'd) -> 'a -> 'b -> 'c -> 'd
+      val map4: ('a -> 'b -> 'c -> 'd -> 'e) -> 'a -> 'b -> 'c -> 'd -> 'e
+      val mapAndUnzipM: ('a -> 'b * 'c) -> 'a list -> 'b list * 'c list
+      val mapM: ('a -> 'b) -> 'a list -> 'b list
+      val mapM': ('a -> 'b) -> 'a list -> unit
+      val mapMPartial: ('a -> 'b Option.t) -> 'a list -> 'b list
+      val mergelBy: ('a * 'a -> 'a) -> 'a list -> 'a Option.t
+      val mergerBy: ('a * 'a -> 'a) -> 'a list -> 'a Option.t
+      val pure: 'a -> 'a
+      val rejectM: ('a -> bool) -> 'a list -> 'a list
+      val return: 'a -> 'a
+      val seq: 'a list -> 'a list
+      val seq': 'a list -> unit
+      val tabulateM: Int.int -> (Int.int -> 'a) -> 'a list
+      val tabulateM': Int.int -> (Int.int -> 'a) -> unit
+      val unless: bool -> unit -> unit
+      val when: bool -> unit -> unit
+      val zipWithM: ('a * 'b -> 'c) -> 'a list * 'b list -> 'c list
+      val zipWithM': ('a * 'b -> 'c) -> 'a list * 'b list -> unit
+   end
+structure Int:
+   sig
+      eqtype int = Int.int
+      eqtype t = Int.int
+      val != : Int.int * Int.int -> bool
+      val * : Int.int * Int.int -> Int.int
+      val + : Int.int * Int.int -> Int.int
+      val - : Int.int * Int.int -> Int.int
+      val < : Int.int * Int.int -> bool
+      val <= : Int.int * Int.int -> bool
+      val == : Int.int * Int.int -> bool
+      val > : Int.int * Int.int -> bool
+      val >= : Int.int * Int.int -> bool
+      val abs: Int.int -> Int.int
+      val compare: Int.int * Int.int -> Primitive.Order.t
+      val comparing: ('a -> Int.int) -> 'a * 'a -> Primitive.Order.t
+      val div: Int.int * Int.int -> Int.int
+      val eq: Int.int -> Int.int -> bool
+      val fmt: StringCvt.radix -> Int.int -> string
+      val fromCharList: char8 list -> Int.int Option.t
+      val fromCharSeq: char8 Seq.t -> Int.int Option.t
+      val fromCharStream: char8 Stream.t' Lazy.t_ ref -> Int.int Option.t
+      val fromFile: string -> Int.int Option.t
+      val fromInstream: ImperativeIOExtra.instream -> Int.int Option.t
+      val fromInt: Int.int -> Int.int
+      val fromLarge: intInf -> Int.int
+      val fromStdIn: unit -> Int.int Option.t
+      val fromString: string -> Int.int Option.t
+      val fromStringList: string list -> Int.int Option.t
+      val fromStringSeq: string Seq.t -> Int.int Option.t
+      val fromStringStream: string Stream.t' Lazy.t_ ref -> Int.int Option.t
+      val fromStringVector: string vector -> Int.int Option.t
+      val gt: Int.int -> Int.int -> bool
+      val gte: Int.int -> Int.int -> bool
+      val inRange: Int.int * Int.int -> Int.int -> bool
+      val lt: Int.int -> Int.int -> bool
+      val lte: Int.int -> Int.int -> bool
+      val max: Int.int * Int.int -> Int.int
+      val maxInt: Int.int Option.t
+      val min: Int.int * Int.int -> Int.int
+      val minInt: Int.int Option.t
+      val mod: Int.int * Int.int -> Int.int
+      val neq: Int.int -> Int.int -> bool
+      val pickle: (string * 'a -> 'b) -> Int.int * 'a -> 'b
+      val precision: Int.int Option.t
+      val quot: Int.int * Int.int -> Int.int
+      val rem: Int.int * Int.int -> Int.int
+      val sameSign: Int.int * Int.int -> bool
+      val scan: StringCvt.radix
+		-> ('a -> (char8 * 'a) Option.t)
+		   -> 'a -> (Int.int * 'a) Option.t
+      val sign: Int.int -> Int.int
+      val toCharList: Int.int -> char8 list
+      val toCharSeq: Int.int -> char8 Seq.t
+      val toCharStream: Int.int -> char8 Stream.t' Lazy.t_ ref
+      val toFile: string -> Int.int -> unit
+      val toInt: Int.int -> Int.int
+      val toLarge: Int.int -> intInf
+      val toOutstream: ImperativeIOExtra.Outstream.t -> Int.int -> unit
+      val toStdOut: Int.int -> unit
+      val toString: Int.int -> string
+      val unpickle: ('a -> (char8 * 'a) Option.t)
+		    -> 'a -> (Int.int * 'a) Option.t
+      val ~ : Int.int -> Int.int
+   end
+structure Option:
+   sig
+      eqtype 'a t = 'a Option.t
+      val $$ : ('a -> 'b) * 'a Option.t -> 'b Option.t
+      val $| : 'a * 'b Option.t -> 'a Option.t
+      val ** : ('a -> 'b) Option.t * 'a Option.t -> 'b Option.t
+      val -- : 'a Option.t * 'b Option.t -> ('a * 'b) Option.t
+      val << : 'a Option.t * 'b Option.t -> 'a Option.t
+      val <=< : ('a -> 'b Option.t) * ('c -> 'a Option.t) -> 'c -> 'b Option.t
+      val =<< : ('a -> 'b Option.t) * 'a Option.t -> 'b Option.t
+      val >=> : ('a -> 'b Option.t) * ('b -> 'c Option.t) -> 'a -> 'c Option.t
+      val >> : 'a Option.t * 'b Option.t -> 'b Option.t
+      val >>= : 'a Option.t * ('a -> 'b Option.t) -> 'b Option.t
+      val app: ('a -> unit) -> 'a Option.t -> unit
+      val fail: string -> 'a Option.t
+      val foldlM: ('a * 'b -> 'b Option.t) -> 'b -> 'a list -> 'b Option.t
+      val foldlM': ('a * 'b -> 'b Option.t) -> 'b -> 'a list -> unit Option.t
+      val foldrM: ('a * 'b -> 'b Option.t) -> 'b -> 'a list -> 'b Option.t
+      val foldrM': ('a * 'b -> 'b Option.t) -> 'b -> 'a list -> unit Option.t
+      val forever: 'a Option.t -> 'b Option.t
+      val foreverWithDelay: Int.int -> 'a Option.t -> 'b Option.t
+      val genZero: unit -> 'a Option.t
+      val guard: bool -> unit Option.t
+      val ignore: 'a Option.t -> unit Option.t
+      val join: 'a Option.t Option.t -> 'a Option.t
+      val keep: ('a -> bool) -> 'a Option.t -> 'a Option.t
+      val keepM: ('a -> bool Option.t) -> 'a list -> 'a list Option.t
+      val map: ('a -> 'b) -> 'a Option.t -> 'b Option.t
+      val map2: ('a -> 'b -> 'c) -> 'a Option.t -> 'b Option.t -> 'c Option.t
+      val map3: ('a -> 'b -> 'c -> 'd)
+		-> 'a Option.t -> 'b Option.t -> 'c Option.t -> 'd Option.t
+      val map4: ('a -> 'b -> 'c -> 'd -> 'e)
+		-> 'a Option.t
+		   -> 'b Option.t -> 'c Option.t -> 'd Option.t -> 'e Option.t
+      val mapAndUnzipM: ('a -> ('b * 'c) Option.t)
+			-> 'a list -> ('b list * 'c list) Option.t
+      val mapM: ('a -> 'b Option.t) -> 'a list -> 'b list Option.t
+      val mapM': ('a -> 'b Option.t) -> 'a list -> unit Option.t
+      val mapMPartial: ('a -> 'b Option.t Option.t)
+		       -> 'a list -> 'b list Option.t
+      val mapPartial: ('a -> 'a Option.t) -> 'a Option.t -> 'a Option.t
+      val mergel: 'a Option.t list -> 'a Option.t
+      val mergelBy: ('a * 'a -> 'a) -> 'a Option.t list -> 'a Option.t Option.t
+      val merger: 'a Option.t list -> 'a Option.t
+      val mergerBy: ('a * 'a -> 'a) -> 'a Option.t list -> 'a Option.t Option.t
+      val optional: 'a Option.t -> 'a Option.t Option.t
+      val plus: 'a Option.t -> 'a Option.t -> 'a Option.t
+      val pure: 'a -> 'a Option.t
+      val reject: ('a -> bool) -> 'a Option.t -> 'a Option.t
+      val rejectM: ('a -> bool Option.t) -> 'a list -> 'a list Option.t
+      val return: 'a -> 'a Option.t
+      val seq: 'a Option.t list -> 'a list Option.t
+      val seq': 'a Option.t list -> unit Option.t
+      val tabulateM: Int.int -> (Int.int -> 'a Option.t) -> 'a list Option.t
+      val tabulateM': Int.int -> (Int.int -> 'a Option.t) -> unit Option.t
+      val unless: bool -> unit Option.t -> unit Option.t
+      val when: bool -> unit Option.t -> unit Option.t
+      val zipWithM: ('a * 'b -> 'c Option.t)
+		    -> 'a list * 'b list -> 'c list Option.t
+      val zipWithM': ('a * 'b -> 'c Option.t)
+		     -> 'a list * 'b list -> unit Option.t
+      val || : 'a Option.t * 'a Option.t -> 'a Option.t
+   end
+structure Pair: Pair
+structure Reader: Reader
+		  where type 'a inner = 'a Reader.inner
+		  where type 'a outer = 'a Reader.outer
+structure State: MonadState
+		 where type 'a inner = 'a
+		 where type 'a outer = 'a State.outer
+		 where type ('a, 'b) t = ('a, 'b) State.t
+structure Thunk: Thunk
+structure TopLevel:
+   sig
+      val $ : ('a -> 'b) * 'a -> 'b
+   end
+structure UnOp:
+   sig
+      type 'a t = 'a -> 'a
+      val lift: ('a -> 'b) * ('c -> 'd) -> ('b -> 'c) -> 'a -> 'd
+   end
+structure UnPred: UnPred
+structure Univ: Univ
+		where type t = Univ.t
+structure ViewL:
+   sig
+      datatype ('a, 'b) t = <:: of 'a * 'b | nill
+   end
+structure ViewR:
+   sig
+      datatype ('a, 'b) t = ::> of 'b * 'a | nilr
+   end
+functor Alt (A: Alt
+		where type 'a t = 'a A.t)
+   : AltEX
+     where type 'a t = 'a A.t
+functor Enumerable (E: Enumerable
+		       where type 'a t = 'a E.t)
+   : EnumerableEX
+     where type 'a t = 'a E.t
+functor Foldable (F: Foldable
+		     where type 'a t = 'a F.t)
+   : FoldableEX
+     where type 'a t = 'a F.t
+functor Func (F: Func
+		 where type 'a t = 'a F.t)
+   : FuncEX
+     where type 'a t = 'a F.t
+functor Idiom (I: Idiom
+		  where type 'a t = 'a I.t)
+   : IdiomEX
+     where type 'a t = 'a I.t
+functor Monad (M: Monad
+		  where type 'a t = 'a M.t)
+   : MonadEX
+     where type 'a t = 'a M.t
+functor MonadP (MP: MonadP
+		    where type 'a t = 'a MP.t)
+   : MonadPEX
+     where type 'a t = 'a MP.t
+functor MonoEnumerable (E: MonoEnumerable
+			   where type elm = E.elm
+			   where type t = E.t)
+   : MonoEnumerableEX
+     where type elm = E.elm
+     where type t = E.t
+functor MonoFoldable (F: MonoFoldable
+			 where type elm = F.elm
+			 where type t = F.t)
+   : MonoFoldableEX
+     where type elm = F.elm
+     where type t = F.t
+functor MonoMonad (M: MonoMonad
+		      where type elm = M.elm
+		      where type t = M.t)
+   : MonoMonadEX
+     where type elm = M.elm
+     where type t = M.t
+functor MonoMonadP (MP: MonoMonadP
+			where type elm = MP.elm
+			where type t = MP.t)
+   : MonoMonadPEX
+     where type elm = MP.elm
+     where type t = MP.t
+functor MonoUnfoldable (U: MonoUnfoldable
+			   where type elm = U.elm
+			   where type t = U.t)
+   : MonoUnfoldableEX
+     where type elm = U.elm
+     where type t = U.t
+functor Ordered (O: Ordered
+		    where type t = O.t)
+   : OrderedEX
+     where type t = O.t
+functor Pickler (P: Pickler
+		    where type t = P.t)
+   : PicklerEX
+     where type t = P.t
+functor PolyOrdered (O: PolyOrdered
+			where type 'a t = 'a O.t)
+   : PolyOrderedEX
+     where type 'a t = 'a O.t
+functor Set (S: Set
+		where type elm = S.elm
+		where type t = S.t)
+   : SetEX
+     where type elm = S.elm
+     where type t = S.t
+functor StateT (I: Monad
+		   where type 'a t = 'a I.t)
+   : MonadState
+     where type 'a inner = 'a I.t
+     where type 'a outer = 'a StateT.outer
+     where type ('a, 'b) t = 'b -> ('a * 'b) I.t
+functor StateTP (I: MonadP
+		    where type 'a t = 'a I.t)
+   : MonadStateP
+     where type 'a inner = 'a I.t
+     where type 'a outer = 'a StateTP.outer
+     where type ('a, 'b) t = 'b -> ('a * 'b) I.t
+functor Unfoldable (U: Unfoldable
+		       where type 'a t = 'a U.t)
+   : UnfoldableEX
+     where type 'a t = 'a U.t
+functor Unpickler (U: Unpickler
+		      where type t = U.t)
+   : UnpicklerEX
+     where type t = U.t
+signature Alt = 
+   sig
+      type 'a t = 'a ?.t
+      val ** : ('a -> 'b) ?.t * 'a ?.t -> 'b ?.t
+      val genZero: unit -> 'a ?.t
+      val pure: 'a -> 'a ?.t
+      val || : 'a ?.t * 'a ?.t -> 'a ?.t
+   end
+signature AltEX = 
+   sig
+      type 'a t = 'a ?.t
+      val $$ : ('a -> 'b) * 'a ?.t -> 'b ?.t
+      val $| : 'a * 'b ?.t -> 'a ?.t
+      val ** : ('a -> 'b) ?.t * 'a ?.t -> 'b ?.t
+      val -- : 'a ?.t * 'b ?.t -> ('a * 'b) ?.t
+      val << : 'a ?.t * 'b ?.t -> 'a ?.t
+      val >> : 'a ?.t * 'b ?.t -> 'b ?.t
+      val app: ('a -> unit) -> 'a ?.t -> unit
+      val genZero: unit -> 'a ?.t
+      val guard: bool -> unit ?.t
+      val map: ('a -> 'b) -> 'a ?.t -> 'b ?.t
+      val map2: ('a -> 'b -> 'c) -> 'a ?.t -> 'b ?.t -> 'c ?.t
+      val map3: ('a -> 'b -> 'c -> 'd) -> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t
+      val map4: ('a -> 'b -> 'c -> 'd -> 'e)
+		-> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t -> 'e ?.t
+      val mergel: 'a ?.t list -> 'a ?.t
+      val mergelBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val merger: 'a ?.t list -> 'a ?.t
+      val mergerBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val optional: 'a ?.t -> 'a Option.t ?.t
+      val plus: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val pure: 'a -> 'a ?.t
+      val || : 'a ?.t * 'a ?.t -> 'a ?.t
+   end
+signature BinFn = 
+   sig
+      type ('a, 'b) t = 'a * 'a -> 'b
+      val lift: ('a -> 'b) * ('c -> 'd) -> ('b * 'b -> 'c) -> 'a * 'a -> 'd
+   end
+signature BinOp = 
+   sig
+      type 'a t = 'a * 'a -> 'a
+      val lift: ('a -> 'b) * ('b -> 'a) -> ('b * 'b -> 'b) -> 'a * 'a -> 'a
+   end
+signature BinPred = 
+   sig
+      type 'a t = 'a * 'a -> bool
+      val lift: ('a -> 'b) -> ('b * 'b -> bool) -> 'a * 'a -> bool
+   end
+signature Cmp = 
+   sig
+      type 'a t = 'a * 'a -> Primitive.Order.t
+      val map: ('a -> 'b)
+	       -> ('b * 'b -> Primitive.Order.t) -> 'a * 'a -> Primitive.Order.t
+   end
+signature Cont = 
+   sig
+      type ('a, 'b) t = ('a -> 'b) -> 'b
+      val >>= : (('a -> 'b) -> 'b) * ('a -> ('c -> 'b) -> 'b)
+		-> ('c -> 'b) -> 'b
+      val callCC: (('a -> 'b) -> ('a -> 'b) -> 'b) -> ('a -> 'b) -> 'b
+      val return: 'a -> ('a -> 'b) -> 'b
+      val throw: ('a -> 'b) -> 'a -> ('c -> 'b) -> 'b
+   end
+signature Effect = 
+   sig
+      type 'a t = 'a -> unit
+      val attach: ('a -> unit) -> 'a -> 'a
+      val ignore: ('a -> unit) -> 'b -> unit
+      val iso: ('a -> 'b) * ('b -> 'a)
+	       -> (('a -> unit) -> 'b -> unit) * (('b -> unit) -> 'a -> unit)
+      val lift: ('a -> 'b) -> ('b -> unit) -> 'a -> unit
+      val tabulate: Int.int * (Int.int -> unit) -> unit
+   end
+signature Enumerable = 
+   sig
+      type 'a t = 'a ?.t
+      val read: 'a ?.t -> ('a * 'a ?.t) Option.t
+   end
+signature EnumerableEX = 
+   sig
+      type 'a t = 'a ?.t
+      val packer: ('a * 'b -> 'b) -> 'a ?.t * 'b -> 'b
+      val scan: (('a ?.t -> ('a * 'a ?.t) Option.t)
+		 -> 'a ?.t -> ('b * 'a ?.t) Option.t)
+		-> 'a ?.t -> 'b Option.t
+      val toList: 'a ?.t -> 'a list
+      val toSeq: 'a ?.t -> 'a Seq.t
+      val toStream: 'a ?.t -> 'a Stream.t' Lazy.t_ ref
+      val toVector: 'a ?.t -> 'a vector
+   end
+signature Fn = 
+   sig
+      type ('a, 'b) t = 'a -> 'b
+      val $ : ('a -> 'b) * 'a -> 'b
+      val /> : ('a * 'b -> 'c) * 'b -> 'a -> 'c
+      val </ : 'a * ('a -> 'b) -> 'b
+      val <\ : 'a * ('a * 'b -> 'c) -> 'b -> 'c
+      val >- : 'a * ('a -> 'b) -> 'b
+      val \> : ('a -> 'b) * 'a -> 'b
+      val const: 'a -> 'b -> 'a
+      val curry: ('a * 'b -> 'c) -> 'a -> 'b -> 'c
+      val curry3: ('a * 'b * 'c -> 'd) -> 'a -> 'b -> 'c -> 'd
+      val curry4: ('a * 'b * 'c * 'd -> 'e) -> 'a -> 'b -> 'c -> 'd -> 'e
+      val eta: ('a -> 'b -> 'c) -> 'a -> 'b -> 'c
+      val first: ('a -> 'b) -> 'a * 'c -> 'b * 'c
+      val fix: (('a -> 'b) -> 'a -> 'b) -> 'a -> 'b
+      val flip: ('a * 'b -> 'c) -> 'b * 'a -> 'c
+      val flipc: ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+      val id: 'a -> 'a
+      val lift: ('a -> 'b) * ('c -> 'd) -> ('b -> 'c) -> 'a -> 'd
+      val o: ('a -> 'b) * ('c -> 'a) -> 'c -> 'b
+      val repeat: Int.int -> ('a -> 'a) -> 'a -> 'a
+      val seal: ('a -> 'b) -> 'a -> unit -> 'b
+      val second: ('a -> 'b) -> 'c * 'a -> 'c * 'b
+      val uncurry: ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+      val uncurry3: ('a -> 'b -> 'c -> 'd) -> 'a * 'b * 'c -> 'd
+      val uncurry4: ('a -> 'b -> 'c -> 'd -> 'e) -> 'a * 'b * 'c * 'd -> 'e
+   end
+signature Foldable = 
+   sig
+      type 'a t = 'a ?.t
+      val foldl: ('a * 'b -> 'b) -> 'b -> 'a ?.t -> 'b
+      val foldr: ('a * 'b -> 'b) -> 'b -> 'a ?.t -> 'b
+   end
+signature FoldableEX = 
+   sig
+      type 'a t = 'a ?.t
+      val all: ('a -> bool) -> 'a ?.t -> bool
+      val any: ('a -> bool) -> 'a ?.t -> bool
+      val appl: ('a -> unit) -> 'a ?.t -> unit
+      val applWhile: ('a -> bool) -> 'a ?.t -> unit
+      val appr: ('a -> unit) -> 'a ?.t -> unit
+      val apprWhile: ('a -> bool) -> 'a ?.t -> unit
+      val concatFoldable: 'a list ?.t -> 'a list
+      val concatList: 'a ?.t list -> 'a list
+      val conjoin: bool ?.t -> bool
+      val disjoin: bool ?.t -> bool
+      val find: ('a -> bool) -> 'a ?.t -> 'a Option.t
+      val findl: ('a -> bool) -> 'a ?.t -> 'a Option.t
+      val findr: ('a -> bool) -> 'a ?.t -> 'a Option.t
+      val first: 'a ?.t -> 'a
+      val foldl1: ('a * 'a -> 'a) -> 'a ?.t -> 'a Option.t
+      val foldlWhile: ('a * 'b -> 'b * bool) -> 'b -> 'a ?.t -> 'b
+      val foldr1: ('a * 'a -> 'a) -> 'a ?.t -> 'a Option.t
+      val foldrWhile: ('a * 'b -> 'b * bool) -> 'b -> 'a ?.t -> 'b
+      val intProduct: Int.int ?.t -> Int.int
+      val intSum: Int.int ?.t -> Int.int
+      val last: 'a ?.t -> 'a
+      val leftmost: 'a Option.t ?.t -> 'a Option.t
+      val maximumBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a Option.t
+      val member: 'a -> 'a ?.t -> bool
+      val minimumBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a Option.t
+      val notMember: 'a -> 'a ?.t -> bool
+      val realProduct: real64 ?.t -> real64
+      val realSum: real64 ?.t -> real64
+      val rightmost: 'a Option.t ?.t -> 'a Option.t
+   end
+signature Func = 
+   sig
+      type 'a t = 'a ?.t
+      val map: ('a -> 'b) -> 'a ?.t -> 'b ?.t
+   end
+signature FuncEX = 
+   sig
+      type 'a t = 'a ?.t
+      val $$ : ('a -> 'b) * 'a ?.t -> 'b ?.t
+      val $| : 'a * 'b ?.t -> 'a ?.t
+      val app: ('a -> unit) -> 'a ?.t -> unit
+      val map: ('a -> 'b) -> 'a ?.t -> 'b ?.t
+   end
+signature Idiom = 
+   sig
+      type 'a t = 'a ?.t
+      val ** : ('a -> 'b) ?.t * 'a ?.t -> 'b ?.t
+      val pure: 'a -> 'a ?.t
+   end
+signature IdiomEX = 
+   sig
+      type 'a t = 'a ?.t
+      val $$ : ('a -> 'b) * 'a ?.t -> 'b ?.t
+      val $| : 'a * 'b ?.t -> 'a ?.t
+      val ** : ('a -> 'b) ?.t * 'a ?.t -> 'b ?.t
+      val -- : 'a ?.t * 'b ?.t -> ('a * 'b) ?.t
+      val << : 'a ?.t * 'b ?.t -> 'a ?.t
+      val >> : 'a ?.t * 'b ?.t -> 'b ?.t
+      val app: ('a -> unit) -> 'a ?.t -> unit
+      val map: ('a -> 'b) -> 'a ?.t -> 'b ?.t
+      val map2: ('a -> 'b -> 'c) -> 'a ?.t -> 'b ?.t -> 'c ?.t
+      val map3: ('a -> 'b -> 'c -> 'd) -> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t
+      val map4: ('a -> 'b -> 'c -> 'd -> 'e)
+		-> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t -> 'e ?.t
+      val mergelBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val mergerBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val pure: 'a -> 'a ?.t
+   end
+signature Map = 
+   sig
+      type key = ?.key
+      type 'a t = 'a ?.t
+      val adjust: ('a Option.t -> 'a) -> 'a ?.t -> ?.key -> 'a ?.t
+      val card: 'a ?.t -> Int.int
+      val compareKey: ?.key * ?.key -> Primitive.Order.t
+      val empty: 'a ?.t
+      val foldl: ('a * 'b -> 'b) -> 'b -> 'a ?.t -> 'b
+      val foldli: ((?.key * 'a) * 'b -> 'b) -> 'b -> 'a ?.t -> 'b
+      val foldr: ('a * 'b -> 'b) -> 'b -> 'a ?.t -> 'b
+      val foldri: ((?.key * 'a) * 'b -> 'b) -> 'b -> 'a ?.t -> 'b
+      val insert: 'a ?.t -> ?.key * 'a -> 'a ?.t
+      val lookup: 'a ?.t -> ?.key -> 'a Option.t
+      val null: 'a ?.t -> bool
+      val remove: 'a ?.t -> ?.key -> 'a ?.t
+   end
+signature MapEX = 
+   sig
+      type key = ?.key
+      type 'a t = 'a ?.t
+      val !! : 'a ?.t * ?.key -> 'a
+      val <| : ?.key * 'a * 'a ?.t -> 'a ?.t
+      val >< : 'a ?.t * 'a ?.t -> 'a ?.t
+      val \ : 'a ?.t * 'a ?.t -> 'a ?.t
+      val all: ('a -> bool) -> 'a ?.t -> bool
+      val any: ('a -> bool) -> 'a ?.t -> bool
+      val appl: ('a -> unit) -> 'a ?.t -> unit
+      val applWhile: ('a -> bool) -> 'a ?.t -> unit
+      val appr: ('a -> unit) -> 'a ?.t -> unit
+      val apprWhile: ('a -> bool) -> 'a ?.t -> unit
+      val collate: ('a * 'a -> Primitive.Order.t)
+		   -> 'a ?.t * 'a ?.t -> Primitive.Order.t
+      val concatFoldable: 'a list ?.t -> 'a list
+      val concatList: 'a ?.t list -> 'a list
+      val conjoin: bool ?.t -> bool
+      val diff: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val disjoin: bool ?.t -> bool
+      val domain: 'a ?.t -> ?.key list
+      val find: ('a -> bool) -> 'a ?.t -> 'a Option.t
+      val findl: ('a -> bool) -> 'a ?.t -> 'a Option.t
+      val findr: ('a -> bool) -> 'a ?.t -> 'a Option.t
+      val first: 'a ?.t -> 'a
+      val foldl1: ('a * 'a -> 'a) -> 'a ?.t -> 'a Option.t
+      val foldlWhile: ('a * 'b -> 'b * bool) -> 'b -> 'a ?.t -> 'b
+      val foldr1: ('a * 'a -> 'a) -> 'a ?.t -> 'a Option.t
+      val foldrWhile: ('a * 'b -> 'b * bool) -> 'b -> 'a ?.t -> 'b
+      val fromList: (?.key * 'a) list -> 'a ?.t
+      val inDomain: 'a ?.t -> ?.key -> bool
+      val inRange: 'a ?.t -> 'a -> bool
+      val index: 'a ?.t -> ?.key -> 'a
+      val insert: 'a ?.t -> ?.key * 'a -> 'a ?.t
+      val insertMaybe: 'a ?.t -> ?.key * 'a -> 'a ?.t Option.t
+      val intProduct: Int.int ?.t -> Int.int
+      val intSum: Int.int ?.t -> Int.int
+      val inter: ('a * 'b -> 'c) -> 'a ?.t * 'b ?.t -> 'c ?.t
+      val inters: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t
+      val keep: ('a -> bool) -> 'a ?.t -> 'a ?.t
+      val last: 'a ?.t -> 'a
+      val leftmost: 'a Option.t ?.t -> 'a Option.t
+      val lookupAdjust: ('a Option.t -> 'a) -> ?.key -> 'a ?.t -> 'a * 'a ?.t
+      val lookupWithDefault: 'a ?.t -> ?.key -> 'a -> 'a
+      val mapPartial: ('a -> 'a Option.t) -> 'a ?.t -> 'a ?.t
+      val maximumBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a Option.t
+      val member: 'a -> 'a ?.t -> bool
+      val merge: ('a Option.t * 'b Option.t -> 'c Option.t)
+		 -> 'a ?.t * 'b ?.t -> 'c ?.t
+      val merges: ('a Option.t * 'a Option.t -> 'a Option.t)
+		  -> 'a ?.t list -> 'a ?.t
+      val minimumBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a Option.t
+      val notMember: 'a -> 'a ?.t -> bool
+      val partition: ('a -> bool) -> 'a ?.t -> 'a ?.t * 'a ?.t
+      val partitionWith: ('a -> ('b, 'c) Either.t) -> 'a ?.t -> 'b ?.t * 'c ?.t
+      val plus: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val range: 'a ?.t -> 'a list
+      val realProduct: real64 ?.t -> real64
+      val realSum: real64 ?.t -> real64
+      val reject: ('a -> bool) -> 'a ?.t -> 'a ?.t
+      val rightmost: 'a Option.t ?.t -> 'a Option.t
+      val singleton: ?.key * 'a -> 'a ?.t
+      val some: 'a ?.t -> 'a
+      val split: 'a ?.t -> ((?.key * 'a) * 'a ?.t) Option.t
+      val splitFirst: 'a ?.t -> ((?.key * 'a) * 'a ?.t) Option.t
+      val splitLast: 'a ?.t -> ((?.key * 'a) * 'a ?.t) Option.t
+      val splitOn: ?.key -> 'a ?.t -> 'a ?.t * 'a Option.t * 'a ?.t
+      val toList: 'a ?.t -> (?.key * 'a) list
+      val union: ('a * 'a -> 'a) -> 'a ?.t * 'a ?.t -> 'a ?.t
+      val unions: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t
+      val viewl: 'a ?.t -> (?.key * 'a, 'a ?.t) ViewL.t
+      val viewr: 'a ?.t -> (?.key * 'a, 'a ?.t) ViewR.t
+   end
+signature Monad = 
+   sig
+      type 'a t = 'a ?.t
+      val >>= : 'a ?.t * ('a -> 'b ?.t) -> 'b ?.t
+      val return: 'a -> 'a ?.t
+   end
+signature MonadEX = 
+   sig
+      type 'a t = 'a ?.t
+      val $$ : ('a -> 'b) * 'a ?.t -> 'b ?.t
+      val $| : 'a * 'b ?.t -> 'a ?.t
+      val ** : ('a -> 'b) ?.t * 'a ?.t -> 'b ?.t
+      val -- : 'a ?.t * 'b ?.t -> ('a * 'b) ?.t
+      val << : 'a ?.t * 'b ?.t -> 'a ?.t
+      val <=< : ('a -> 'b ?.t) * ('c -> 'a ?.t) -> 'c -> 'b ?.t
+      val =<< : ('a -> 'b ?.t) * 'a ?.t -> 'b ?.t
+      val >=> : ('a -> 'b ?.t) * ('b -> 'c ?.t) -> 'a -> 'c ?.t
+      val >> : 'a ?.t * 'b ?.t -> 'b ?.t
+      val >>= : 'a ?.t * ('a -> 'b ?.t) -> 'b ?.t
+      val app: ('a -> unit) -> 'a ?.t -> unit
+      val fail: string -> 'a ?.t
+      val foldlM: ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> 'b ?.t
+      val foldlM': ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> unit ?.t
+      val foldrM: ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> 'b ?.t
+      val foldrM': ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> unit ?.t
+      val forever: 'a ?.t -> 'b ?.t
+      val foreverWithDelay: Int.int -> 'a ?.t -> 'b ?.t
+      val ignore: 'a ?.t -> unit ?.t
+      val join: 'a ?.t ?.t -> 'a ?.t
+      val keepM: ('a -> bool ?.t) -> 'a list -> 'a list ?.t
+      val map: ('a -> 'b) -> 'a ?.t -> 'b ?.t
+      val map2: ('a -> 'b -> 'c) -> 'a ?.t -> 'b ?.t -> 'c ?.t
+      val map3: ('a -> 'b -> 'c -> 'd) -> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t
+      val map4: ('a -> 'b -> 'c -> 'd -> 'e)
+		-> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t -> 'e ?.t
+      val mapAndUnzipM: ('a -> ('b * 'c) ?.t)
+			-> 'a list -> ('b list * 'c list) ?.t
+      val mapM: ('a -> 'b ?.t) -> 'a list -> 'b list ?.t
+      val mapM': ('a -> 'b ?.t) -> 'a list -> unit ?.t
+      val mapMPartial: ('a -> 'b Option.t ?.t) -> 'a list -> 'b list ?.t
+      val mergelBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val mergerBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val pure: 'a -> 'a ?.t
+      val rejectM: ('a -> bool ?.t) -> 'a list -> 'a list ?.t
+      val return: 'a -> 'a ?.t
+      val seq: 'a ?.t list -> 'a list ?.t
+      val seq': 'a ?.t list -> unit ?.t
+      val tabulateM: Int.int -> (Int.int -> 'a ?.t) -> 'a list ?.t
+      val tabulateM': Int.int -> (Int.int -> 'a ?.t) -> unit ?.t
+      val unless: bool -> unit ?.t -> unit ?.t
+      val when: bool -> unit ?.t -> unit ?.t
+      val zipWithM: ('a * 'b -> 'c ?.t) -> 'a list * 'b list -> 'c list ?.t
+      val zipWithM': ('a * 'b -> 'c ?.t) -> 'a list * 'b list -> unit ?.t
+   end
+signature MonadP = 
+   sig
+      type 'a t = 'a ?.t
+      val >>= : 'a ?.t * ('a -> 'b ?.t) -> 'b ?.t
+      val genZero: unit -> 'a ?.t
+      val return: 'a -> 'a ?.t
+      val || : 'a ?.t * 'a ?.t -> 'a ?.t
+   end
+signature MonadPEX = 
+   sig
+      type 'a t = 'a ?.t
+      val $$ : ('a -> 'b) * 'a ?.t -> 'b ?.t
+      val $| : 'a * 'b ?.t -> 'a ?.t
+      val ** : ('a -> 'b) ?.t * 'a ?.t -> 'b ?.t
+      val -- : 'a ?.t * 'b ?.t -> ('a * 'b) ?.t
+      val << : 'a ?.t * 'b ?.t -> 'a ?.t
+      val <=< : ('a -> 'b ?.t) * ('c -> 'a ?.t) -> 'c -> 'b ?.t
+      val =<< : ('a -> 'b ?.t) * 'a ?.t -> 'b ?.t
+      val >=> : ('a -> 'b ?.t) * ('b -> 'c ?.t) -> 'a -> 'c ?.t
+      val >> : 'a ?.t * 'b ?.t -> 'b ?.t
+      val >>= : 'a ?.t * ('a -> 'b ?.t) -> 'b ?.t
+      val app: ('a -> unit) -> 'a ?.t -> unit
+      val fail: string -> 'a ?.t
+      val foldlM: ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> 'b ?.t
+      val foldlM': ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> unit ?.t
+      val foldrM: ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> 'b ?.t
+      val foldrM': ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> unit ?.t
+      val forever: 'a ?.t -> 'b ?.t
+      val foreverWithDelay: Int.int -> 'a ?.t -> 'b ?.t
+      val genZero: unit -> 'a ?.t
+      val guard: bool -> unit ?.t
+      val ignore: 'a ?.t -> unit ?.t
+      val join: 'a ?.t ?.t -> 'a ?.t
+      val keep: ('a -> bool) -> 'a ?.t -> 'a ?.t
+      val keepM: ('a -> bool ?.t) -> 'a list -> 'a list ?.t
+      val map: ('a -> 'b) -> 'a ?.t -> 'b ?.t
+      val map2: ('a -> 'b -> 'c) -> 'a ?.t -> 'b ?.t -> 'c ?.t
+      val map3: ('a -> 'b -> 'c -> 'd) -> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t
+      val map4: ('a -> 'b -> 'c -> 'd -> 'e)
+		-> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t -> 'e ?.t
+      val mapAndUnzipM: ('a -> ('b * 'c) ?.t)
+			-> 'a list -> ('b list * 'c list) ?.t
+      val mapM: ('a -> 'b ?.t) -> 'a list -> 'b list ?.t
+      val mapM': ('a -> 'b ?.t) -> 'a list -> unit ?.t
+      val mapMPartial: ('a -> 'b Option.t ?.t) -> 'a list -> 'b list ?.t
+      val mapPartial: ('a -> 'a Option.t) -> 'a ?.t -> 'a ?.t
+      val mergel: 'a ?.t list -> 'a ?.t
+      val mergelBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val merger: 'a ?.t list -> 'a ?.t
+      val mergerBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val optional: 'a ?.t -> 'a Option.t ?.t
+      val plus: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val pure: 'a -> 'a ?.t
+      val reject: ('a -> bool) -> 'a ?.t -> 'a ?.t
+      val rejectM: ('a -> bool ?.t) -> 'a list -> 'a list ?.t
+      val return: 'a -> 'a ?.t
+      val seq: 'a ?.t list -> 'a list ?.t
+      val seq': 'a ?.t list -> unit ?.t
+      val tabulateM: Int.int -> (Int.int -> 'a ?.t) -> 'a list ?.t
+      val tabulateM': Int.int -> (Int.int -> 'a ?.t) -> unit ?.t
+      val unless: bool -> unit ?.t -> unit ?.t
+      val when: bool -> unit ?.t -> unit ?.t
+      val zipWithM: ('a * 'b -> 'c ?.t) -> 'a list * 'b list -> 'c list ?.t
+      val zipWithM': ('a * 'b -> 'c ?.t) -> 'a list * 'b list -> unit ?.t
+      val || : 'a ?.t * 'a ?.t -> 'a ?.t
+   end
+signature MonadState = 
+   sig
+      type 'a inner = 'a ?.inner
+      type 'a outer = 'a ?.outer
+      type ('a, 'b) t = ('a, 'b) ?.t
+      val >>= : ('a, 'b) ?.t * ('a -> ('c, 'b) ?.t) -> ('c, 'b) ?.t
+      val eval: ('a, 'b) ?.t -> 'b -> 'a ?.inner
+      val exec: ('a, 'b) ?.t -> 'b -> 'b ?.inner
+      val get: ('a, 'a) ?.t
+      val gets: ('a -> 'b) -> ('b, 'a) ?.t
+      val lift: 'a ?.inner -> ('a, 'b) ?.t
+      val mapState: (('a * 'b) ?.inner -> ('c * 'b) ?.inner)
+		    -> ('a, 'b) ?.t -> ('c, 'b) ?.t
+      val modify: ('a -> 'a) -> (unit, 'a) ?.t
+      val polymorphically: 'a ?.outer -> ('a, 'b) ?.t
+      val put: 'a -> (unit, 'a) ?.t
+      val return: 'a -> ('a, 'b) ?.t
+      val run: ('a, 'b) ?.t -> 'b -> ('a * 'b) ?.inner
+      val withState: ('a -> 'a) -> ('b, 'a) ?.t -> ('b, 'a) ?.t
+      structure Monad: MonadEX
+		       where type 'a t = 'a ?.outer
+   end
+signature MonadStateCommon = 
+   sig
+      type 'a inner = 'a ?.inner
+      type 'a outer = 'a ?.outer
+      type ('a, 'b) t = ('a, 'b) ?.t
+      val >>= : ('a, 'b) ?.t * ('a -> ('c, 'b) ?.t) -> ('c, 'b) ?.t
+      val eval: ('a, 'b) ?.t -> 'b -> 'a ?.inner
+      val exec: ('a, 'b) ?.t -> 'b -> 'b ?.inner
+      val get: ('a, 'a) ?.t
+      val gets: ('a -> 'b) -> ('b, 'a) ?.t
+      val lift: 'a ?.inner -> ('a, 'b) ?.t
+      val mapState: (('a * 'b) ?.inner -> ('c * 'b) ?.inner)
+		    -> ('a, 'b) ?.t -> ('c, 'b) ?.t
+      val modify: ('a -> 'a) -> (unit, 'a) ?.t
+      val polymorphically: 'a ?.outer -> ('a, 'b) ?.t
+      val put: 'a -> (unit, 'a) ?.t
+      val return: 'a -> ('a, 'b) ?.t
+      val run: ('a, 'b) ?.t -> 'b -> ('a * 'b) ?.inner
+      val withState: ('a -> 'a) -> ('b, 'a) ?.t -> ('b, 'a) ?.t
+   end
+signature MonadStateP = 
+   sig
+      type 'a inner = 'a ?.inner
+      type 'a outer = 'a ?.outer
+      type ('a, 'b) t = ('a, 'b) ?.t
+      val >>= : ('a, 'b) ?.t * ('a -> ('c, 'b) ?.t) -> ('c, 'b) ?.t
+      val eval: ('a, 'b) ?.t -> 'b -> 'a ?.inner
+      val exec: ('a, 'b) ?.t -> 'b -> 'b ?.inner
+      val genZero: unit -> ('a, 'b) ?.t
+      val get: ('a, 'a) ?.t
+      val gets: ('a -> 'b) -> ('b, 'a) ?.t
+      val lift: 'a ?.inner -> ('a, 'b) ?.t
+      val mapState: (('a * 'b) ?.inner -> ('c * 'b) ?.inner)
+		    -> ('a, 'b) ?.t -> ('c, 'b) ?.t
+      val modify: ('a -> 'a) -> (unit, 'a) ?.t
+      val polymorphically: 'a ?.outer -> ('a, 'b) ?.t
+      val put: 'a -> (unit, 'a) ?.t
+      val return: 'a -> ('a, 'b) ?.t
+      val run: ('a, 'b) ?.t -> 'b -> ('a * 'b) ?.inner
+      val withState: ('a -> 'a) -> ('b, 'a) ?.t -> ('b, 'a) ?.t
+      val || : ('a, 'b) ?.t * ('a, 'b) ?.t -> ('a, 'b) ?.t
+      structure Monad: MonadPEX
+		       where type 'a t = 'a ?.outer
+   end
+signature Mono = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+   end
+signature MonoEnumerable = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val read: ?.t -> (?.elm * ?.t) Option.t
+   end
+signature MonoEnumerableEX = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val packer: (?.elm * 'a -> 'a) -> ?.t * 'a -> 'a
+      val scan: ((?.t -> (?.elm * ?.t) Option.t) -> ?.t -> ('a * ?.t) Option.t)
+		-> ?.t -> 'a Option.t
+      val toList: ?.t -> ?.elm list
+      val toSeq: ?.t -> ?.elm Seq.t
+      val toStream: ?.t -> ?.elm Stream.t' Lazy.t_ ref
+      val toVector: ?.t -> ?.elm vector
+   end
+signature MonoFoldable = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val foldl: (?.elm * 'a -> 'a) -> 'a -> ?.t -> 'a
+      val foldr: (?.elm * 'a -> 'a) -> 'a -> ?.t -> 'a
+   end
+signature MonoFoldableEX = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val all: (?.elm -> bool) -> ?.t -> bool
+      val any: (?.elm -> bool) -> ?.t -> bool
+      val appl: (?.elm -> unit) -> ?.t -> unit
+      val applUntil: (?.elm -> bool) -> ?.t -> unit
+      val appr: (?.elm -> unit) -> ?.t -> unit
+      val apprUntil: (?.elm -> bool) -> ?.t -> unit
+      val concatList: ?.t list -> ?.elm list
+      val concatMap: (?.elm -> 'a list) -> ?.t -> 'a list
+      val find: (?.elm -> bool) -> ?.t -> ?.elm Option.t
+      val findl: (?.elm -> bool) -> ?.t -> ?.elm Option.t
+      val findr: (?.elm -> bool) -> ?.t -> ?.elm Option.t
+      val first: ?.t -> ?.elm
+      val foldl1: (?.elm * ?.elm -> ?.elm) -> ?.t -> ?.elm Option.t
+      val foldlUntil: (?.elm * 'a -> 'a * bool) -> 'a -> ?.t -> 'a
+      val foldr1: (?.elm * ?.elm -> ?.elm) -> ?.t -> ?.elm Option.t
+      val foldrUntil: (?.elm * 'a -> 'a * bool) -> 'a -> ?.t -> 'a
+      val last: ?.t -> ?.elm
+      val maximumBy: (?.elm * ?.elm -> Primitive.Order.t)
+		     -> ?.t -> ?.elm Option.t
+      val minimumBy: (?.elm * ?.elm -> Primitive.Order.t)
+		     -> ?.t -> ?.elm Option.t
+   end
+signature MonoMonad = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val >>= : ?.t * (?.elm -> ?.t) -> ?.t
+      val return: ?.elm -> ?.t
+   end
+signature MonoMonadEX = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val $$ : (?.elm -> ?.elm) * ?.t -> ?.t
+      val $| : ?.elm * ?.t -> ?.t
+      val << : ?.t * ?.t -> ?.t
+      val <=< : (?.elm -> ?.t) * (?.elm -> ?.t) -> ?.elm -> ?.t
+      val =<< : (?.elm -> ?.t) * ?.t -> ?.t
+      val >=> : (?.elm -> ?.t) * (?.elm -> ?.t) -> ?.elm -> ?.t
+      val >> : ?.t * ?.t -> ?.t
+      val app: (?.elm -> unit) -> ?.t -> unit
+      val foldlM: ('a * ?.elm -> ?.t) -> ?.elm -> 'a list -> ?.t
+      val foldrM: ('a * ?.elm -> ?.t) -> ?.elm -> 'a list -> ?.t
+      val forever: ?.t -> ?.t
+      val foreverWithDelay: Int.int -> ?.t -> ?.t
+      val map: (?.elm -> ?.elm) -> ?.t -> ?.t
+      val map2: (?.elm -> ?.elm -> ?.elm) -> ?.t -> ?.t -> ?.t
+      val map3: (?.elm -> ?.elm -> ?.elm -> ?.elm) -> ?.t -> ?.t -> ?.t -> ?.t
+      val map4: (?.elm -> ?.elm -> ?.elm -> ?.elm -> ?.elm)
+		-> ?.t -> ?.t -> ?.t -> ?.t -> ?.t
+      val mergelBy: (?.elm * ?.elm -> ?.elm) -> ?.t list -> ?.t Option.t
+      val mergerBy: (?.elm * ?.elm -> ?.elm) -> ?.t list -> ?.t Option.t
+   end
+signature MonoMonadP = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val >>= : ?.t * (?.elm -> ?.t) -> ?.t
+      val genZero: unit -> ?.t
+      val return: ?.elm -> ?.t
+      val || : ?.t * ?.t -> ?.t
+   end
+signature MonoMonadPEX = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val $$ : (?.elm -> ?.elm) * ?.t -> ?.t
+      val $| : ?.elm * ?.t -> ?.t
+      val << : ?.t * ?.t -> ?.t
+      val <=< : (?.elm -> ?.t) * (?.elm -> ?.t) -> ?.elm -> ?.t
+      val =<< : (?.elm -> ?.t) * ?.t -> ?.t
+      val >=> : (?.elm -> ?.t) * (?.elm -> ?.t) -> ?.elm -> ?.t
+      val >> : ?.t * ?.t -> ?.t
+      val >>= : ?.t * (?.elm -> ?.t) -> ?.t
+      val app: (?.elm -> unit) -> ?.t -> unit
+      val foldlM: ('a * ?.elm -> ?.t) -> ?.elm -> 'a list -> ?.t
+      val foldrM: ('a * ?.elm -> ?.t) -> ?.elm -> 'a list -> ?.t
+      val forever: ?.t -> ?.t
+      val foreverWithDelay: Int.int -> ?.t -> ?.t
+      val genZero: unit -> ?.t
+      val keep: (?.elm -> bool) -> ?.t -> ?.t
+      val map: (?.elm -> ?.elm) -> ?.t -> ?.t
+      val map2: (?.elm -> ?.elm -> ?.elm) -> ?.t -> ?.t -> ?.t
+      val map3: (?.elm -> ?.elm -> ?.elm -> ?.elm) -> ?.t -> ?.t -> ?.t -> ?.t
+      val map4: (?.elm -> ?.elm -> ?.elm -> ?.elm -> ?.elm)
+		-> ?.t -> ?.t -> ?.t -> ?.t -> ?.t
+      val mapPartial: (?.elm -> ?.elm Option.t) -> ?.t -> ?.t
+      val mergel: ?.t list -> ?.t
+      val mergelBy: (?.elm * ?.elm -> ?.elm) -> ?.t list -> ?.t Option.t
+      val merger: ?.t list -> ?.t
+      val mergerBy: (?.elm * ?.elm -> ?.elm) -> ?.t list -> ?.t Option.t
+      val plus: ?.t -> ?.t -> ?.t
+      val reject: (?.elm -> bool) -> ?.t -> ?.t
+      val return: ?.elm -> ?.t
+      val || : ?.t * ?.t -> ?.t
+   end
+signature MonoUnfoldable = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val genEmpty: unit -> ?.t
+      val write: ?.elm * ?.t -> ?.t
+   end
+signature MonoUnfoldableEX = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val fromList: ?.elm list -> ?.t
+      val fromSeq: ?.elm Seq.t -> ?.t
+      val fromStream: ?.elm Stream.t' Lazy.t_ ref -> ?.t
+      val fromVector: ?.elm vector -> ?.t
+      val pack: ((?.elm * ?.t -> ?.t) -> 'a * ?.t -> ?.t) -> 'a -> ?.t
+      val scanner: ('a -> (?.elm * 'a) Option.t) -> 'a -> (?.t * 'a) Option.t
+   end
+signature Ordered = 
+   sig
+      type t = ?.t
+      val compare: ?.t * ?.t -> Primitive.Order.t
+   end
+signature OrderedEX = 
+   sig
+      type t = ?.t
+      val != : ?.t * ?.t -> bool
+      val < : ?.t * ?.t -> bool
+      val <= : ?.t * ?.t -> bool
+      val == : ?.t * ?.t -> bool
+      val > : ?.t * ?.t -> bool
+      val >= : ?.t * ?.t -> bool
+      val comparing: ('a -> ?.t) -> 'a * 'a -> Primitive.Order.t
+      val eq: ?.t -> ?.t -> bool
+      val gt: ?.t -> ?.t -> bool
+      val gte: ?.t -> ?.t -> bool
+      val inRange: ?.t * ?.t -> ?.t -> bool
+      val lt: ?.t -> ?.t -> bool
+      val lte: ?.t -> ?.t -> bool
+      val max: ?.t * ?.t -> ?.t
+      val min: ?.t * ?.t -> ?.t
+      val neq: ?.t -> ?.t -> bool
+   end
+signature Pair = 
+   sig
+      eqtype ('a, 'b) t = 'a * 'b
+      val app: ('a -> unit) * ('b -> unit) -> 'a * 'b -> unit
+      val appFst: ('a -> unit) -> 'a * 'b -> unit
+      val appSnd: ('a -> unit) -> 'b * 'a -> unit
+      val delay: 'a Lazy.t_ ref * 'b Lazy.t_ ref -> ('a * 'b) Lazy.t_ ref
+      val foldl: ('a * 'b -> 'b) * ('c * 'b -> 'b) -> 'b -> 'a * 'c -> 'b
+      val foldr: ('a * 'b -> 'b) * ('c * 'b -> 'b) -> 'b -> 'a * 'c -> 'b
+      val fst: 'a * 'b -> 'a
+      val map: ('a -> 'b) * ('c -> 'd) -> 'a * 'c -> 'b * 'd
+      val mapFst: ('a -> 'b) -> 'a * 'c -> 'b * 'c
+      val mapSnd: ('a -> 'b) -> 'c * 'a -> 'c * 'b
+      val snd: 'a * 'b -> 'b
+      val swap: 'a * 'b -> 'b * 'a
+      val swizzle: ('a * 'b) * ('c * 'd) -> ('a * 'c) * ('b * 'd)
+   end
+signature Pickler = 
+   sig
+      type t = ?.t
+      val pickle: (string * 'a -> 'a) -> ?.t * 'a -> 'a
+   end
+signature PicklerEX = 
+   sig
+      type t = ?.t
+      val toCharList: ?.t -> char8 list
+      val toCharSeq: ?.t -> char8 Seq.t
+      val toCharStream: ?.t -> char8 Stream.t' Lazy.t_ ref
+      val toFile: string -> ?.t -> unit
+      val toOutstream: ImperativeIOExtra.Outstream.t -> ?.t -> unit
+      val toStdOut: ?.t -> unit
+      val toString: ?.t -> string
+   end
+signature PolyOrdered = 
+   sig
+      type 'a t = 'a ?.t
+      val compare: 'a ?.t * 'b ?.t -> Primitive.Order.t
+   end
+signature PolyOrderedEX = 
+   sig
+      type 'a t = 'a ?.t
+      val != : 'a ?.t * 'b ?.t -> bool
+      val < : 'a ?.t * 'b ?.t -> bool
+      val <= : 'a ?.t * 'b ?.t -> bool
+      val == : 'a ?.t * 'b ?.t -> bool
+      val > : 'a ?.t * 'b ?.t -> bool
+      val >= : 'a ?.t * 'b ?.t -> bool
+      val comparing: ('a -> 'b ?.t) -> 'a * 'a -> Primitive.Order.t
+      val eq: 'a ?.t -> 'b ?.t -> bool
+      val gt: 'a ?.t -> 'b ?.t -> bool
+      val gte: 'a ?.t -> 'b ?.t -> bool
+      val inRange: 'a ?.t * 'b ?.t -> 'c ?.t -> bool
+      val lt: 'a ?.t -> 'b ?.t -> bool
+      val lte: 'a ?.t -> 'b ?.t -> bool
+      val max: 'a ?.t * 'a ?.t -> 'a ?.t
+      val min: 'a ?.t * 'a ?.t -> 'a ?.t
+      val neq: 'a ?.t -> 'b ?.t -> bool
+   end
+signature Reader = 
+   sig
+      type 'a inner = 'a ?.inner
+      type 'a outer = 'a ?.outer
+      type ('a, 'b) t = 'b -> ('a * 'b) Option.t
+      val >>= : ('a -> ('b * 'a) Option.t) * ('b -> 'a -> ('c * 'a) Option.t)
+		-> 'a -> ('c * 'a) Option.t
+      val eval: ('a -> ('b * 'a) Option.t) -> 'a -> 'b ?.inner
+      val exec: ('a -> ('b * 'a) Option.t) -> 'a -> 'a ?.inner
+      val genZero: unit -> 'a -> ('b * 'a) Option.t
+      val get: 'a -> ('a * 'a) Option.t
+      val gets: ('a -> 'b) -> 'a -> ('b * 'a) Option.t
+      val lift: 'a ?.inner -> 'b -> ('a * 'b) Option.t
+      val mapState: (('a * 'b) ?.inner -> ('c * 'b) ?.inner)
+		    -> ('b -> ('a * 'b) Option.t) -> 'b -> ('c * 'b) Option.t
+      val modify: ('a -> 'a) -> 'a -> (unit * 'a) Option.t
+      val polymorphically: 'a ?.outer -> 'b -> ('a * 'b) Option.t
+      val put: 'a -> 'a -> (unit * 'a) Option.t
+      val return: 'a -> 'b -> ('a * 'b) Option.t
+      val returnO: 'a Option.t -> 'b -> ('a * 'b) Option.t
+      val run: ('a -> ('b * 'a) Option.t) -> 'a -> ('b * 'a) ?.inner
+      val withState: ('a -> 'a)
+		     -> ('a -> ('b * 'a) Option.t) -> 'a -> ('b * 'a) Option.t
+      val || : ('a -> ('b * 'a) Option.t) * ('a -> ('b * 'a) Option.t)
+	       -> 'a -> ('b * 'a) Option.t
+      structure Monad: MonadPEX
+		       where type 'a t = 'a ?.outer
+   end
+signature Sequence = 
+   sig
+      type 'a t = 'a ?.t
+      val <| : 'a * 'a ?.t -> 'a ?.t
+      val >< : 'a ?.t * 'a ?.t -> 'a ?.t
+      val adjust: ('a -> 'a) -> Int.int -> 'a ?.t -> 'a ?.t
+      val foldl: ('a * 'b -> 'b) -> 'b -> 'a ?.t -> 'b
+      val foldr: ('a * 'b -> 'b) -> 'b -> 'a ?.t -> 'b
+      val genEmpty: unit -> 'a ?.t
+      val index: Int.int -> 'a ?.t -> 'a
+      val length: 'a ?.t -> Int.int
+      val map: ('a -> 'b) -> 'a ?.t -> 'b ?.t
+      val null: 'a ?.t -> bool
+      val splitAt: Int.int -> 'a ?.t -> 'a ?.t * 'a * 'a ?.t
+      val |> : 'a ?.t * 'a -> 'a ?.t
+   end
+signature SequenceEX = 
+   sig
+      type 'a t = 'a ?.t
+      val !! : 'a ?.t * Int.int -> 'a
+      val $$ : ('a -> 'b) * 'a ?.t -> 'b ?.t
+      val $| : 'a * 'b ?.t -> 'a ?.t
+      val ** : ('a -> 'b) ?.t * 'a ?.t -> 'b ?.t
+      val -- : 'a ?.t * 'b ?.t -> ('a * 'b) ?.t
+      val << : 'a ?.t * 'b ?.t -> 'a ?.t
+      val <=< : ('a -> 'b ?.t) * ('c -> 'a ?.t) -> 'c -> 'b ?.t
+      val =<< : ('a -> 'b ?.t) * 'a ?.t -> 'b ?.t
+      val >=> : ('a -> 'b ?.t) * ('b -> 'c ?.t) -> 'a -> 'c ?.t
+      val >> : 'a ?.t * 'b ?.t -> 'b ?.t
+      val >>= : 'a ?.t * ('a -> 'b ?.t) -> 'b ?.t
+      val all: ('a -> bool) -> 'a ?.t -> bool
+      val allPairs: 'a ?.t -> ('a * 'a) ?.t
+      val allSplits: 'a ?.t -> 'a ?.t ?.t
+      val any: ('a -> bool) -> 'a ?.t -> bool
+      val app: ('a -> unit) -> 'a ?.t -> unit
+      val append: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val appl: ('a -> unit) -> 'a ?.t -> unit
+      val applWhile: ('a -> bool) -> 'a ?.t -> unit
+      val appr: ('a -> unit) -> 'a ?.t -> unit
+      val apprWhile: ('a -> bool) -> 'a ?.t -> unit
+      val break: ('a -> bool) -> 'a ?.t -> 'a ?.t * 'a ?.t
+      val collate: ('a * 'a -> Primitive.Order.t)
+		   -> 'a ?.t * 'a ?.t -> Primitive.Order.t
+      val concat: 'a ?.t ?.t -> 'a ?.t
+      val concatFoldable: 'a list ?.t -> 'a list
+      val concatList: 'a ?.t list -> 'a list
+      val concatMap: ('a -> 'b ?.t) -> 'a ?.t -> 'b ?.t
+      val conjoin: bool ?.t -> bool
+      val cons: 'a -> 'a ?.t -> 'a ?.t
+      val consAll: 'a -> 'a ?.t ?.t -> 'a ?.t ?.t
+      val delete: 'a -> 'a ?.t -> 'a ?.t
+      val deleteBy: ('a * 'a -> Primitive.Order.t) -> 'a -> 'a ?.t -> 'a ?.t
+      val diff: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val diffBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a ?.t -> 'a ?.t
+      val disjoin: bool ?.t -> bool
+      val drop: 'a ?.t * Int.int -> 'a ?.t
+      val dropWhile: ('a -> bool) -> 'a ?.t -> 'a ?.t
+      val fail: string -> 'a ?.t
+      val find: ('a -> bool) -> 'a ?.t -> 'a Option.t
+      val findIndex: ('a * 'a -> Primitive.Order.t)
+		     -> 'a -> 'a ?.t -> Int.int Option.t
+      val findIndices: ('a * 'a -> Primitive.Order.t)
+		       -> 'a -> 'a ?.t -> Int.int ?.t
+      val findl: ('a -> bool) -> 'a ?.t -> 'a Option.t
+      val findr: ('a -> bool) -> 'a ?.t -> 'a Option.t
+      val first: 'a ?.t -> 'a
+      val foldl1: ('a * 'a -> 'a) -> 'a ?.t -> 'a Option.t
+      val foldlM: ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> 'b ?.t
+      val foldlM': ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> unit ?.t
+      val foldlWhile: ('a * 'b -> 'b * bool) -> 'b -> 'a ?.t -> 'b
+      val foldr1: ('a * 'a -> 'a) -> 'a ?.t -> 'a Option.t
+      val foldrM: ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> 'b ?.t
+      val foldrM': ('a * 'b -> 'b ?.t) -> 'b -> 'a list -> unit ?.t
+      val foldrWhile: ('a * 'b -> 'b * bool) -> 'b -> 'a ?.t -> 'b
+      val forever: 'a ?.t -> 'b ?.t
+      val foreverWithDelay: Int.int -> 'a ?.t -> 'b ?.t
+      val fromList: 'a list -> 'a ?.t
+      val fromSeq: 'a Seq.t -> 'a ?.t
+      val fromStream: 'a Stream.t' Lazy.t_ ref -> 'a ?.t
+      val fromVector: 'a vector -> 'a ?.t
+      val genEmpty: unit -> 'a ?.t
+      val genZero: unit -> 'a ?.t
+      val group: 'a ?.t -> 'a ?.t ?.t
+      val groupBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a ?.t ?.t
+      val guard: bool -> unit ?.t
+      val head: 'a ?.t -> 'a
+      val ignore: 'a ?.t -> unit ?.t
+      val init: 'a ?.t -> 'a ?.t
+      val inits: 'a ?.t -> 'a ?.t ?.t
+      val insert: 'a -> 'a ?.t -> 'a ?.t
+      val insertBy: ('a * 'a -> Primitive.Order.t) -> 'a -> 'a ?.t -> 'a ?.t
+      val intProduct: Int.int ?.t -> Int.int
+      val intSum: Int.int ?.t -> Int.int
+      val inter: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val interBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a ?.t -> 'a ?.t
+      val intersperse: 'a -> 'a ?.t -> 'a ?.t
+      val isInfixOf: 'a ?.t -> 'a ?.t -> bool
+      val isPrefixOf: 'a ?.t -> 'a ?.t -> bool
+      val isSuffixOf: 'a ?.t -> 'a ?.t -> bool
+      val join: 'a ?.t ?.t -> 'a ?.t
+      val keep: ('a -> bool) -> 'a ?.t -> 'a ?.t
+      val keepM: ('a -> bool ?.t) -> 'a list -> 'a list ?.t
+      val last: 'a ?.t -> 'a
+      val leftmost: 'a Option.t ?.t -> 'a Option.t
+      val lines: string -> string ?.t
+      val lookup: 'a ?.t -> Int.int -> 'a Option.t
+      val map2: ('a -> 'b -> 'c) -> 'a ?.t -> 'b ?.t -> 'c ?.t
+      val map3: ('a -> 'b -> 'c -> 'd) -> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t
+      val map4: ('a -> 'b -> 'c -> 'd -> 'e)
+		-> 'a ?.t -> 'b ?.t -> 'c ?.t -> 'd ?.t -> 'e ?.t
+      val mapAccumL: ('a * 'b -> 'c * 'b) -> 'b -> 'a ?.t -> 'c ?.t * 'b
+      val mapAccumR: ('a * 'b -> 'c * 'b) -> 'b -> 'a ?.t -> 'c ?.t * 'b
+      val mapAndUnzipM: ('a -> ('b * 'c) ?.t)
+			-> 'a list -> ('b list * 'c list) ?.t
+      val mapM: ('a -> 'b ?.t) -> 'a list -> 'b list ?.t
+      val mapM': ('a -> 'b ?.t) -> 'a list -> unit ?.t
+      val mapMPartial: ('a -> 'b Option.t ?.t) -> 'a list -> 'b list ?.t
+      val mapPartial: ('a -> 'a Option.t) -> 'a ?.t -> 'a ?.t
+      val maximumBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a Option.t
+      val member: 'a -> 'a ?.t -> bool
+      val memberIndex: 'a -> 'a ?.t -> Int.int Option.t
+      val memberIndices: 'a -> 'a ?.t -> Int.int ?.t
+      val mergel: 'a ?.t list -> 'a ?.t
+      val mergelBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val merger: 'a ?.t list -> 'a ?.t
+      val mergerBy: ('a * 'a -> 'a) -> 'a ?.t list -> 'a ?.t Option.t
+      val minimumBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a Option.t
+      val notMember: 'a -> 'a ?.t -> bool
+      val nub: 'a ?.t -> 'a ?.t
+      val nubBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a ?.t
+      val optional: 'a ?.t -> 'a Option.t ?.t
+      val pack: (('a * 'a ?.t -> 'a ?.t) -> 'b * 'a ?.t -> 'a ?.t)
+		-> 'b -> 'a ?.t
+      val packer: ('a * 'b -> 'b) -> 'a ?.t * 'b -> 'b
+      val partition: ('a -> bool) -> 'a ?.t -> 'a ?.t * 'a ?.t
+      val permutations: 'a ?.t -> 'a ?.t ?.t
+      val plus: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val power: 'a ?.t -> 'a ?.t ?.t
+      val pure: 'a -> 'a ?.t
+      val read: 'a ?.t -> ('a * 'a ?.t) Option.t
+      val realProduct: real64 ?.t -> real64
+      val realSum: real64 ?.t -> real64
+      val reject: ('a -> bool) -> 'a ?.t -> 'a ?.t
+      val rejectM: ('a -> bool ?.t) -> 'a list -> 'a list ?.t
+      val removePrefix: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val replicate: Int.int -> 'a -> 'a ?.t
+      val return: 'a -> 'a ?.t
+      val rev: 'a ?.t -> 'a ?.t
+      val revAppend: 'a ?.t * 'a ?.t -> 'a ?.t
+      val rightmost: 'a Option.t ?.t -> 'a Option.t
+      val scan: (('a ?.t -> ('a * 'a ?.t) Option.t)
+		 -> 'a ?.t -> ('b * 'a ?.t) Option.t)
+		-> 'a ?.t -> 'b Option.t
+      val scanl: ('a * 'b -> 'b) -> 'b -> 'a ?.t -> 'b ?.t
+      val scanl1: ('a * 'b -> 'b) -> 'a ?.t -> 'b ?.t
+      val scanlWhile: ('a * 'b -> 'b * bool) -> 'b -> 'a ?.t -> 'b ?.t
+      val scanner: ('a -> ('b * 'a) Option.t) -> 'a -> ('b ?.t * 'a) Option.t
+      val scanr: ('a * 'b -> 'b) -> 'b -> 'a ?.t -> 'b ?.t
+      val scanr1: ('a * 'b -> 'b) -> 'a ?.t -> 'b ?.t
+      val scanrWhile: ('a * 'b -> 'b * bool) -> 'b -> 'a ?.t -> 'b ?.t
+      val seq: 'a ?.t list -> 'a list ?.t
+      val seq': 'a ?.t list -> unit ?.t
+      val shuffle: 'a ?.t -> 'a ?.t
+      val singleton: 'a -> 'a ?.t
+      val slice: 'a ?.t * Int.int * Int.int -> 'a ?.t
+      val snoc: 'a -> 'a ?.t -> 'a ?.t
+      val sort: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a ?.t
+      val span: ('a -> bool) -> 'a ?.t -> 'a ?.t * 'a ?.t
+      val subsequences: 'a ?.t -> 'a ?.t ?.t
+      val tabulate: Int.int * (Int.int -> 'a) -> 'a ?.t
+      val tabulateM: Int.int -> (Int.int -> 'a ?.t) -> 'a list ?.t
+      val tabulateM': Int.int -> (Int.int -> 'a ?.t) -> unit ?.t
+      val tail: 'a ?.t -> 'a ?.t
+      val tails: 'a ?.t -> 'a ?.t ?.t
+      val take: 'a ?.t * Int.int -> 'a ?.t
+      val takeWhile: ('a -> bool) -> 'a ?.t -> 'a ?.t
+      val toList: 'a ?.t -> 'a list
+      val toSeq: 'a ?.t -> 'a Seq.t
+      val toStream: 'a ?.t -> 'a Stream.t' Lazy.t_ ref
+      val toVector: 'a ?.t -> 'a vector
+      val transpose: 'a ?.t ?.t -> 'a ?.t ?.t
+      val union: 'a ?.t -> 'a ?.t -> 'a ?.t
+      val unionBy: ('a * 'a -> Primitive.Order.t) -> 'a ?.t -> 'a ?.t -> 'a ?.t
+      val unless: bool -> unit ?.t -> unit ?.t
+      val unlines: string ?.t -> string
+      val unwords: string ?.t -> string
+      val unzip: ('a * 'b) ?.t -> 'a ?.t * 'b ?.t
+      val unzip3: ('a * 'b * 'c) ?.t -> 'a ?.t * 'b ?.t * 'c ?.t
+      val unzip4: ('a * 'b * 'c * 'd) ?.t -> 'a ?.t * 'b ?.t * 'c ?.t * 'd ?.t
+      val unzip5: ('a * 'b * 'c * 'd * 'e) ?.t
+		  -> 'a ?.t * 'b ?.t * 'c ?.t * 'd ?.t * 'e
+      val update: 'a ?.t -> Int.int -> 'a -> 'a ?.t
+      val viewl: 'a ?.t -> ('a, 'a ?.t) ViewL.t
+      val viewr: 'a ?.t -> ('a, 'a ?.t) ViewR.t
+      val when: bool -> unit ?.t -> unit ?.t
+      val words: string -> string ?.t
+      val write: 'a * 'a ?.t -> 'a ?.t
+      val zip: 'a ?.t * 'b ?.t -> ('a * 'b) ?.t
+      val zip3: 'a ?.t * 'b ?.t * 'c ?.t -> ('a * 'b * 'c) ?.t
+      val zip4: 'a ?.t * 'b ?.t * 'c ?.t * 'd ?.t -> ('a * 'b * 'c * 'd) ?.t
+      val zip5: 'a ?.t * 'b ?.t * 'c ?.t * 'd ?.t * 'e ?.t
+		-> ('a * 'b * 'c * 'd * 'e) ?.t
+      val zipWith: ('a * 'b -> 'c) -> 'a ?.t * 'b ?.t -> 'c ?.t
+      val zipWith3: ('a * 'b * 'c -> 'd) -> 'a ?.t * 'b ?.t * 'c ?.t -> 'd ?.t
+      val zipWith4: ('a * 'b * 'c * 'd -> 'e)
+		    -> 'a ?.t * 'b ?.t * 'c ?.t * 'd ?.t -> 'e ?.t
+      val zipWith5: ('a * 'b * 'c * 'd * 'e -> 'f)
+		    -> 'a ?.t * 'b ?.t * 'c ?.t * 'd ?.t * 'e ?.t -> 'f ?.t
+      val zipWithM: ('a * 'b -> 'c ?.t) -> 'a list * 'b list -> 'c list ?.t
+      val zipWithM': ('a * 'b -> 'c ?.t) -> 'a list * 'b list -> unit ?.t
+      val || : 'a ?.t * 'a ?.t -> 'a ?.t
+   end
+signature Set = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val adjust: (?.elm Option.t -> ?.elm) -> ?.t -> ?.elm -> ?.t
+      val card: ?.t -> Int.int
+      val compareElm: ?.elm * ?.elm -> Primitive.Order.t
+      val empty: ?.t
+      val foldl: (?.elm * 'a -> 'a) -> 'a -> ?.t -> 'a
+      val foldr: (?.elm * 'a -> 'a) -> 'a -> ?.t -> 'a
+      val insert: ?.t -> ?.elm -> ?.t
+      val member: ?.t -> ?.elm -> bool
+      val null: ?.t -> bool
+      val remove: ?.t -> ?.elm -> ?.t
+   end
+signature SetEX = 
+   sig
+      type elm = ?.elm
+      type t = ?.t
+      val != : ?.t * ?.t -> bool
+      val $$ : (?.elm -> ?.elm) * ?.t -> ?.t
+      val $| : ?.elm * ?.t -> ?.t
+      val < : ?.t * ?.t -> bool
+      val << : ?.t * ?.t -> ?.t
+      val <= : ?.t * ?.t -> bool
+      val <=< : (?.elm -> ?.t) * (?.elm -> ?.t) -> ?.elm -> ?.t
+      val =<< : (?.elm -> ?.t) * ?.t -> ?.t
+      val == : ?.t * ?.t -> bool
+      val > : ?.t * ?.t -> bool
+      val >= : ?.t * ?.t -> bool
+      val >=> : (?.elm -> ?.t) * (?.elm -> ?.t) -> ?.elm -> ?.t
+      val >> : ?.t * ?.t -> ?.t
+      val >>= : ?.t * (?.elm -> ?.t) -> ?.t
+      val app: (?.elm -> unit) -> ?.t -> unit
+      val compare: ?.t * ?.t -> Primitive.Order.t
+      val comparing: ('a -> ?.t) -> 'a * 'a -> Primitive.Order.t
+      val eq: ?.t -> ?.t -> bool
+      val foldlM: ('a * ?.elm -> ?.t) -> ?.elm -> 'a list -> ?.t
+      val foldrM: ('a * ?.elm -> ?.t) -> ?.elm -> 'a list -> ?.t
+      val forever: ?.t -> ?.t
+      val foreverWithDelay: Int.int -> ?.t -> ?.t
+      val fromList: ?.elm list -> ?.t
+      val fromSeq: ?.elm Seq.t -> ?.t
+      val fromStream: ?.elm Stream.t' Lazy.t_ ref -> ?.t
+      val fromVector: ?.elm vector -> ?.t
+      val genEmpty: unit -> ?.t
+      val genZero: unit -> ?.t
+      val gt: ?.t -> ?.t -> bool
+      val gte: ?.t -> ?.t -> bool
+      val inRange: ?.t * ?.t -> ?.t -> bool
+      val keep: (?.elm -> bool) -> ?.t -> ?.t
+      val lt: ?.t -> ?.t -> bool
+      val lte: ?.t -> ?.t -> bool
+      val map: (?.elm -> ?.elm) -> ?.t -> ?.t
+      val map2: (?.elm -> ?.elm -> ?.elm) -> ?.t -> ?.t -> ?.t
+      val map3: (?.elm -> ?.elm -> ?.elm -> ?.elm) -> ?.t -> ?.t -> ?.t -> ?.t
+      val map4: (?.elm -> ?.elm -> ?.elm -> ?.elm -> ?.elm)
+		-> ?.t -> ?.t -> ?.t -> ?.t -> ?.t
+      val mapPartial: (?.elm -> ?.elm Option.t) -> ?.t -> ?.t
+      val max: ?.t * ?.t -> ?.t
+      val mergel: ?.t list -> ?.t
+      val mergelBy: (?.elm * ?.elm -> ?.elm) -> ?.t list -> ?.t Option.t
+      val merger: ?.t list -> ?.t
+      val mergerBy: (?.elm * ?.elm -> ?.elm) -> ?.t list -> ?.t Option.t
+      val min: ?.t * ?.t -> ?.t
+      val neq: ?.t -> ?.t -> bool
+      val pack: ((?.elm * ?.t -> ?.t) -> 'a * ?.t -> ?.t) -> 'a -> ?.t
+      val packer: (?.elm * 'a -> 'a) -> ?.t * 'a -> 'a
+      val plus: ?.t -> ?.t -> ?.t
+      val read: ?.t -> (?.elm * ?.t) Option.t
+      val reject: (?.elm -> bool) -> ?.t -> ?.t
+      val return: ?.elm -> ?.t
+      val scan: ((?.t -> (?.elm * ?.t) Option.t) -> ?.t -> ('a * ?.t) Option.t)
+		-> ?.t -> 'a Option.t
+      val scanner: ('a -> (?.elm * 'a) Option.t) -> 'a -> (?.t * 'a) Option.t
+      val toList: ?.t -> ?.elm list
+      val toSeq: ?.t -> ?.elm Seq.t
+      val toStream: ?.t -> ?.elm Stream.t' Lazy.t_ ref
+      val toVector: ?.t -> ?.elm vector
+      val write: ?.elm * ?.t -> ?.t
+      val || : ?.t * ?.t -> ?.t
+   end
+signature Thunk = 
+   sig
+      type 'a t = unit -> 'a
+      val delay: (unit -> unit -> 'a) -> unit -> 'a
+      val eager: 'a -> unit -> 'a
+      val force: (unit -> 'a) -> 'a
+      val iso: ('a -> 'b) * ('b -> 'a)
+	       -> ((unit -> 'a) -> unit -> 'b) * ((unit -> 'b) -> unit -> 'a)
+      val lift: ('a -> 'b) -> (unit -> 'a) -> unit -> 'b
+   end
+signature UnOp = 
+   sig
+      type 'a t = 'a -> 'a
+      val lift: ('a -> 'b) * ('b -> 'a) -> ('b -> 'b) -> 'a -> 'a
+   end
+signature UnPred = 
+   sig
+      type 'a t = 'a -> bool
+      val andAlso: ('a -> bool) * ('a -> bool) -> 'a -> bool
+      val lift: ('a -> 'b) -> ('b -> bool) -> 'a -> bool
+      val neg: ('a -> bool) -> 'a -> bool
+      val orElse: ('a -> bool) * ('a -> bool) -> 'a -> bool
+   end
+signature Unfoldable = 
+   sig
+      type 'a t = 'a ?.t
+      val genEmpty: unit -> 'a ?.t
+      val write: 'a * 'a ?.t -> 'a ?.t
+   end
+signature UnfoldableEX = 
+   sig
+      type 'a t = 'a ?.t
+      val fromList: 'a list -> 'a ?.t
+      val fromSeq: 'a Seq.t -> 'a ?.t
+      val fromStream: 'a Stream.t' Lazy.t_ ref -> 'a ?.t
+      val fromVector: 'a vector -> 'a ?.t
+      val pack: (('a * 'a ?.t -> 'a ?.t) -> 'b * 'a ?.t -> 'a ?.t)
+		-> 'b -> 'a ?.t
+      val scanner: ('a -> ('b * 'a) Option.t) -> 'a -> ('b ?.t * 'a) Option.t
+   end
+signature Univ = 
+   sig
+      type t = ?.t
+      exception Univ_0
+      val newEmb: unit -> ('a -> ?.t) * (?.t -> 'a Option.t)
+      val newIso: unit -> ('a -> ?.t) * (?.t -> 'a)
+   end
+signature Unpickler = 
+   sig
+      type t = ?.t
+      val unpickle: ('a -> (char8 * 'a) Option.t) -> 'a -> (?.t * 'a) Option.t
+   end
+signature UnpicklerEX = 
+   sig
+      type t = ?.t
+      val fromCharList: char8 list -> ?.t Option.t
+      val fromCharSeq: char8 Seq.t -> ?.t Option.t
+      val fromCharStream: char8 Stream.t' Lazy.t_ ref -> ?.t Option.t
+      val fromFile: string -> ?.t Option.t
+      val fromInstream: ImperativeIOExtra.instream -> ?.t Option.t
+      val fromStdIn: unit -> ?.t Option.t
+      val fromString: string -> ?.t Option.t
+      val fromStringList: string list -> ?.t Option.t
+      val fromStringSeq: string Seq.t -> ?.t Option.t
+      val fromStringStream: string Stream.t' Lazy.t_ ref -> ?.t Option.t
+      val fromStringVector: string vector -> ?.t Option.t
+   end

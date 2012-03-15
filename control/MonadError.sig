@@ -1,12 +1,18 @@
-signature ErrorT = sig
-  include MonadP
-  type error
+signature MonadError =
+sig
   type 'a inner
+  type ('a, 'e) t = ('e, 'a) Either.t inner
 
-  val throw : error -> 'a monad
-  val catch : 'a monad * (error -> 'a monad) -> 'a monad
-  val run  : 'a monad -> (error, 'a) either inner
+  val >>= : ('a, 'e) t * ('a -> ('b, 'e) t) -> ('b, 'e) t
+  val return : 'a -> ('a, 'e) t
+  val || : ('a, 'e) t BinOp.t
 
-  val mapError : ((error, 'a) either inner ->
-                  (error, 'b) either inner) -> 'a monad -> 'b monad
+  val lift : 'a inner -> ('a, 'e) t
+
+  val throw : 'e -> ('a, 'e) t
+  val catch : ('a, 'e) t * ('e -> ('a, 'e) t) -> ('a, 'e) t
+  val run : ('a, 'e) t -> ('e, 'a) Either.t inner
+
+  val mapError : (('e, 'a) Either.t inner ->
+                  ('f, 'a) Either.t inner) -> ('a, 'e) t -> ('a, 'f) t
 end

@@ -1,0 +1,11 @@
+local
+  $(SML_LIB)/basis/basis.mlb
+in
+Util.sml
+ViewL.sml
+ViewR.sml
+Lazy.sml
+Seq.sml
+Stream.sml
+String.sml
+end
