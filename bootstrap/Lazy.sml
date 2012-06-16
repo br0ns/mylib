@@ -26,4 +26,7 @@ fun lazy t = delay
 
 fun thunk p () = force p
 fun memoise t = thunk (lazy t)
+
+exception Undefined
+val undefined = lazy (fn _ => raise Undefined)
 end
