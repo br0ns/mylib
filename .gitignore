@@ -4,3 +4,6 @@ MyLib
 mosml/autogen
 notes.org
 install.local
+*.swp
+*.swo
+*.un~
