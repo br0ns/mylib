@@ -2,6 +2,7 @@ MyLib
 *.uo
 *.ui
 mosml/autogen
+Test
 notes.org
 install.local
 *.swp
